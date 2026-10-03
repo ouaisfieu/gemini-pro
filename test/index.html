@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>GEMINI PRO // WEB LAB — OUAISFIEU EDITION</title>
+  <meta name="description" content="Démonstrateur technologique interactif : Moteur 3D Particules, Synthétiseur Web Audio FFT & Raycasting 2D Temps Réel." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            cyber: {
+              bg: '#06080f',
+              panel: 'rgba(13, 18, 30, 0.78)',
+              border: 'rgba(99, 102, 241, 0.22)',
+              cyan: '#00f2fe',
+              violet: '#8b5cf6',
+              emerald: '#10b981',
+              amber: '#f59e0b',
+              rose: '#f43f5e'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --accent-primary: #00f2fe;
+      --accent-secondary: #8b5cf6;
+      --bg-deep: #05070e;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.07) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 45%),
+        linear-gradient(to bottom, #05070e 0%, #090d1a 100%);
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+
+    /* Glassmorphic Studio Surfaces */
+    .glass-panel {
+      background: rgba(12, 17, 31, 0.76);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .glass-card {
+      background: rgba(18, 25, 43, 0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(0, 242, 254, 0.35);
+      box-shadow: 0 8px 30px rgba(0, 242, 254, 0.08);
+    }
+
+    /* Custom Range Sliders */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: rgba(30, 41, 59, 0.9);
+      border-radius: 999px;
+      outline: none;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00f2fe, #8b5cf6);
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.7);
+      border: 2px solid #ffffff;
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    /* Sequencer Step Glow */
+    .step-btn {
+      transition: all 0.12s ease;
+    }
+    .step-btn.active-lead {
+      background: linear-gradient(135deg, #00f2fe, #0284c7);
+      box-shadow: 0 0 14px rgba(0, 242, 254, 0.55);
+      border-color: #bae6fd;
+    }
+    .step-btn.active-bass {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      box-shadow: 0 0 14px rgba(139, 92, 246, 0.55);
+      border-color: #ddd6fe;
+    }
+    .step-btn.active-kick {
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+      box-shadow: 0 0 14px rgba(244, 63, 94, 0.55);
+      border-color: #fecdd3;
+    }
+    .step-btn.active-hat {
+      background: linear-gradient(135deg, #10b981, #047857);
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.55);
+      border-color: #a7f3d0;
+    }
+    .step-btn.playhead-col {
+      outline: 2px solid rgba(255, 255, 255, 0.85);
+      outline-offset: 2px;
+      transform: translateY(-2px);
+    }
+
+    /* Subtle grid overlay */
+    .cyber-grid-bg {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #06080f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-slate-950 cyber-grid-bg">
+
+  <!-- TOP STUDIO HEADER -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 px-3 sm:px-6 py-2.5">
+    <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 via-indigo-500 to-purple-600 p-[1px] shadow-lg shadow-cyan-500/20">
+          <div class="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center">
+            <svg class="w-5 h-5 text-cyan-400 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <span class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          </span>
+        </div>
+
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs font-bold tracking-widest uppercase bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">
+              GEMINI PRO // WEB LAB
+            </span>
+            <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 rounded-full">
+              OUAISFIEU EDITION
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-mono truncate max-w-[230px] sm:max-w-none">
+            ouaisfieu.github.io/gemini-pro/test/
+          </p>
+        </div>
+      </div>
+
+      <!-- Module Navigation Tabs -->
+      <nav class="flex items-center gap-1 sm:gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-800 overflow-x-auto max-w-full" aria-label="Modules du laboratoire">
+        <button onclick="switchModule('particles')" id="tab-particles" class="module-tab flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 2a10 10 0 1 0 10 10"></path>
+            <path d="M12 2v4"></path>
+            <path d="M22 12h-4"></path>
+          </svg>
+          <span>1. Physique &amp; Plexus 3D</span>
+        </button>
+
+        <button onclick="switchModule('synth')" id="tab-synth" class="module-tab flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-400 hover:text-slate-200 border border-transparent">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 10v3"></path>
+            <path d="M6 6v11"></path>
+            <path d="M10 3v18"></path>
+            <path d="M14 8v7"></path>
+            <path d="M18 5v13"></path>
+            <path d="M22 10v3"></path>
+          </svg>
+          <span>2. Synthé WebAudio &amp; FFT</span>
+        </button>
+
+        <button onclick="switchModule('raycast')" id="tab-raycast" class="module-tab flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-400 hover:text-slate-200 border border-transparent">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+          </svg>
+          <span>3. Raycasting &amp; Optique 2D</span>
+        </button>
+      </nav>
+
+      <!-- Telemetry & Quick Actions -->
+      <div class="flex items-center gap-2">
+        <!-- Live FPS & Frame Graph Pill -->
+        <div class="hidden xl:flex items-center gap-2.5 bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-xl">
+          <div class="text-right">
+            <div class="flex items-center gap-1.5">
+              <span id="hud-fps" class="font-mono text-xs font-bold text-emerald-400">60 FPS</span>
+              <span id="hud-ms" class="font-mono text-[10px] text-slate-400">16.6ms</span>
+            </div>
+            <div class="text-[9px] font-mono text-slate-500 uppercase tracking-wider">Moteur Temps Réel</div>
+          </div>
+          <canvas id="fps-sparkline" width="64" height="24" class="rounded bg-slate-950 border border-slate-800/80"></canvas>
+        </div>
+
+        <!-- Command Palette Button (Ctrl+K) -->
+        <button onclick="toggleCommandPalette()" class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-xs text-slate-300 transition-all" title="Ouvrir la palette de commandes">
+          <svg class="w-3.5 h-3.5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span class="hidden md:inline">Commandes</span>
+          <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-slate-950 text-slate-400 rounded border border-slate-700">Ctrl+K</kbd>
+        </button>
+
+        <!-- GitHub Pages Deploy & Export Button -->
+        <button onclick="downloadSelfHTML()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-slate-950 font-semibold text-xs shadow-lg shadow-cyan-500/20 transition-all">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Télécharger index.html</span>
+        </button>
+
+        <button onclick="openDeployModal()" class="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 transition-all" title="Instructions GitHub Pages">
+          <svg class="w-4 h-4 text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-[1600px] w-full mx-auto p-3 sm:p-5 flex flex-col gap-4">
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 1: MOTEUR PHYSIQUE & PARTICULES 3D / NEURAL PLEXUS             -->
+    <!-- ===================================================================== -->
+    <section id="module-particles" class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+      
+      <!-- Interactive 3D Canvas Viewport -->
+      <div class="lg:col-span-8 xl:col-span-9 relative rounded-2xl overflow-hidden glass-panel border border-slate-800/90 flex flex-col min-h-[460px] sm:min-h-[600px]">
+        
+        <!-- Canvas Top Floating Overlay -->
+        <div class="absolute top-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+          <div class="glass-card px-3 py-1.5 rounded-xl flex items-center gap-2.5 pointer-events-auto">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            <div>
+              <h2 class="text-xs font-bold text-slate-100 tracking-wide uppercase">Simulateur Plexus Neuronal &amp; Gravité 3D</h2>
+              <p class="text-[11px] text-slate-400">Bougez la souris pour déformer le champ • Cliquez pour déclencher une onde de choc</p>
+            </div>
+          </div>
+
+          <!-- Force Mode Quick Pills -->
+          <div class="flex flex-wrap items-center gap-1.5 pointer-events-auto bg-slate-950/85 p-1 rounded-xl border border-slate-800">
+            <button onclick="setForceMode('vortex')" id="force-vortex" class="force-btn px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+              Vortex Quantique
+            </button>
+            <button onclick="setForceMode('attractor')" id="force-attractor" class="force-btn px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium text-slate-400 hover:text-slate-200 border border-transparent">
+              Attracteur Gravité
+            </button>
+            <button onclick="setForceMode('repulse')" id="force-repulse" class="force-btn px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium text-slate-400 hover:text-slate-200 border border-transparent">
+              Répulsion Magnétique
+            </button>
+            <button onclick="setForceMode('lorentz')" id="force-lorentz" class="force-btn px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium text-slate-400 hover:text-slate-200 border border-transparent">
+              Harmonie Chaos
+            </button>
+          </div>
+        </div>
+
+        <!-- The 3D Particle Canvas -->
+        <canvas id="particle-canvas" class="w-full h-full flex-1 cursor-crosshair block"></canvas>
+
+        <!-- Bottom Live Telemetry Bar inside Canvas -->
+        <div class="absolute bottom-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none text-[11px] font-mono">
+          <div class="glass-card px-3 py-1.5 rounded-xl flex items-center gap-4 text-slate-300">
+            <span>ENTITÉS: <strong id="stat-particles" class="text-cyan-400">420</strong></span>
+            <span>LIENS SYNAPTIQUES: <strong id="stat-links" class="text-violet-400">0</strong></span>
+            <span class="hidden sm:inline">VECTEUR CURSEUR: <strong id="stat-cursor" class="text-emerald-400">0, 0</strong></span>
+          </div>
+          <div class="flex items-center gap-2 pointer-events-auto">
+            <button onclick="triggerShockwave()" class="glass-card hover:bg-cyan-500/20 px-3 py-1.5 rounded-xl text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5 font-semibold transition-all active:scale-95">
+              <span>⚡ Impulsion Supernova</span>
+            </button>
+            <button onclick="resetParticles()" class="glass-card hover:bg-slate-800 px-3 py-1.5 rounded-xl text-slate-300 border border-slate-700 transition-all">
+              Réinitialiser
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4 xl:col-span-3 glass-panel rounded-2xl p-4 flex flex-col justify-between gap-4">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                Paramètres Physiques
+              </h3>
+              <p class="text-[11px] text-slate-400">Contrôle temps réel de la matrice 3D</p>
+            </div>
+            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-900 text-cyan-400 border border-slate-800">60 Hz</span>
+          </div>
+
+          <!-- Palette Presets -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-2">Spectre Colorimétrique</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="setPalette('cyberpunk')" id="pal-cyberpunk" class="palette-btn flex items-center gap-2 p-2 rounded-xl border border-cyan-500/50 bg-slate-900/90 text-xs font-medium text-white">
+                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-cyan-400 to-fuchsia-500"></span>
+                Cyberpunk
+              </button>
+              <button onclick="setPalette('emerald')" id="pal-emerald" class="palette-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-900/50 text-xs font-medium text-slate-300 hover:border-emerald-500/40">
+                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-emerald-400 to-lime-300"></span>
+                Émeraude
+              </button>
+              <button onclick="setPalette('solar')" id="pal-solar" class="palette-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-900/50 text-xs font-medium text-slate-300 hover:border-amber-500/40">
+                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-amber-400 to-rose-500"></span>
+                Solaire
+              </button>
+              <button onclick="setPalette('abyssal')" id="pal-abyssal" class="palette-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-900/50 text-xs font-medium text-slate-300 hover:border-indigo-500/40">
+                <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-blue-400 to-violet-600"></span>
+                Abyssal
+              </button>
+            </div>
+          </div>
+
+          <!-- Sliders -->
+          <div class="space-y-3.5 pt-1">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Nombre de particules</span>
+                <span id="val-pcount" class="font-mono text-cyan-400">420</span>
+              </div>
+              <input type="range" id="slider-pcount" min="100" max="900" step="20" value="420" oninput="updateParticleConfig()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Portée synaptique (px)</span>
+                <span id="val-plink" class="font-mono text-cyan-400">115 px</span>
+              </div>
+              <input type="range" id="slider-plink" min="0" max="220" step="5" value="115" oninput="updateParticleConfig()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Distorsion temporelle (Time-Warp)</span>
+                <span id="val-pspeed" class="font-mono text-violet-400">1.0x</span>
+              </div>
+              <input type="range" id="slider-pspeed" min="0.1" max="2.8" step="0.1" value="1.0" oninput="updateParticleConfig()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Friction / Amortissement</span>
+                <span id="val-pdamp" class="font-mono text-emerald-400">0.96</span>
+              </div>
+              <input type="range" id="slider-pdamp" min="0.88" max="0.99" step="0.01" value="0.96" oninput="updateParticleConfig()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Rotation orbitale 3D</span>
+                <span id="val-prot" class="font-mono text-amber-400">0.35</span>
+              </div>
+              <input type="range" id="slider-prot" min="0" max="1.5" step="0.05" value="0.35" oninput="updateParticleConfig()" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Interactive Tips Card -->
+        <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-cyan-400 font-semibold">Architecture Moteur</span>
+            <span class="text-[10px] font-mono text-slate-500">HTML5 Canvas 2D/3D</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Projection perspective 3D <code class="text-slate-200 font-mono">f/(f+z)</code> calculée à la volée avec partitionnement spatial et rendu dynamique des connexions lumineuses.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 2: SYNTHÉTISEUR WEB AUDIO & SÉQUENCEUR 16 PAS + FFT            -->
+    <!-- ===================================================================== -->
+    <section id="module-synth" class="hidden flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+      
+      <!-- Left & Center Studio Rack: FFT Visualizer + 16-Step Matrix + Keyboard -->
+      <div class="lg:col-span-8 xl:col-span-9 flex flex-col gap-4">
+        
+        <!-- Dual Visualizer Panel (FFT Spectrum + Oscilloscope) -->
+        <div class="glass-panel rounded-2xl p-4 border border-slate-800 relative overflow-hidden">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div class="flex items-center gap-2.5">
+              <span id="audio-status-dot" class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+              <div>
+                <h2 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wide">Analyseur Spectral FFT &amp; Oscilloscope Temps Réel</h2>
+                <p class="text-[11px] text-slate-400">Synthèse Web Audio API 100% native (zéro fichier audio externe)</p>
+              </div>
+            </div>
+
+            <!-- Transport Controls -->
+            <div class="flex flex-wrap items-center gap-2">
+              <button onclick="toggleSequencer()" id="btn-seq-play" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition-all">
+                <svg id="icon-seq-play" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <span id="label-seq-play">Démarrer Séquenceur</span>
+              </button>
+
+              <button onclick="generateProceduralPattern()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 text-violet-300 border border-violet-500/40 text-xs font-semibold transition-all">
+                <span>🎲 Motif Procédural IA</span>
+              </button>
+
+              <button onclick="clearSequencerPattern()" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-xs transition-all">
+                Vider
+              </button>
+            </div>
+          </div>
+
+          <div class="relative h-44 sm:h-52 w-full rounded-xl overflow-hidden bg-slate-950 border border-slate-800/90">
+            <canvas id="audio-visualizer" class="w-full h-full block"></canvas>
+            <div class="absolute top-2.5 left-3 flex items-center gap-3 text-[10px] font-mono text-slate-400 pointer-events-none">
+              <span class="px-2 py-0.5 rounded bg-slate-900/80 border border-slate-800 text-cyan-400">FFT 2048 BINS</span>
+              <span id="synth-current-note" class="px-2 py-0.5 rounded bg-slate-900/80 border border-slate-800 text-violet-300">NOTE: --</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16-Step Matrix Sequencer -->
+        <div class="glass-panel rounded-2xl p-4 border border-slate-800 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Séquenceur Matriciel 16 Pas (4 Pistes Polyphoniques)</h3>
+              <p class="text-[11px] text-slate-400">Cliquez sur les cellules pour activer/désactiver les pas rythmiques et mélodiques</p>
+            </div>
+            <!-- Musical Preset Selector -->
+            <div class="flex items-center gap-1.5">
+              <button onclick="loadAudioPreset('cyberpunk')" class="px-2.5 py-1 rounded-lg text-[11px] font-mono bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/25">
+                Preset: Blade Runner
+              </button>
+              <button onclick="loadAudioPreset('acid')" class="px-2.5 py-1 rounded-lg text-[11px] font-mono bg-violet-500/15 text-violet-300 border border-violet-500/30 hover:bg-violet-500/25">
+                Preset: Techno Berlin
+              </button>
+              <button onclick="loadAudioPreset('outrun')" class="px-2.5 py-1 rounded-lg text-[11px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25">
+                Preset: Outrun 1984
+              </button>
+            </div>
+          </div>
+
+          <!-- Sequencer Grid Container -->
+          <div class="overflow-x-auto pb-2">
+            <div id="sequencer-grid" class="min-w-[680px] space-y-2.5">
+              <!-- Populated dynamically by JS -->
+            </div>
+          </div>
+
+          <!-- Interactive Playable Synth Keyboard (1 Octave + Chords) -->
+          <div class="pt-2 border-t border-slate-800/80">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-slate-300">Clavier Synthétiseur Temps Réel (Souris ou Touches <kbd class="px-1.5 py-0.5 bg-slate-900 rounded border border-slate-700 font-mono text-[10px]">A Z E R T Y U I</kbd>)</span>
+              <span class="text-[11px] font-mono text-cyan-400">Polyphonie FM + Filtre Résonant</span>
+            </div>
+            <div id="piano-keys" class="grid grid-cols-8 sm:grid-cols-12 gap-1.5 h-16">
+              <!-- Populated dynamically by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4 xl:col-span-3 glass-panel rounded-2xl p-4 flex flex-col justify-between gap-4">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-violet-400"></span>
+                Moteur DSP &amp; Filtres
+              </h3>
+              <p class="text-[11px] text-slate-400">Modulation d'onde &amp; effets spatiaux</p>
+            </div>
+            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-900 text-violet-400 border border-slate-800">WebAudio</span>
+          </div>
+
+          <!-- Waveform Selector -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-2">Forme d'Onde Oscillateur</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="setWaveform('sawtooth')" id="wave-sawtooth" class="wave-btn p-2 rounded-xl border border-cyan-500/50 bg-cyan-500/15 text-xs font-mono text-cyan-300 font-semibold">
+                ⊿ Dent de Scie
+              </button>
+              <button onclick="setWaveform('square')" id="wave-square" class="wave-btn p-2 rounded-xl border border-slate-800 bg-slate-900/60 text-xs font-mono text-slate-300">
+                ⊓ Signal Carré
+              </button>
+              <button onclick="setWaveform('triangle')" id="wave-triangle" class="wave-btn p-2 rounded-xl border border-slate-800 bg-slate-900/60 text-xs font-mono text-slate-300">
+                △ Triangle Pur
+              </button>
+              <button onclick="setWaveform('sine')" id="wave-sine" class="wave-btn p-2 rounded-xl border border-slate-800 bg-slate-900/60 text-xs font-mono text-slate-300">
+                ∿ Sinusoïde
+              </button>
+            </div>
+          </div>
+
+          <!-- DSP Sliders -->
+          <div class="space-y-3.5">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Tempo (BPM)</span>
+                <span id="val-bpm" class="font-mono text-cyan-400">124 BPM</span>
+              </div>
+              <input type="range" id="slider-bpm" min="70" max="175" step="1" value="124" oninput="updateSynthParams()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Fréquence Coupure Filtre (Cutoff)</span>
+                <span id="val-cutoff" class="font-mono text-violet-400">2400 Hz</span>
+              </div>
+              <input type="range" id="slider-cutoff" min="180" max="8000" step="50" value="2400" oninput="updateSynthParams()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Résonance Filtre (Q Peak)</span>
+                <span id="val-resonance" class="font-mono text-emerald-400">6.5</span>
+              </div>
+              <input type="range" id="slider-resonance" min="0.5" max="18" step="0.5" value="6.5" oninput="updateSynthParams()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Écho Stéréo / Delay Feedback</span>
+                <span id="val-delay" class="font-mono text-amber-400">35%</span>
+              </div>
+              <input type="range" id="slider-delay" min="0" max="0.75" step="0.05" value="0.35" oninput="updateSynthParams()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Gain Master</span>
+                <span id="val-volume" class="font-mono text-rose-400">75%</span>
+              </div>
+              <input type="range" id="slider-volume" min="0.05" max="1.0" step="0.05" value="0.75" oninput="updateSynthParams()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3 space-y-1.5">
+          <div class="text-[11px] font-mono uppercase tracking-wider text-violet-400 font-semibold">Chaîne Audio Temps Réel</div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Oscillateurs Polyphoniques → Filtre Biquad Passe-Bas Résonant → Delay Stéréo Croisé → Compresseur Dynamique → Analyseur FFT.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 3: LABORATOIRE D'ALGORITHMES & RAYCASTING 2D TEMPS RÉEL        -->
+    <!-- ===================================================================== -->
+    <section id="module-raycast" class="hidden flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+      
+      <!-- Raycasting Canvas Viewport -->
+      <div class="lg:col-span-8 xl:col-span-9 relative rounded-2xl overflow-hidden glass-panel border border-slate-800 flex flex-col min-h-[460px] sm:min-h-[600px]">
+        
+        <!-- Top Overlay Controls -->
+        <div class="absolute top-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+          <div class="glass-card px-3 py-1.5 rounded-xl flex items-center gap-2.5 pointer-events-auto">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            <div>
+              <h2 class="text-xs font-bold text-slate-100 uppercase tracking-wide">Moteur de Raycasting 2D &amp; Réflexions Spéculaires</h2>
+              <p class="text-[11px] text-slate-400">Déplacez la source lumineuse • Cliquez-glissez pour tracer vos propres miroirs ou murs</p>
+            </div>
+          </div>
+
+          <!-- Scene Presets -->
+          <div class="flex flex-wrap items-center gap-1.5 pointer-events-auto bg-slate-950/85 p-1 rounded-xl border border-slate-800">
+            <button onclick="loadRaycastScene('mirrors')" class="px-2.5 py-1 rounded-lg text-[11px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40">
+              Chambre des Miroirs
+            </button>
+            <button onclick="loadRaycastScene('maze')" class="px-2.5 py-1 rounded-lg text-[11px] font-mono text-slate-300 hover:bg-slate-800">
+              Labyrinthe Cristallin
+            </button>
+            <button onclick="loadRaycastScene('pillars')" class="px-2.5 py-1 rounded-lg text-[11px] font-mono text-slate-300 hover:bg-slate-800">
+              Piliers Hexagonaux
+            </button>
+          </div>
+        </div>
+
+        <canvas id="raycast-canvas" class="w-full h-full flex-1 cursor-none block"></canvas>
+
+        <!-- Bottom Raycast Stats -->
+        <div class="absolute bottom-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none text-[11px] font-mono">
+          <div class="glass-card px-3 py-1.5 rounded-xl flex items-center gap-4 text-slate-300">
+            <span>RAYONS ÉMIS: <strong id="stat-rays" class="text-amber-400">360</strong></span>
+            <span>INTERSECTIONS/FRAME: <strong id="stat-intersects" class="text-cyan-400">0</strong></span>
+            <span>SEGMENTS: <strong id="stat-walls" class="text-violet-400">0</strong></span>
+          </div>
+          <div class="flex items-center gap-2 pointer-events-auto">
+            <button onclick="toggleDrawWallType()" id="btn-wall-type" class="glass-card px-3 py-1.5 rounded-xl text-cyan-300 border border-cyan-500/40 font-semibold">
+              Mode Tracé : Miroir Réfléchissant ✨
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raycasting Controls Sidebar -->
+      <aside class="lg:col-span-4 xl:col-span-3 glass-panel rounded-2xl p-4 flex flex-col justify-between gap-4">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                Optique Géométrique
+              </h3>
+              <p class="text-[11px] text-slate-400">Lancer de rayons &amp; rebonds</p>
+            </div>
+            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-900 text-amber-400 border border-slate-800">2D BVH</span>
+          </div>
+
+          <!-- Light Color Mode -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-2">Spectre du Faisceau</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="setRayColor('cyber')" class="p-2 rounded-xl border border-cyan-500/40 bg-slate-900 text-xs font-mono text-cyan-300">
+                Laser Cyan
+              </button>
+              <button onclick="setRayColor('solar')" class="p-2 rounded-xl border border-slate-800 bg-slate-900/60 text-xs font-mono text-amber-300">
+                Plasma Solaire
+              </button>
+              <button onclick="setRayColor('rainbow')" class="p-2 rounded-xl border border-slate-800 bg-slate-900/60 text-xs font-mono text-fuchsia-300">
+                Prisme Spectral
+              </button>
+              <button onclick="setRayColor('emerald')" class="p-2 rounded-xl border border-slate-800 bg-slate-900/60 text-xs font-mono text-emerald-300">
+                Vision Nocturne
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-3.5">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Densité de Rayons</span>
+                <span id="val-raycount" class="font-mono text-amber-400">360 rayons</span>
+              </div>
+              <input type="range" id="slider-raycount" min="60" max="900" step="30" value="360" oninput="updateRaycastConfig()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Angle d'Ouverture (FOV)</span>
+                <span id="val-rayfov" class="font-mono text-cyan-400">360°</span>
+              </div>
+              <input type="range" id="slider-rayfov" min="45" max="360" step="15" value="360" oninput="updateRaycastConfig()" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Rebonds Spéculaires Max (Miroirs)</span>
+                <span id="val-raybounces" class="font-mono text-violet-400">3 rebonds</span>
+              </div>
+              <input type="range" id="slider-raybounces" min="0" max="6" step="1" value="3" oninput="updateRaycastConfig()" />
+            </div>
+          </div>
+
+          <!-- Toggles -->
+          <div class="space-y-2 pt-2">
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/70 border border-slate-800 cursor-pointer">
+              <span class="text-xs text-slate-300">Polygone d'Ombre Volumétrique</span>
+              <input type="checkbox" id="chk-ray-poly" checked onchange="updateRaycastConfig()" class="accent-cyan-400 w-4 h-4 rounded" />
+            </label>
+
+            <label class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/70 border border-slate-800 cursor-pointer">
+              <span class="text-xs text-slate-300">Drone Lumineux Secondaire</span>
+              <input type="checkbox" id="chk-ray-drone" checked onchange="updateRaycastConfig()" class="accent-cyan-400 w-4 h-4 rounded" />
+            </label>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3 space-y-1.5">
+          <div class="text-[11px] font-mono uppercase tracking-wider text-amber-400 font-semibold">Algorithme d'Intersection</div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Calcul analytique paramétrique segment-rayon <code class="text-slate-200 font-mono">t &amp; u</code> avec vecteur normal de réflexion <code class="text-slate-200 font-mono">R = D - 2(D·N)N</code> sur les surfaces miroirs.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- COMMAND PALETTE MODAL (Ctrl+K)                                        -->
+  <!-- ===================================================================== -->
+  <div id="cmd-palette-backdrop" onclick="if(event.target === this) toggleCommandPalette()" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-start justify-center pt-20 px-4">
+    <div class="w-full max-w-xl glass-panel rounded-2xl border border-cyan-500/30 shadow-2xl overflow-hidden">
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-slate-800">
+        <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input id="cmd-input" type="text" placeholder="Rechercher une action, un module ou un preset..." oninput="filterCommands()" class="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none font-sans" />
+        <kbd class="px-2 py-0.5 text-[10px] font-mono bg-slate-900 text-slate-400 rounded border border-slate-700">ESC</kbd>
+      </div>
+      <div id="cmd-list" class="max-h-80 overflow-y-auto p-2 space-y-1">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- GITHUB PAGES DEPLOYMENT GUIDE MODAL                                   -->
+  <!-- ===================================================================== -->
+  <div id="deploy-modal-backdrop" onclick="if(event.target === this) closeDeployModal()" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl glass-panel rounded-2xl border border-violet-500/30 p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+          <h3 class="text-base font-bold text-white">Déploiement Express sur GitHub Pages</h3>
+        </div>
+        <button onclick="closeDeployModal()" class="text-slate-400 hover:text-white p-1">✕</button>
+      </div>
+
+      <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+        Cette application est intégralement autonome (<strong>Single-File Architecture</strong>). Pour la publier instantanément sur <code class="text-cyan-300 font-mono">https://ouaisfieu.github.io/gemini-pro/test/</code> :
+      </p>
+
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 font-mono text-xs text-slate-300 space-y-1.5 overflow-x-auto">
+        <div class="text-slate-500"># 1. Cliquez sur "Télécharger index.html" en haut à droite</div>
+        <div class="text-slate-500"># 2. Placez le fichier dans le dossier test/ de votre dépôt :</div>
+        <div class="text-cyan-400">mkdir -p test &amp;&amp; mv ~/Downloads/index.html ./test/index.html</div>
+        <div class="text-violet-400">git add test/index.html &amp;&amp; git commit -m "feat: deploy Gemini Pro Web Lab showcase" &amp;&amp; git push</div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-end gap-2 pt-2">
+        <button onclick="copyDeployCommands()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-cyan-300 border border-slate-700 transition-all">
+          Copier les commandes Git
+        </button>
+        <button onclick="downloadSelfHTML(); closeDeployModal();" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-slate-950 text-xs font-bold transition-all">
+          Télécharger index.html maintenant
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script>
+    /*************************************************************************
+     * GLOBAL STATE & TELEMETRY ENGINE
+     *************************************************************************/
+    let activeModule = 'particles';
+    const fpsHistory = new Array(32).fill(60);
+    let lastFrameTime = performance.now();
+    let frameCount = 0;
+    let currentFps = 60;
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const borderCol = type === 'success' ? 'border-emerald-500/50 text-emerald-300' : 'border-cyan-500/50 text-cyan-300';
+      toast.className = `glass-panel px-4 py-2.5 rounded-xl border ${borderCol} text-xs font-mono shadow-xl transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto flex items-center gap-2`;
+      toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-current animate-pulse"></span><span>${message}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    function switchModule(mod) {
+      activeModule = mod;
+      ['particles', 'synth', 'raycast'].forEach(m => {
+        const sec = document.getElementById(`module-${m}`);
+        const tab = document.getElementById(`tab-${m}`);
+        if (m === mod) {
+          sec.classList.remove('hidden');
+          tab.className = 'module-tab flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm';
+        } else {
+          sec.classList.add('hidden');
+          tab.className = 'module-tab flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-400 hover:text-slate-200 border border-transparent';
+        }
+      });
+
+      if (mod === 'particles') resizeParticleCanvas();
+      if (mod === 'synth') resizeAudioCanvas();
+      if (mod === 'raycast') resizeRaycastCanvas();
+    }
+
+    function updateTelemetry(now) {
+      frameCount++;
+      const delta = now - lastFrameTime;
+      if (delta >= 400) {
+        currentFps = Math.min(144, Math.round((frameCount * 1000) / delta));
+        const msPerFrame = (delta / frameCount).toFixed(1);
+        frameCount = 0;
+        lastFrameTime = now;
+
+        fpsHistory.push(currentFps);
+        fpsHistory.shift();
+
+        const fpsEl = document.getElementById('hud-fps');
+        const msEl = document.getElementById('hud-ms');
+        if (fpsEl) {
+          fpsEl.textContent = `${currentFps} FPS`;
+          fpsEl.className = `font-mono text-xs font-bold ${currentFps >= 50 ? 'text-emerald-400' : currentFps >= 30 ? 'text-amber-400' : 'text-rose-400'}`;
+        }
+        if (msEl) msEl.textContent = `${msPerFrame}ms`;
+
+        drawFpsSparkline();
+      }
+    }
+
+    function drawFpsSparkline() {
+      const canvas = document.getElementById('fps-sparkline');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 1.5;
+      for (let i = 0; i < fpsHistory.length; i++) {
+        const x = (i / (fpsHistory.length - 1)) * canvas.width;
+        const y = canvas.height - Math.min(1, fpsHistory[i] / 70) * (canvas.height - 4) - 2;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    /*************************************************************************
+     * MODULE 1: 3D PARTICLE & NEURAL PLEXUS ENGINE
+     *************************************************************************/
+    const pCanvas = document.getElementById('particle-canvas');
+    const pCtx = pCanvas.getContext('2d');
+
+    const palettes = {
+      cyberpunk: ['#00f2fe', '#4facfe', '#a855f7', '#ec4899'],
+      emerald: ['#10b981', '#34d399', '#84cc16', '#06b6d4'],
+      solar: ['#f59e0b', '#fbbf24', '#f43f5e', '#fb7185'],
+      abyssal: ['#38bdf8', '#6366f1', '#818cf8', '#c084fc']
+    };
+
+    const pConfig = {
+      count: 420,
+      linkDist: 115,
+      timeScale: 1.0,
+      damping: 0.96,
+      rotSpeed: 0.35,
+      forceMode: 'vortex',
+      palette: 'cyberpunk'
+    };
+
+    let particles = [];
+    const pMouse = { x: 0, y: 0, worldX: 0, worldY: 0, active: false };
+
+    function resizeParticleCanvas() {
+      const rect = pCanvas.parentElement.getBoundingClientRect();
+      pCanvas.width = rect.width;
+      pCanvas.height = rect.height;
+    }
+
+    function createParticle() {
+      const spread = Math.max(pCanvas.width, pCanvas.height) * 0.65 || 500;
+      const cols = palettes[pConfig.palette];
+      return {
+        x: (Math.random() - 0.5) * spread,
+        y: (Math.random() - 0.5) * spread,
+        z: (Math.random() - 0.5) * 450,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+        vz: (Math.random() - 0.5) * 2,
+        size: Math.random() * 2.2 + 1.1,
+        color: cols[Math.floor(Math.random() * cols.length)]
+      };
+    }
+
+    function syncParticlesCount() {
+      while (particles.length < pConfig.count) {
+        particles.push(createParticle());
+      }
+      if (particles.length > pConfig.count) {
+        particles.length = pConfig.count;
+      }
+      document.getElementById('stat-particles').textContent = particles.length;
+    }
+
+    function resetParticles() {
+      particles = [];
+      syncParticlesCount();
+      showToast('Matrice de particules réinitialisée', 'info');
+    }
+
+    function setPalette(name) {
+      pConfig.palette = name;
+      ['cyberpunk', 'emerald', 'solar', 'abyssal'].forEach(p => {
+        const btn = document.getElementById(`pal-${p}`);
+        if (p === name) {
+          btn.className = 'palette-btn flex items-center gap-2 p-2 rounded-xl border border-cyan-500/50 bg-slate-900/90 text-xs font-medium text-white';
+        } else {
+          btn.className = 'palette-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-900/50 text-xs font-medium text-slate-300';
+        }
+      });
+      const cols = palettes[name];
+      particles.forEach((pt, idx) => {
+        pt.color = cols[idx % cols.length];
+      });
+    }
+
+    function setForceMode(mode) {
+      pConfig.forceMode = mode;
+      ['vortex', 'attractor', 'repulse', 'lorentz'].forEach(m => {
+        const btn = document.getElementById(`force-${m}`);
+        if (m === mode) {
+          btn.className = 'force-btn px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/40';
+        } else {
+          btn.className = 'force-btn px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium text-slate-400 hover:text-slate-200 border border-transparent';
+        }
+      });
+    }
+
+    function updateParticleConfig() {
+      pConfig.count = parseInt(document.getElementById('slider-pcount').value, 10);
+      pConfig.linkDist = parseInt(document.getElementById('slider-plink').value, 10);
+      pConfig.timeScale = parseFloat(document.getElementById('slider-pspeed').value);
+      pConfig.damping = parseFloat(document.getElementById('slider-pdamp').value);
+      pConfig.rotSpeed = parseFloat(document.getElementById('slider-prot').value);
+
+      document.getElementById('val-pcount').textContent = pConfig.count;
+      document.getElementById('val-plink').textContent = `${pConfig.linkDist} px`;
+      document.getElementById('val-pspeed').textContent = `${pConfig.timeScale.toFixed(1)}x`;
+      document.getElementById('val-pdamp').textContent = pConfig.damping.toFixed(2);
+      document.getElementById('val-prot').textContent = pConfig.rotSpeed.toFixed(2);
+
+      syncParticlesCount();
+    }
+
+    function triggerShockwave(cx = 0, cy = 0) {
+      particles.forEach(p => {
+        const dx = p.x - cx;
+        const dy = p.y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy) + 1;
+        const force = Math.min(28, 3500 / dist);
+        p.vx += (dx / dist) * force;
+        p.vy += (dy / dist) * force;
+        p.vz += (Math.random() - 0.5) * 18;
+      });
+    }
+
+    pCanvas.addEventListener('pointermove', e => {
+      const rect = pCanvas.getBoundingClientRect();
+      pMouse.x = e.clientX - rect.left;
+      pMouse.y = e.clientY - rect.top;
+      pMouse.worldX = pMouse.x - pCanvas.width / 2;
+      pMouse.worldY = pMouse.y - pCanvas.height / 2;
+      pMouse.active = true;
+      const curEl = document.getElementById('stat-cursor');
+      if (curEl) curEl.textContent = `${Math.round(pMouse.worldX)}, ${Math.round(pMouse.worldY)}`;
+    });
+
+    pCanvas.addEventListener('pointerleave', () => {
+      pMouse.active = false;
+    });
+
+    pCanvas.addEventListener('pointerdown', () => {
+      triggerShockwave(pMouse.worldX, pMouse.worldY);
+    });
+
+    function renderParticlesFrame() {
+      const w = pCanvas.width;
+      const h = pCanvas.height;
+      if (!w || !h) return;
+
+      pCtx.fillStyle = 'rgba(6, 8, 15, 0.32)';
+      pCtx.fillRect(0, 0, w, h);
+
+      const cx = w / 2;
+      const cy = h / 2;
+      const fov = 520;
+      const dt = pConfig.timeScale;
+      const rotAngle = 0.004 * pConfig.rotSpeed * dt;
+      const cosA = Math.cos(rotAngle);
+      const sinA = Math.sin(rotAngle);
+
+      const projected = [];
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        // 3D Y-axis rotation
+        const rx = p.x * cosA - p.z * sinA;
+        const rz = p.z * cosA + p.x * sinA;
+        p.x = rx;
+        p.z = rz;
+
+        // Interactive cursor force field
+        const tx = pMouse.active ? pMouse.worldX : 0;
+        const ty = pMouse.active ? pMouse.worldY : 0;
+        const dx = tx - p.x;
+        const dy = ty - p.y;
+        const distSq = dx * dx + dy * dy + 80;
+        const dist = Math.sqrt(distSq);
+
+        if (pConfig.forceMode === 'vortex') {
+          const strength = pMouse.active ? 1.6 : 0.45;
+          p.vx += (-dy / dist) * strength * dt + (dx / dist) * 0.18 * dt;
+          p.vy += (dx / dist) * strength * dt + (dy / dist) * 0.18 * dt;
+        } else if (pConfig.forceMode === 'attractor') {
+          const f = (pMouse.active ? 140 : 40) / dist;
+          p.vx += (dx / dist) * f * dt;
+          p.vy += (dy / dist) * f * dt;
+        } else if (pConfig.forceMode === 'repulse') {
+          if (dist < 260) {
+            const f = -220 / dist;
+            p.vx += (dx / dist) * f * dt;
+            p.vy += (dy / dist) * f * dt;
+          }
+          p.vx += (-p.x * 0.0015) * dt;
+          p.vy += (-p.y * 0.0015) * dt;
+        } else if (pConfig.forceMode === 'lorentz') {
+          p.vx += Math.sin(p.y * 0.012) * 0.45 * dt;
+          p.vy += Math.cos(p.x * 0.012) * 0.45 * dt;
+        }
+
+        // Gentle Z restoring spring
+        p.vz += (-p.z * 0.001) * dt;
+
+        p.vx *= pConfig.damping;
+        p.vy *= pConfig.damping;
+        p.vz *= pConfig.damping;
+
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.z += p.vz * dt;
+
+        // Perspective projection
+        const scale = fov / (fov + p.z + 350);
+        if (scale > 0.1) {
+          projected.push({
+            sx: cx + p.x * scale,
+            sy: cy + p.y * scale,
+            scale,
+            color: p.color,
+            size: p.size * scale
+          });
+        }
+      }
+
+      // Draw neural plexus connections
+      let linkCount = 0;
+      const maxDist = pConfig.linkDist;
+      const maxDistSq = maxDist * maxDist;
+
+      if (maxDist > 0) {
+        pCtx.lineWidth = 0.85;
+        for (let i = 0; i < projected.length; i++) {
+          const a = projected[i];
+          for (let j = i + 1; j < projected.length; j++) {
+            const b = projected[j];
+            const dx = a.sx - b.sx;
+            const dy = a.sy - b.sy;
+            const dSq = dx * dx + dy * dy;
+            if (dSq < maxDistSq) {
+              linkCount++;
+              const alpha = (1 - dSq / maxDistSq) * 0.42;
+              pCtx.strokeStyle = `rgba(56, 189, 248, ${alpha.toFixed(2)})`;
+              pCtx.beginPath();
+              pCtx.moveTo(a.sx, a.sy);
+              pCtx.lineTo(b.sx, b.sy);
+              pCtx.stroke();
+            }
+          }
+        }
+      }
+
+      // Draw glowing particles
+      for (let i = 0; i < projected.length; i++) {
+        const pt = projected[i];
+        pCtx.fillStyle = pt.color;
+        pCtx.beginPath();
+        pCtx.arc(pt.sx, pt.sy, Math.max(1, pt.size), 0, Math.PI * 2);
+        pCtx.fill();
+      }
+
+      document.getElementById('stat-links').textContent = linkCount;
+    }
+
+    /*************************************************************************
+     * MODULE 2: WEB AUDIO SYNTHESIZER, SEQUENCER & FFT VISUALIZER
+     *************************************************************************/
+    let audioCtx = null;
+    let masterGain = null;
+    let filterNode = null;
+    let delayNode = null;
+    let feedbackGain = null;
+    let analyserNode = null;
+
+    const synthState = {
+      isPlaying: false,
+      bpm: 124,
+      currentStep: 0,
+      waveform: 'sawtooth',
+      cutoff: 2400,
+      resonance: 6.5,
+      delayAmt: 0.35,
+      volume: 0.75,
+      timerId: null
+    };
+
+    // Pentatonic / Cyberpunk Scale frequencies for the 16 steps
+    const leadNotes = [
+      261.63, 293.66, 311.13, 392.00, 466.16, 523.25, 392.00, 311.13,
+      261.63, 311.13, 392.00, 523.25, 587.33, 466.16, 392.00, 311.13
+    ];
+    const bassNotes = [
+      65.41, 65.41, 77.78, 65.41, 98.00, 98.00, 77.78, 65.41,
+      65.41, 65.41, 116.54, 98.00, 77.78, 77.78, 98.00, 65.41
+    ];
+
+    const tracks = [
+      { id: 'lead', name: 'SYNTH LEAD', activeClass: 'active-lead', steps: [1,0,1,0, 1,1,0,1, 0,1,1,0, 1,0,1,1] },
+      { id: 'bass', name: 'FM SUB BASS', activeClass: 'active-bass', steps: [1,0,0,1, 0,0,1,0, 1,0,0,1, 0,1,0,0] },
+      { id: 'kick', name: 'ANALOG KICK', activeClass: 'active-kick', steps: [1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,1,0] },
+      { id: 'hat',  name: 'CYBER HI-HAT', activeClass: 'active-hat',  steps: [0,0,1,0, 0,0,1,1, 0,0,1,0, 0,1,1,1] }
+    ];
+
+    function initAudioEngine() {
+      if (audioCtx) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return;
+      }
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContextClass();
+
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = synthState.volume;
+
+      filterNode = audioCtx.createBiquadFilter();
+      filterNode.type = 'lowpass';
+      filterNode.frequency.value = synthState.cutoff;
+      filterNode.Q.value = synthState.resonance;
+
+      delayNode = audioCtx.createDelay(1.0);
+      delayNode.delayTime.value = 0.28;
+
+      feedbackGain = audioCtx.createGain();
+      feedbackGain.gain.value = synthState.delayAmt;
+
+      analyserNode = audioCtx.createAnalyser();
+      analyserNode.fftSize = 2048;
+      analyserNode.smoothingTimeConstant = 0.82;
+
+      // Audio routing graph
+      filterNode.connect(masterGain);
+      filterNode.connect(delayNode);
+      delayNode.connect(feedbackGain);
+      feedbackGain.connect(delayNode);
+      feedbackGain.connect(masterGain);
+
+      masterGain.connect(analyserNode);
+      analyserNode.connect(audioCtx.destination);
+
+      const dot = document.getElementById('audio-status-dot');
+      if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping';
+    }
+
+    function playSynthTone(freq, duration = 0.18, type = synthState.waveform, isBass = false) {
+      initAudioEngine();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const subOsc = audioCtx.createOscillator();
+      const env = audioCtx.createGain();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+
+      subOsc.type = isBass ? 'triangle' : 'sine';
+      subOsc.frequency.setValueAtTime(isBass ? freq * 0.5 : freq * 1.005, now);
+
+      env.gain.setValueAtTime(0.001, now);
+      env.gain.exponentialRampToValueAtTime(isBass ? 0.42 : 0.28, now + 0.012);
+      env.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      osc.connect(env);
+      subOsc.connect(env);
+      env.connect(filterNode);
+
+      osc.start(now);
+      subOsc.start(now);
+      osc.stop(now + duration + 0.02);
+      subOsc.stop(now + duration + 0.02);
+
+      const noteEl = document.getElementById('synth-current-note');
+      if (noteEl) noteEl.textContent = `FREQ: ${Math.round(freq)} Hz`;
+    }
+
+    function playAnalogKick() {
+      initAudioEngine();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const env = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(145, now);
+      osc.frequency.exponentialRampToValueAtTime(36, now + 0.14);
+
+      env.gain.setValueAtTime(0.75, now);
+      env.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+
+      osc.connect(env);
+      env.connect(masterGain);
+
+      osc.start(now);
+      osc.stop(now + 0.25);
+    }
+
+    function playCyberHat() {
+      initAudioEngine();
+      const now = audioCtx.currentTime;
+      const bufferSize = audioCtx.sampleRate * 0.06;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+
+      const hpFilter = audioCtx.createBiquadFilter();
+      hpFilter.type = 'highpass';
+      hpFilter.frequency.setValueAtTime(6500, now);
+
+      const env = audioCtx.createGain();
+      env.gain.setValueAtTime(0.28, now);
+      env.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+
+      noise.connect(hpFilter);
+      hpFilter.connect(env);
+      env.connect(masterGain);
+
+      noise.start(now);
+    }
+
+    function buildSequencerGrid() {
+      const container = document.getElementById('sequencer-grid');
+      container.innerHTML = '';
+
+      tracks.forEach((track, tIdx) => {
+        const row = document.createElement('div');
+        row.className = 'grid grid-cols-18 gap-1.5 items-center flex';
+
+        const label = document.createElement('div');
+        label.className = 'w-28 shrink-0 text-[11px] font-mono font-bold text-slate-300 tracking-wider';
+        label.textContent = track.name;
+        row.appendChild(label);
+
+        const stepsWrap = document.createElement('div');
+        stepsWrap.className = 'flex-1 grid grid-cols-16 gap-1.5';
+        stepsWrap.style.gridTemplateColumns = 'repeat(16, minmax(0, 1fr))';
+
+        for (let s = 0; s < 16; s++) {
+          const btn = document.createElement('button');
+          btn.id = `cell-${tIdx}-${s}`;
+          const isBeat = s % 4 === 0;
+          const active = track.steps[s] === 1;
+          btn.className = `step-btn h-9 rounded-lg border ${active ? track.activeClass : isBeat ? 'bg-slate-900 border-slate-700/80 hover:border-slate-500' : 'bg-slate-950/90 border-slate-800/80 hover:border-slate-600'} text-[10px] font-mono text-slate-400`;
+          btn.textContent = s + 1;
+          btn.onclick = () => {
+            track.steps[s] = track.steps[s] ? 0 : 1;
+            buildSequencerGrid();
+          };
+          stepsWrap.appendChild(btn);
+        }
+
+        row.appendChild(stepsWrap);
+        container.appendChild(row);
+      });
+    }
+
+    function buildPianoKeyboard() {
+      const container = document.getElementById('piano-keys');
+      container.innerHTML = '';
+      const keyboardNotes = [
+        { note: 'C4', freq: 261.63, key: 'A' },
+        { note: 'D4', freq: 293.66, key: 'Z' },
+        { note: 'Eb4', freq: 311.13, key: 'E' },
+        { note: 'F4', freq: 349.23, key: 'R' },
+        { note: 'G4', freq: 392.00, key: 'T' },
+        { note: 'Ab4', freq: 415.30, key: 'Y' },
+        { note: 'Bb4', freq: 466.16, key: 'U' },
+        { note: 'C5', freq: 523.25, key: 'I' },
+        { note: 'D5', freq: 587.33, key: 'O' },
+        { note: 'Eb5', freq: 622.25, key: 'P' },
+        { note: 'G5', freq: 783.99, key: 'Q' },
+        { note: 'C6', freq: 1046.50, key: 'S' }
+      ];
+
+      keyboardNotes.forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = 'flex flex-col items-center justify-between p-2 rounded-xl bg-slate-900/90 hover:bg-cyan-500/20 active:scale-95 border border-slate-700/80 hover:border-cyan-400 transition-all';
+        btn.innerHTML = `
+          <span class="text-[10px] font-mono text-slate-500">${item.key}</span>
+          <span class="text-xs font-mono font-bold text-cyan-300">${item.note}</span>
+        `;
+        btn.onpointerdown = () => playSynthTone(item.freq, 0.32);
+        container.appendChild(btn);
+      });
+    }
+
+    function stepSequencerTick() {
+      const s = synthState.currentStep;
+
+      // Update visual playhead highlight
+      for (let t = 0; t < tracks.length; t++) {
+        for (let col = 0; col < 16; col++) {
+          const cell = document.getElementById(`cell-${t}-${col}`);
+          if (cell) {
+            if (col === s) cell.classList.add('playhead-col');
+            else cell.classList.remove('playhead-col');
+          }
+        }
+      }
+
+      if (tracks[0].steps[s]) playSynthTone(leadNotes[s], 0.16, synthState.waveform, false);
+      if (tracks[1].steps[s]) playSynthTone(bassNotes[s], 0.22, 'sawtooth', true);
+      if (tracks[2].steps[s]) playAnalogKick();
+      if (tracks[3].steps[s]) playCyberHat();
+
+      synthState.currentStep = (s + 1) % 16;
+    }
+
+    function toggleSequencer() {
+      initAudioEngine();
+      synthState.isPlaying = !synthState.isPlaying;
+      const btn = document.getElementById('btn-seq-play');
+      const label = document.getElementById('label-seq-play');
+
+      if (synthState.isPlaying) {
+        label.textContent = 'Arrêter Séquenceur';
+        btn.className = 'flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-amber-500 text-slate-950 font-bold text-xs shadow-lg shadow-rose-500/20 transition-all';
+        scheduleSequencerInterval();
+      } else {
+        label.textContent = 'Démarrer Séquenceur';
+        btn.className = 'flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition-all';
+        clearInterval(synthState.timerId);
+      }
+    }
+
+    function scheduleSequencerInterval() {
+      clearInterval(synthState.timerId);
+      if (!synthState.isPlaying) return;
+      const stepMs = (60 / synthState.bpm / 4) * 1000;
+      stepSequencerTick();
+      synthState.timerId = setInterval(stepSequencerTick, stepMs);
+    }
+
+    function updateSynthParams() {
+      synthState.bpm = parseInt(document.getElementById('slider-bpm').value, 10);
+      synthState.cutoff = parseFloat(document.getElementById('slider-cutoff').value);
+      synthState.resonance = parseFloat(document.getElementById('slider-resonance').value);
+      synthState.delayAmt = parseFloat(document.getElementById('slider-delay').value);
+      synthState.volume = parseFloat(document.getElementById('slider-volume').value);
+
+      document.getElementById('val-bpm').textContent = `${synthState.bpm} BPM`;
+      document.getElementById('val-cutoff').textContent = `${synthState.cutoff} Hz`;
+      document.getElementById('val-resonance').textContent = synthState.resonance.toFixed(1);
+      document.getElementById('val-delay').textContent = `${Math.round(synthState.delayAmt * 100)}%`;
+      document.getElementById('val-volume').textContent = `${Math.round(synthState.volume * 100)}%`;
+
+      if (filterNode && audioCtx) {
+        filterNode.frequency.setTargetAtTime(synthState.cutoff, audioCtx.currentTime, 0.03);
+        filterNode.Q.setTargetAtTime(synthState.resonance, audioCtx.currentTime, 0.03);
+      }
+      if (feedbackGain && audioCtx) {
+        feedbackGain.gain.setTargetAtTime(synthState.delayAmt, audioCtx.currentTime, 0.03);
+      }
+      if (masterGain && audioCtx) {
+        masterGain.gain.setTargetAtTime(synthState.volume, audioCtx.currentTime, 0.03);
+      }
+      if (synthState.isPlaying) scheduleSequencerInterval();
+    }
+
+    function setWaveform(wave) {
+      synthState.waveform = wave;
+      ['sawtooth', 'square', 'triangle', 'sine'].forEach(w => {
+        const btn = document.getElementById(`wave-${w}`);
+        if (w === wave) {
+          btn.className = 'wave-btn p-2 rounded-xl border border-cyan-500/50 bg-cyan-500/15 text-xs font-mono text-cyan-300 font-semibold';
+        } else {
+          btn.className = 'wave-btn p-2 rounded-xl border border-slate-800 bg-slate-900/60 text-xs font-mono text-slate-300';
+        }
+      });
+    }
+
+    function generateProceduralPattern() {
+      for (let s = 0; s < 16; s++) {
+        tracks[0].steps[s] = Math.random() > 0.42 ? 1 : 0;
+        tracks[1].steps[s] = (s % 4 === 0 || Math.random() > 0.65) ? 1 : 0;
+        tracks[2].steps[s] = (s % 4 === 0 || (s === 14 && Math.random() > 0.4)) ? 1 : 0;
+        tracks[3].steps[s] = (s % 2 === 1 || Math.random() > 0.6) ? 1 : 0;
+      }
+      buildSequencerGrid();
+      showToast('Nouveau motif procédural généré !', 'success');
+    }
+
+    function clearSequencerPattern() {
+      tracks.forEach(t => t.steps.fill(0));
+      buildSequencerGrid();
+    }
+
+    function loadAudioPreset(preset) {
+      if (preset === 'cyberpunk') {
+        document.getElementById('slider-bpm').value = 118;
+        document.getElementById('slider-cutoff').value = 1950;
+        setWaveform('sawtooth');
+      } else if (preset === 'acid') {
+        document.getElementById('slider-bpm').value = 138;
+        document.getElementById('slider-cutoff').value = 3400;
+        document.getElementById('slider-resonance').value = 13.5;
+        setWaveform('square');
+      } else if (preset === 'outrun') {
+        document.getElementById('slider-bpm').value = 106;
+        document.getElementById('slider-cutoff').value = 2800;
+        setWaveform('triangle');
+      }
+      updateSynthParams();
+      generateProceduralPattern();
+    }
+
+    const aCanvas = document.getElementById('audio-visualizer');
+    const aCtx = aCanvas.getContext('2d');
+
+    function resizeAudioCanvas() {
+      const rect = aCanvas.parentElement.getBoundingClientRect();
+      aCanvas.width = rect.width;
+      aCanvas.height = rect.height;
+    }
+
+    function renderAudioVisualizer() {
+      const w = aCanvas.width;
+      const h = aCanvas.height;
+      if (!w || !h) return;
+
+      aCtx.fillStyle = 'rgba(5, 7, 14, 0.38)';
+      aCtx.fillRect(0, 0, w, h);
+
+      if (!analyserNode) {
+        // Draw idle decorative wave
+        aCtx.strokeStyle = 'rgba(0, 242, 254, 0.35)';
+        aCtx.lineWidth = 2;
+        aCtx.beginPath();
+        const t = performance.now() * 0.003;
+        for (let x = 0; x < w; x += 6) {
+          const y = h / 2 + Math.sin(x * 0.02 + t) * 16 * Math.cos(x * 0.005 - t);
+          if (x === 0) aCtx.moveTo(x, y);
+          else aCtx.lineTo(x, y);
+        }
+        aCtx.stroke();
+        return;
+      }
+
+      const freqData = new Uint8Array(analyserNode.frequencyBinCount);
+      const timeData = new Uint8Array(analyserNode.frequencyBinCount);
+      analyserNode.getByteFrequencyData(freqData);
+      analyserNode.getByteTimeDomainData(timeData);
+
+      // Draw FFT Bars
+      const barCount = 64;
+      const barWidth = w / barCount;
+      for (let i = 0; i < barCount; i++) {
+        const val = freqData[i * 4] / 255;
+        const barH = val * (h * 0.85);
+        const hue = 185 + (i / barCount) * 95;
+        aCtx.fillStyle = `hsla(${hue}, 95%, 60%, 0.65)`;
+        aCtx.fillRect(i * barWidth + 1, h - barH, barWidth - 2, barH);
+      }
+
+      // Draw Oscilloscope Waveform
+      aCtx.strokeStyle = '#00f2fe';
+      aCtx.lineWidth = 2.2;
+      aCtx.beginPath();
+      const sliceWidth = w / 256;
+      for (let i = 0; i < 256; i++) {
+        const v = timeData[i] / 128.0;
+        const y = (v * h) / 2;
+        const x = i * sliceWidth;
+        if (i === 0) aCtx.moveTo(x, y);
+        else aCtx.lineTo(x, y);
+      }
+      aCtx.stroke();
+    }
+
+    /*************************************************************************
+     * MODULE 3: 2D RAYCASTING & SPECULAR MIRROR OPTICS ENGINE
+     *************************************************************************/
+    const rCanvas = document.getElementById('raycast-canvas');
+    const rCtx = rCanvas.getContext('2d');
+
+    const rayConfig = {
+      rayCount: 360,
+      fov: 360,
+      maxBounces: 3,
+      colorMode: 'cyber',
+      showPolygon: true,
+      showDrone: true,
+      drawMirrorMode: true
+    };
+
+    let rayWalls = [];
+    const raySource = { x: 300, y: 260, angle: 0 };
+    let isDrawingWall = false;
+    let tempWallStart = null;
+    let tempWallEnd = null;
+
+    function resizeRaycastCanvas() {
+      const rect = rCanvas.parentElement.getBoundingClientRect();
+      rCanvas.width = rect.width;
+      rCanvas.height = rect.height;
+      if (rayWalls.length === 0) {
+        loadRaycastScene('mirrors');
+      }
+    }
+
+    function addBoundaryWalls(w, h) {
+      rayWalls.push(
+        { x1: 0, y1: 0, x2: w, y2: 0, mirror: false },
+        { x1: w, y1: 0, x2: w, y2: h, mirror: false },
+        { x1: w, y1: h, x2: 0, y2: h, mirror: false },
+        { x1: 0, y1: h, x2: 0, y2: 0, mirror: false }
+      );
+    }
+
+    function loadRaycastScene(scene) {
+      const w = rCanvas.width || 900;
+      const h = rCanvas.height || 560;
+      rayWalls = [];
+      addBoundaryWalls(w, h);
+
+      if (scene === 'mirrors') {
+        // Mirror prism chamber
+        rayWalls.push(
+          { x1: w * 0.2, y1: h * 0.2, x2: w * 0.45, y2: h * 0.15, mirror: true },
+          { x1: w * 0.6, y1: h * 0.18, x2: w * 0.82, y2: h * 0.38, mirror: true },
+          { x1: w * 0.78, y1: h * 0.68, x2: w * 0.52, y2: h * 0.84, mirror: true },
+          { x1: w * 0.18, y1: h * 0.75, x2: w * 0.35, y2: h * 0.85, mirror: true },
+          { x1: w * 0.38, y1: h * 0.45, x2: w * 0.48, y2: h * 0.58, mirror: false },
+          { x1: w * 0.55, y1: h * 0.35, x2: w * 0.64, y2: h * 0.50, mirror: false }
+        );
+      } else if (scene === 'maze') {
+        const cols = 5, rows = 3;
+        const cw = w / (cols + 1), ch = h / (rows + 1);
+        for (let r = 1; r <= rows; r++) {
+          for (let c = 1; c <= cols; c++) {
+            const x = c * cw;
+            const y = r * ch;
+            const isMirror = (r + c) % 2 === 0;
+            if (Math.random() > 0.3) {
+              rayWalls.push({ x1: x - cw * 0.35, y1: y, x2: x + cw * 0.35, y2: y, mirror: isMirror });
+            } else {
+              rayWalls.push({ x1: x, y1: y - ch * 0.35, x2: x, y2: y + ch * 0.35, mirror: isMirror });
+            }
+          }
+        }
+      } else if (scene === 'pillars') {
+        const centers = [
+          { cx: w * 0.28, cy: h * 0.32, r: 42, sides: 6, mirror: true },
+          { cx: w * 0.72, cy: h * 0.32, r: 42, sides: 6, mirror: false },
+          { cx: w * 0.28, cy: h * 0.70, r: 42, sides: 6, mirror: false },
+          { cx: w * 0.72, cy: h * 0.70, r: 42, sides: 6, mirror: true },
+          { cx: w * 0.50, cy: h * 0.50, r: 52, sides: 8, mirror: true }
+        ];
+        centers.forEach(p => {
+          for (let i = 0; i < p.sides; i++) {
+            const a1 = (i / p.sides) * Math.PI * 2;
+            const a2 = ((i + 1) / p.sides) * Math.PI * 2;
+            rayWalls.push({
+              x1: p.cx + Math.cos(a1) * p.r,
+              y1: p.cy + Math.sin(a1) * p.r,
+              x2: p.cx + Math.cos(a2) * p.r,
+              y2: p.cy + Math.sin(a2) * p.r,
+              mirror: p.mirror
+            });
+          }
+        });
+      }
+      document.getElementById('stat-walls').textContent = rayWalls.length;
+    }
+
+    function toggleDrawWallType() {
+      rayConfig.drawMirrorMode = !rayConfig.drawMirrorMode;
+      const btn = document.getElementById('btn-wall-type');
+      if (rayConfig.drawMirrorMode) {
+        btn.textContent = 'Mode Tracé : Miroir Réfléchissant ✨';
+        btn.className = 'glass-card px-3 py-1.5 rounded-xl text-cyan-300 border border-cyan-500/40 font-semibold';
+      } else {
+        btn.textContent = 'Mode Tracé : Mur Opaque 🧱';
+        btn.className = 'glass-card px-3 py-1.5 rounded-xl text-amber-300 border border-amber-500/40 font-semibold';
+      }
+    }
+
+    function setRayColor(mode) {
+      rayConfig.colorMode = mode;
+    }
+
+    function updateRaycastConfig() {
+      rayConfig.rayCount = parseInt(document.getElementById('slider-raycount').value, 10);
+      rayConfig.fov = parseInt(document.getElementById('slider-rayfov').value, 10);
+      rayConfig.maxBounces = parseInt(document.getElementById('slider-raybounces').value, 10);
+      rayConfig.showPolygon = document.getElementById('chk-ray-poly').checked;
+      rayConfig.showDrone = document.getElementById('chk-ray-drone').checked;
+
+      document.getElementById('val-raycount').textContent = `${rayConfig.rayCount} rayons`;
+      document.getElementById('val-rayfov').textContent = `${rayConfig.fov}°`;
+      document.getElementById('val-raybounces').textContent = `${rayConfig.maxBounces} rebonds`;
+      document.getElementById('stat-rays').textContent = rayConfig.rayCount;
+    }
+
+    rCanvas.addEventListener('pointermove', e => {
+      const rect = rCanvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      if (isDrawingWall) {
+        tempWallEnd = { x: mx, y: my };
+      } else {
+        const dx = mx - raySource.x;
+        const dy = my - raySource.y;
+        if (Math.hypot(dx, dy) > 4) {
+          raySource.angle = Math.atan2(dy, dx);
+        }
+        raySource.x = mx;
+        raySource.y = my;
+      }
+    });
+
+    rCanvas.addEventListener('pointerdown', e => {
+      const rect = rCanvas.getBoundingClientRect();
+      isDrawingWall = true;
+      tempWallStart = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      tempWallEnd = { ...tempWallStart };
+    });
+
+    window.addEventListener('pointerup', () => {
+      if (isDrawingWall && tempWallStart && tempWallEnd) {
+        const len = Math.hypot(tempWallEnd.x - tempWallStart.x, tempWallEnd.y - tempWallStart.y);
+        if (len > 18) {
+          rayWalls.push({
+            x1: tempWallStart.x,
+            y1: tempWallStart.y,
+            x2: tempWallEnd.x,
+            y2: tempWallEnd.y,
+            mirror: rayConfig.drawMirrorMode
+          });
+          document.getElementById('stat-walls').textContent = rayWalls.length;
+        }
+      }
+      isDrawingWall = false;
+      tempWallStart = null;
+      tempWallEnd = null;
+    });
+
+    function intersectRayWall(ox, oy, dx, dy, wall) {
+      const x1 = wall.x1, y1 = wall.y1, x2 = wall.x2, y2 = wall.y2;
+      const x3 = ox, y3 = oy, x4 = ox + dx, y4 = oy + dy;
+
+      const den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+      if (Math.abs(den) < 1e-6) return null;
+
+      const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
+      const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
+
+      if (t >= 0 && t <= 1 && u > 0.001) {
+        return {
+          x: x1 + t * (x2 - x1),
+          y: y1 + t * (y2 - y1),
+          dist: u,
+          wall
+        };
+      }
+      return null;
+    }
+
+    function renderRaycastFrame(now) {
+      const w = rCanvas.width;
+      const h = rCanvas.height;
+      if (!w || !h) return;
+
+      rCtx.fillStyle = '#05070f';
+      rCtx.fillRect(0, 0, w, h);
+
+      let totalIntersections = 0;
+      const fovRad = (rayConfig.fov * Math.PI) / 180;
+      const startAngle = raySource.angle - fovRad / 2;
+      const count = rayConfig.rayCount;
+      const firstHitPoints = [];
+
+      // Cast rays from primary source
+      for (let i = 0; i < count; i++) {
+        const a = startAngle + (i / count) * fovRad;
+        let ox = raySource.x;
+        let oy = raySource.y;
+        let dx = Math.cos(a);
+        let dy = Math.sin(a);
+
+        for (let bounce = 0; bounce <= rayConfig.maxBounces; bounce++) {
+          let closest = null;
+          let minDist = Infinity;
+
+          for (let k = 0; k < rayWalls.length; k++) {
+            const hit = intersectRayWall(ox, oy, dx, dy, rayWalls[k]);
+            if (hit && hit.dist < minDist) {
+              minDist = hit.dist;
+              closest = hit;
+            }
+          }
+
+          if (!closest) break;
+          totalIntersections++;
+
+          if (bounce === 0) {
+            firstHitPoints.push(closest);
+          }
+
+          // Ray color styling
+          let strokeCol = 'rgba(0, 242, 254, 0.16)';
+          if (rayConfig.colorMode === 'solar') strokeCol = 'rgba(251, 191, 36, 0.16)';
+          else if (rayConfig.colorMode === 'emerald') strokeCol = 'rgba(16, 185, 129, 0.16)';
+          else if (rayConfig.colorMode === 'rainbow') {
+            const hue = Math.round((i / count) * 360);
+            strokeCol = `hsla(${hue}, 90%, 60%, ${bounce === 0 ? 0.22 : 0.45})`;
+          } else if (bounce > 0) {
+            strokeCol = 'rgba(168, 85, 247, 0.42)';
+          }
+
+          rCtx.strokeStyle = strokeCol;
+          rCtx.lineWidth = bounce === 0 ? 1 : 1.4;
+          rCtx.beginPath();
+          rCtx.moveTo(ox, oy);
+          rCtx.lineTo(closest.x, closest.y);
+          rCtx.stroke();
+
+          if (!closest.wall.mirror || bounce === rayConfig.maxBounces) break;
+
+          // Specular reflection vector R = D - 2(D·N)N
+          const wx = closest.wall.x2 - closest.wall.x1;
+          const wy = closest.wall.y2 - closest.wall.y1;
+          const wLen = Math.hypot(wx, wy) || 1;
+          const nx = -wy / wLen;
+          const ny = wx / wLen;
+          const dot = dx * nx + dy * ny;
+
+          dx = dx - 2 * dot * nx;
+          dy = dy - 2 * dot * ny;
+          ox = closest.x;
+          oy = closest.y;
+        }
+      }
+
+      // Volumetric visibility polygon fill
+      if (rayConfig.showPolygon && firstHitPoints.length > 2) {
+        const grad = rCtx.createRadialGradient(raySource.x, raySource.y, 4, raySource.x, raySource.y, Math.max(w, h) * 0.55);
+        grad.addColorStop(0, 'rgba(0, 242, 254, 0.22)');
+        grad.addColorStop(1, 'rgba(0, 242, 254, 0.0)');
+        rCtx.fillStyle = grad;
+        rCtx.beginPath();
+        rCtx.moveTo(raySource.x, raySource.y);
+        for (let i = 0; i < firstHitPoints.length; i++) {
+          rCtx.lineTo(firstHitPoints[i].x, firstHitPoints[i].y);
+        }
+        rCtx.closePath();
+        rCtx.fill();
+      }
+
+      // Autonomous secondary orbital light drone
+      if (rayConfig.showDrone) {
+        const t = now * 0.0012;
+        const droneX = w * 0.5 + Math.cos(t) * (w * 0.26);
+        const droneY = h * 0.5 + Math.sin(t * 1.7) * (h * 0.24);
+        const droneRays = 90;
+        rCtx.strokeStyle = 'rgba(244, 63, 94, 0.15)';
+        rCtx.lineWidth = 1;
+        for (let i = 0; i < droneRays; i++) {
+          const a = (i / droneRays) * Math.PI * 2;
+          const dx = Math.cos(a), dy = Math.sin(a);
+          let closest = null, minDist = Infinity;
+          for (let k = 0; k < rayWalls.length; k++) {
+            const hit = intersectRayWall(droneX, droneY, dx, dy, rayWalls[k]);
+            if (hit && hit.dist < minDist) {
+              minDist = hit.dist;
+              closest = hit;
+            }
+          }
+          if (closest) {
+            rCtx.beginPath();
+            rCtx.moveTo(droneX, droneY);
+            rCtx.lineTo(closest.x, closest.y);
+            rCtx.stroke();
+          }
+        }
+        rCtx.fillStyle = '#f43f5e';
+        rCtx.beginPath();
+        rCtx.arc(droneX, droneY, 5, 0, Math.PI * 2);
+        rCtx.fill();
+      }
+
+      // Draw walls & mirrors
+      for (let i = 4; i < rayWalls.length; i++) {
+        const wall = rayWalls[i];
+        rCtx.strokeStyle = wall.mirror ? '#00f2fe' : '#64748b';
+        rCtx.lineWidth = wall.mirror ? 3.5 : 3;
+        rCtx.beginPath();
+        rCtx.moveTo(wall.x1, wall.y1);
+        rCtx.lineTo(wall.x2, wall.y2);
+        rCtx.stroke();
+      }
+
+      // Draw wall currently being dragged by user
+      if (isDrawingWall && tempWallStart && tempWallEnd) {
+        rCtx.strokeStyle = rayConfig.drawMirrorMode ? '#38bdf8' : '#fbbf24';
+        rCtx.setLineDash([6, 4]);
+        rCtx.lineWidth = 2.5;
+        rCtx.beginPath();
+        rCtx.moveTo(tempWallStart.x, tempWallStart.y);
+        rCtx.lineTo(tempWallEnd.x, tempWallEnd.y);
+        rCtx.stroke();
+        rCtx.setLineDash([]);
+      }
+
+      // Draw primary light emitter cursor
+      rCtx.fillStyle = '#ffffff';
+      rCtx.beginPath();
+      rCtx.arc(raySource.x, raySource.y, 6, 0, Math.PI * 2);
+      rCtx.fill();
+
+      document.getElementById('stat-intersects').textContent = totalIntersections;
+    }
+
+    /*************************************************************************
+     * COMMAND PALETTE (CTRL+K) & SELF-CONTAINED GITHUB PAGES EXPORT
+     *************************************************************************/
+    const commands = [
+      { title: 'Basculer vers : 1. Physique & Plexus 3D', cat: 'Navigation', action: () => switchModule('particles') },
+      { title: 'Basculer vers : 2. Synthé WebAudio & FFT', cat: 'Navigation', action: () => switchModule('synth') },
+      { title: 'Basculer vers : 3. Raycasting & Optique 2D', cat: 'Navigation', action: () => switchModule('raycast') },
+      { title: 'Déclencher une Supernova (Particules 3D)', cat: 'Physique', action: () => { switchModule('particles'); triggerShockwave(); } },
+      { title: 'Démarrer / Arrêter le Séquenceur Audio', cat: 'Audio DSP', action: () => { switchModule('synth'); toggleSequencer(); } },
+      { title: 'Générer un Motif Musical Procédural IA', cat: 'Audio DSP', action: () => { switchModule('synth'); generateProceduralPattern(); } },
+      { title: 'Charger Scène : Chambre des Miroirs', cat: 'Raycasting', action: () => { switchModule('raycast'); loadRaycastScene('mirrors'); } },
+      { title: 'Télécharger index.html (Prêt pour GitHub Pages)', cat: 'Déploiement', action: () => downloadSelfHTML() }
+    ];
+
+    function toggleCommandPalette() {
+      const backdrop = document.getElementById('cmd-palette-backdrop');
+      const isHidden = backdrop.classList.contains('hidden');
+      if (isHidden) {
+        backdrop.classList.remove('hidden');
+        const input = document.getElementById('cmd-input');
+        input.value = '';
+        filterCommands();
+        setTimeout(() => input.focus(), 50);
+      } else {
+        backdrop.classList.add('hidden');
+      }
+    }
+
+    function filterCommands() {
+      const q = document.getElementById('cmd-input').value.toLowerCase();
+      const list = document.getElementById('cmd-list');
+      list.innerHTML = '';
+
+      commands
+        .filter(c => c.title.toLowerCase().includes(q) || c.cat.toLowerCase().includes(q))
+        .forEach(cmd => {
+          const btn = document.createElement('button');
+          btn.className = 'w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-cyan-500/15 text-left transition-all group';
+          btn.innerHTML = `
+            <span class="text-xs sm:text-sm text-slate-200 group-hover:text-cyan-300 font-medium">${cmd.title}</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">${cmd.cat}</span>
+          `;
+          btn.onclick = () => {
+            toggleCommandPalette();
+            cmd.action();
+          };
+          list.appendChild(btn);
+        });
+    }
+
+    function openDeployModal() {
+      document.getElementById('deploy-modal-backdrop').classList.remove('hidden');
+    }
+
+    function closeDeployModal() {
+      document.getElementById('deploy-modal-backdrop').classList.add('hidden');
+    }
+
+    function copyDeployCommands() {
+      const cmdText = `mkdir -p test && mv ~/Downloads/index.html ./test/index.html && git add test/index.html && git commit -m "feat: deploy Gemini Pro Web Lab showcase" && git push`;
+      const tempArea = document.createElement('textarea');
+      tempArea.value = cmdText;
+      document.body.appendChild(tempArea);
+      tempArea.select();
+      document.execCommand('copy');
+      tempArea.remove();
+      showToast('Commandes Git copiées dans le presse-papiers !', 'success');
+    }
+
+    function downloadSelfHTML() {
+      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast('index.html téléchargé ! Prêt pour /gemini-pro/test/', 'success');
+    }
+
+    // Global Keyboard Shortcuts (Ctrl+K, Escape, Piano keys)
+    window.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        toggleCommandPalette();
+      } else if (e.key === 'Escape') {
+        document.getElementById('cmd-palette-backdrop').classList.add('hidden');
+        closeDeployModal();
+      } else if (activeModule === 'synth' && document.activeElement.tagName !== 'INPUT') {
+        const keyMap = {
+          a: 261.63, z: 293.66, e: 311.13, r: 349.23,
+          t: 392.00, y: 415.30, u: 466.16, i: 523.25
+        };
+        const freq = keyMap[e.key.toLowerCase()];
+        if (freq) playSynthTone(freq, 0.25);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (activeModule === 'particles') resizeParticleCanvas();
+      if (activeModule === 'synth') resizeAudioCanvas();
+      if (activeModule === 'raycast') resizeRaycastCanvas();
+    });
+
+    // Master 60 FPS Animation Loop
+    function masterLoop(now) {
+      updateTelemetry(now);
+      if (activeModule === 'particles') renderParticlesFrame();
+      else if (activeModule === 'synth') renderAudioVisualizer();
+      else if (activeModule === 'raycast') renderRaycastFrame(now);
+      requestAnimationFrame(masterLoop);
+    }
+
+    window.onload = function () {
+      resizeParticleCanvas();
+      syncParticlesCount();
+      buildSequencerGrid();
+      buildPianoKeyboard();
+      requestAnimationFrame(masterLoop);
+    };
+  </script>
+</body>
+</html>
