@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="fr-BE" prefix="og: https://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO PRIMAIRE -->
+  <title>BROL 3.0 – Dashboard Central & Explorateur de Modules Web | Ouaisfieu</title>
+  <meta name="description" content="Explorez l'écosystème BROL (Niveaux 0 et 1) : tableau de bord interactif regroupant 34 modules web, outils de veille citoyenne, éducation permanente, intranets et IA fictive GORK.">
+  <meta name="keywords" content="BROL, dashboard central, ouaisfieu, veille citoyenne, éducation permanente, GORK, intranet, outils web, HTML, STIC, plaidoyer">
+  <meta name="author" content="Ouaisfieu">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#020617">
+  <link rel="canonical" href="https://ouaisfieu.github.io/gemini-pro/dashboard/">
+
+  <!-- OPEN GRAPH / RÉSEAUX SOCIAUX -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_BE">
+  <meta property="og:site_name" content="BROL 3.0 – Command Center">
+  <meta property="og:title" content="BROL 3.0 – Dashboard Central / Centraal Dashboord">
+  <meta property="og:description" content="Portail interactif unifiant les 34 modules des Niveaux 0 et 1 de l'écosystème BROL : kits HTML, boussole de navigation, veille citoyenne, GORK et jeux sérieux.">
+  <meta property="og:url" content="https://ouaisfieu.github.io/gemini-pro/dashboard/">
+  <meta property="og:image" content="https://dl.ouaisfi.eu/usba/capture.jpg">
+  <meta property="og:image:alt" content="Aperçu du Dashboard Central BROL">
+
+  <!-- TWITTER / X CARDS -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BROL 3.0 – Dashboard Central & Explorateur de Modules">
+  <meta name="twitter:description" content="Explorez les 34 modules et annexes de l'écosystème BROL (Niveaux 0 et 1) en mode Iframe, Graphe GORK ou Grille.">
+  <meta name="twitter:image" content="https://dl.ouaisfi.eu/usba/capture.jpg">
+
+  <!-- FAVICON SVG INLINE (Évite les erreurs 404 favicon.ico) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23020617' stroke='%2338bdf8' stroke-width='4'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' fill='%2322c55e' font-family='monospace' font-weight='bold' font-size='20'%3EBROL%3C/text%3E%3C/svg%3E">
+
+  <!-- PERFORMANCE : PRÉCONNEXION AUX DOMAINES DISTANTS -->
+  <link rel="preconnect" href="https://dl.ouaisfi.eu">
+  <link rel="dns-prefetch" href="https://dl.ouaisfi.eu">
+
+  <!-- DONNÉES STRUCTURÉES SCHEMA.ORG (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["WebApplication", "CollectionPage"],
+    "name": "BROL 3.0 – Dashboard Central / Centraal Dashboord",
+    "alternateName": "BROL Command Center",
+    "url": "https://ouaisfieu.github.io/gemini-pro/dashboard/",
+    "description": "Tableau de bord centralisant 34 modules web (Niveaux 0 et 1), outils de veille citoyenne, guides de plaidoyer, modèles d'intranets et expériences interactives.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "All",
+    "inLanguage": "fr-BE",
+    "author": {
+      "@type": "Organization",
+      "name": "Ouaisfieu",
+      "url": "https://ouaisfieu.github.io/"
+    },
+    "isBasedOn": "https://dl.ouaisfi.eu/usba/"
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-panel: rgba(9, 14, 28, 0.94);
+      --bg-card: rgba(15, 23, 42, 0.92);
+      --bg-card-hover: rgba(30, 41, 59, 0.98);
+      --accent: #22c55e;
+      --cyan: #38bdf8;
+      --orange: #f97316;
+      --purple: #a855f7;
+      --red: #f87171;
+      --yellow: #eab308;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.24);
+      --border-strong: rgba(56, 189, 248, 0.6);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --radius-xl: 16px;
+      --radius-md: 11px;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--font-main);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.18), transparent 45%),
+        radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.16), transparent 45%),
+        var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Effet scanline léger */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(15, 23, 42, 0.22) 1px, transparent 1px);
+      background-size: 100% 3px;
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      flex-shrink: 0;
+      backdrop-filter: blur(16px);
+      background: rgba(2, 6, 23, 0.92);
+      border-bottom: 1px solid rgba(30, 64, 175, 0.65);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-frame {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      padding: 2px;
+      background: conic-gradient(from 180deg, #22c55e, #38bdf8, #f97316, #a855f7, #22c55e);
+      box-shadow: 0 0 22px rgba(56, 189, 248, 0.55);
+      flex-shrink: 0;
+    }
+
+    .logo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #bbf7d0;
+    }
+
+    .brand-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 0;
+    }
+
+    .badge-version {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid var(--accent);
+      color: #bbf7d0;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .brand-sub {
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .level-switcher, .view-switcher {
+      display: inline-flex;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .pill-btn {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pill-btn:hover { color: var(--text); }
+
+    .pill-btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      color: #e0f2fe;
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+
+    .action-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      padding: 6px 11px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      border-color: var(--cyan);
+      background: rgba(30, 41, 59, 0.95);
+      transform: translateY(-1px);
+    }
+
+    .action-btn.trap-btn {
+      border-color: rgba(249, 115, 22, 0.6);
+      color: #fed7aa;
+      background: rgba(249, 115, 22, 0.12);
+    }
+
+    /* LAYOUT PRINCIPAL CORRIGÉ (Aucun chevauchement du footer possible) */
+    main {
+      flex: 1 0 auto;
+      width: 100%;
+      padding: 12px;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 350px minmax(0, 1fr) 310px;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+      position: relative;
+      /* Hauteur synchronisée sur grand écran pour garder les 3 colonnes alignées */
+      height: calc(100vh - 125px);
+      min-height: 540px;
+    }
+
+    @media (max-width: 1220px) {
+      main {
+        grid-template-columns: 330px minmax(0, 1fr);
+      }
+      .side-panel {
+        grid-column: 1 / -1;
+        height: auto;
+        min-height: 0;
+      }
+    }
+
+    @media (max-width: 860px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      .panel {
+        height: auto;
+        min-height: 0;
+      }
+      .modules-scroll {
+        max-height: 420px;
+      }
+      .viewer-stage {
+        min-height: 460px;
+      }
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .panel-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+    }
+
+    /* RECHERCHE & FILTRES */
+    .search-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(2, 6, 23, 0.9);
+      color: var(--text);
+      font-size: 0.8rem;
+      padding: 7px 62px 7px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--cyan);
+    }
+
+    .kbd-hint {
+      position: absolute;
+      right: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      color: var(--muted);
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    select {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(2, 6, 23, 0.9);
+      color: var(--text);
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      outline: none;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.73rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    /* LISTE DES MODULES */
+    .modules-scroll {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
+      padding-right: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .modules-scroll::-webkit-scrollbar,
+    .side-scroll::-webkit-scrollbar { width: 5px; }
+    .modules-scroll::-webkit-scrollbar-thumb,
+    .side-scroll::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 999px;
+    }
+
+    .group-title {
+      font-size: 0.7rem;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin: 2px 4px 5px;
+      font-family: var(--font-mono);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .module-item {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      padding: 8px 10px;
+      margin-bottom: 5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: flex-start;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .module-item:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(148, 163, 184, 0.55);
+      transform: translateX(2px);
+    }
+
+    .module-item.active {
+      background: rgba(34, 197, 94, 0.14);
+      border-color: var(--accent);
+      box-shadow: 0 0 18px rgba(34, 197, 94, 0.2);
+    }
+
+    .module-main {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .module-title-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .module-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .module-title:hover {
+      color: var(--cyan);
+    }
+
+    .module-sub {
+      font-size: 0.73rem;
+      color: var(--muted);
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .module-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .module-file {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: #94a3b8;
+      max-width: 115px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .badges-inline {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .level-tag {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.14);
+      color: #bae6fd;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    .level-tag.lvl-1 {
+      background: rgba(168, 85, 247, 0.16);
+      color: #e9d5ff;
+      border-color: rgba(168, 85, 247, 0.4);
+    }
+
+    .module-kind {
+      font-size: 0.68rem;
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .kind-base  { border-color: rgba(34, 197, 94, 0.8); color: #bbf7d0; }
+    .kind-brol  { border-color: rgba(56, 189, 248, 0.8); color: #bae6fd; }
+    .kind-univ  { border-color: rgba(168, 85, 247, 0.8); color: #e9d5ff; }
+    .kind-intra { border-color: rgba(249, 115, 22, 0.8); color: #fed7aa; }
+    .kind-ia    { border-color: rgba(248, 113, 113, 0.8); color: #fecaca; }
+    .kind-meta  { border-color: rgba(234, 179, 8, 0.8); color: #fef08a; }
+
+    .fav-star {
+      background: none;
+      border: none;
+      color: #475569;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 0 2px;
+      transition: color 0.15s, transform 0.15s;
+    }
+    .fav-star:hover { transform: scale(1.2); }
+    .fav-star.is-fav { color: #facc15; }
+
+    /* COLONNE CENTRALE : VIEWER MULTI-MODES */
+    .viewer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .viewer-title {
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 0;
+    }
+
+    .viewer-subtitle {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .trap-alert-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(249, 115, 22, 0.18);
+      border: 1px solid var(--orange);
+      color: #fed7aa;
+    }
+
+    .viewer-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      background: rgba(2, 6, 23, 0.75);
+      padding: 6px 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .url-bar {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      color: #bae6fd;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 380px;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .viewer-stage {
+      flex: 1 1 0;
+      min-height: 0;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #020617;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #iframeContainer {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+    }
+
+    #viewerFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #020617;
+      transition: width 0.25s ease, height 0.25s ease;
+    }
+
+    #viewerFrame.viewport-tablet {
+      width: 768px;
+      max-width: 100%;
+      height: 94%;
+      border: 2px solid var(--border-strong);
+      border-radius: 14px;
+    }
+
+    #viewerFrame.viewport-mobile {
+      width: 390px;
+      max-width: 100%;
+      height: 92%;
+      border: 2px solid var(--border-strong);
+      border-radius: 20px;
+    }
+
+    /* Vue Graphe & Vue Grille */
+    #graphContainer, #gridContainer {
+      position: absolute;
+      inset: 0;
+      background: #020617;
+      display: none;
+    }
+
+    #graphCanvas {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .graph-legend {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(2, 6, 23, 0.88);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    #gridContainer {
+      overflow-y: auto;
+      padding: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 10px;
+      align-content: start;
+    }
+
+    .grid-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .grid-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+      background: var(--bg-card-hover);
+    }
+
+    /* COLONNE DROITE : ANNEXES & DIAGNOSTIC */
+    .side-scroll {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 3px;
+    }
+
+    .embed-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .embed-btn {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      font-size: 0.74rem;
+      padding: 7px 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      transition: all 0.15s ease;
+      text-align: left;
+      overflow: hidden;
+    }
+
+    .embed-btn:hover {
+      border-color: var(--cyan);
+      background: var(--bg-card-hover);
+    }
+
+    .embed-btn.active {
+      border-color: var(--accent);
+      background: rgba(34, 197, 94, 0.15);
+    }
+
+    .trap-card {
+      background: rgba(249, 115, 22, 0.08);
+      border: 1px solid rgba(249, 115, 22, 0.45);
+      border-radius: var(--radius-md);
+      padding: 9px 10px;
+      font-size: 0.75rem;
+      line-height: 1.4;
+      color: #ffedd5;
+    }
+
+    .trap-card strong { color: #fb923c; }
+
+    .video-drawer {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #020617;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .video-drawer summary {
+      padding: 8px 10px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      user-select: none;
+      color: #bae6fd;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    /* MODALE D'AUDIT */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.82);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-box {
+      background: #090e1c;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-xl);
+      max-width: 680px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .audit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
+    .audit-item {
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border-left: 3px solid var(--accent);
+    }
+
+    /* FOOTER VERROUILLÉ EN BAS DE PAGE */
+    footer {
+      flex-shrink: 0;
+      margin-top: auto;
+      width: 100%;
+      padding: 9px 16px;
+      font-size: 0.74rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(30, 64, 175, 0.55);
+      background: rgba(2, 6, 23, 0.96);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      position: relative;
+      z-index: 10;
+    }
+
+    footer a { color: var(--cyan); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo-frame" aria-hidden="true">
+      <div class="logo-inner">BROL</div>
+    </div>
+    <div>
+      <h1 class="brand-title">
+        BROL 3.0 – Dashboard Central / Centraal Dashboord
+        <span class="badge-version">NIVEAUX 0 + 1 UNIFIÉS</span>
+      </h1>
+      <p class="brand-sub">
+        Écosystème complet <code>dl.ouaisfi.eu/usba/</code> • Optimisé pour <code>ouaisfieu.github.io/gemini-pro/dashboard/</code>
+      </p>
+    </div>
+  </div>
+
+  <nav class="header-controls" aria-label="Contrôles globaux du tableau de bord">
+    <!-- Sélecteur de Niveau -->
+    <div class="level-switcher" role="group" aria-label="Filtrer par niveau">
+      <button type="button" class="pill-btn active" data-level="all">🌐 Tous (34)</button>
+      <button type="button" class="pill-btn" data-level="0">🟢 Niveau 0 (15)</button>
+      <button type="button" class="pill-btn" data-level="1">🟣 Niveau 1 (19)</button>
+    </div>
+
+    <!-- Sélecteur de Vue Centrale -->
+    <div class="view-switcher" role="group" aria-label="Mode de visualisation">
+      <button type="button" class="pill-btn active" data-view="iframe">🖥️ Iframe</button>
+      <button type="button" class="pill-btn" data-view="graph">🕸️ Graphe GORK</button>
+      <button type="button" class="pill-btn" data-view="grid">🗂️ Grille</button>
+    </div>
+
+    <!-- Mode de résolution des URLs -->
+    <button type="button" class="action-btn" id="toggleBaseBtn" title="Basculer entre les URLs absolues vers dl.ouaisfi.eu et les chemins locaux relatifs">
+      🔗 Source : <strong id="baseModeLabel">dl.ouaisfi.eu</strong>
+    </button>
+
+    <!-- Bouton Rapport des Pièges -->
+    <button type="button" class="action-btn trap-btn" id="openAuditBtn">
+      🕵️‍♂️ Pièges déjoués (5)
+    </button>
+  </nav>
+</header>
+
+<main>
+  <!-- COLONNE GAUCHE : EXPLORATEUR DE MODULES -->
+  <section class="panel" aria-labelledby="explorerHeading">
+    <div class="panel-header">
+      <h2 class="panel-title" id="explorerHeading">📂 Pages &amp; modules</h2>
+      <button type="button" class="action-btn" id="favFilterBtn" title="Afficher uniquement les favoris">⭐ Favoris</button>
+    </div>
+
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <input type="search" id="moduleSearch" placeholder="Rechercher (nom, fichier, tag)…" aria-label="Rechercher un module">
+        <span class="kbd-hint">Ctrl+K</span>
+      </div>
+      <div class="filter-row">
+        <select id="moduleCategory" aria-label="Filtrer par catégorie">
+          <option value="all">Toutes les catégories</option>
+          <option value="base">🟢 La Base</option>
+          <option value="brol">🔵 BROL, Fichiers &amp; Bac à spam</option>
+          <option value="univ">🟣 Univers &amp; Jeu</option>
+          <option value="intra">🟠 Intranet, Extronet &amp; Métier</option>
+          <option value="ia">🔴 IA fictive (GORK / Minitel)</option>
+          <option value="meta">🟡 Tests &amp; Méta-guides</option>
+        </select>
+      </div>
+      <div class="stats-bar">
+        <span id="modulesCount">34 modules</span>
+        <span id="activeLevelHint">Niveaux 0 &amp; 1 actifs</span>
+      </div>
+    </div>
+
+    <div class="modules-scroll" id="modulesContainer">
+      <!-- Fallback SEO statique si JavaScript est désactivé -->
+      <noscript>
+        <p style="padding:8px;font-size:0.8rem;">Index statique des modules BROL :</p>
+        <ul style="padding-left:20px;font-size:0.8rem;line-height:1.6;">
+          <li><a href="https://dl.ouaisfi.eu/usba/index.html">LE SITE ULTIME (index)</a></li>
+          <li><a href="https://dl.ouaisfi.eu/usba/browniz-politik.html">Politique des Cookies</a></li>
+          <li><a href="https://dl.ouaisfi.eu/usba/valeurs.html">Boussole de valeurs</a></li>
+          <li><a href="https://dl.ouaisfi.eu/usba/portail.html">Hub illustré (Portail)</a></li>
+          <li><a href="https://dl.ouaisfi.eu/usba/minitel.html">GORK / Minitel</a></li>
+          <li><a href="https://dl.ouaisfi.eu/usba/terminal-ia.html">GORKI / Terminal IA</a></li>
+          <li><a href="https://dl.ouaisfi.eu/usba/veilleuxses.html">Agence détective publique</a></li>
+          <li><a href="https://dl.ouaisfi.eu/usba/stic-anarchie.html">STIC de l’anarchie</a></li>
+          <li><a href="https://dl.ouaisfi.eu/usba/1/index.html">Accéder au Niveau 1 complet</a></li>
+        </ul>
+      </noscript>
+    </div>
+  </section>
+
+  <!-- COLONNE CENTRALE : VIEWER / GRAPHE / GRILLE -->
+  <section class="panel" id="viewerPanel" aria-labelledby="viewerTitle">
+    <div class="viewer-header">
+      <div>
+        <h2 class="viewer-title">
+          <span id="viewerTitle">Sélectionnez un module</span>
+          <span class="trap-alert-badge" id="viewerTrapBadge" style="display:none;"></span>
+        </h2>
+        <p class="viewer-subtitle" id="viewerSubtitle"></p>
+      </div>
+      <div class="badges-inline">
+        <span class="level-tag" id="viewerLevelBadge">Niveau 0</span>
+        <span class="module-kind kind-base" id="viewerCategoryBadge">La Base</span>
+        <span class="module-kind" id="viewerKindBadge">info</span>
+      </div>
+    </div>
+
+    <div class="viewer-toolbar">
+      <div class="url-bar" id="viewerFile" title="">URL : —</div>
+      <div class="toolbar-actions">
+        <button type="button" class="action-btn viewport-btn" data-size="desktop" title="Vue Bureau" aria-label="Vue Bureau">💻</button>
+        <button type="button" class="action-btn viewport-btn" data-size="tablet" title="Vue Tablette (768px)" aria-label="Vue Tablette">📱</button>
+        <button type="button" class="action-btn viewport-btn" data-size="mobile" title="Vue Mobile (390px)" aria-label="Vue Mobile">🤳</button>
+        <button type="button" class="action-btn" id="reloadFrameBtn" title="Recharger l'aperçu" aria-label="Recharger l'aperçu">🔄</button>
+        <button type="button" class="action-btn" id="copyUrlBtn" title="Copier l'URL complète">📋 Copier</button>
+        <a href="https://dl.ouaisfi.eu/usba/" id="viewerOpenNew" class="action-btn" target="_blank" rel="noopener noreferrer" style="border-color:var(--cyan);color:#e0f2fe;">
+          ↗ Nouvel onglet
+        </a>
+      </div>
+    </div>
+
+    <div class="viewer-stage">
+      <!-- Mode 1 : Iframe -->
+      <div id="iframeContainer">
+        <iframe id="viewerFrame" title="Aperçu interactif du module BROL sélectionné" src="about:blank" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+      </div>
+
+      <!-- Mode 2 : Graphe GORK -->
+      <div id="graphContainer">
+        <canvas id="graphCanvas" aria-label="Graphe interactif des modules BROL"></canvas>
+        <div class="graph-legend">
+          🟢 Niveau 0 (/usba/) &nbsp;|&nbsp; 🟣 Niveau 1 (/usba/1/)<br>
+          Cliquez sur un nœud pour ouvrir le module dans le viewer
+        </div>
+      </div>
+
+      <!-- Mode 3 : Grille panoramique -->
+      <div id="gridContainer"></div>
+    </div>
+  </section>
+
+  <!-- COLONNE DROITE : DISTRACTIONS, ANNEXES & CONTRÔLE -->
+  <aside class="panel side-panel" aria-labelledby="annexesHeading">
+    <div class="panel-header">
+      <h2 class="panel-title" id="annexesHeading">🐧 Distractions &amp; Annexes (12)</h2>
+    </div>
+
+    <div class="side-scroll">
+      <div class="embed-grid" id="embedsContainer"></div>
+
+      <div class="trap-card" id="trapInspectorBox">
+        <strong>🛡️ Diagnostic temps réel :</strong>
+        <div id="trapInspectorText" style="margin-top:3px;">
+          Tous les pièges du code original (catégorie <code>ib</code>, DOM Niveau 1 écrasé, <code>capture.jpg</code> déguisé en vidéo, chemins relatifs inter-domaines) sont corrigés.
+        </div>
+      </div>
+
+      <details class="video-drawer" open>
+        <summary>▶️ Vidéo d'intro BROL (<code>vzkUUpms_aU</code>)</summary>
+        <iframe width="100%" height="185" loading="lazy" src="https://www.youtube.com/embed/vzkUUpms_aU" title="Vidéo YouTube de présentation BROL" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </details>
+    </div>
+  </aside>
+</main>
+
+<!-- MODALE D'AUDIT DES PIÈGES DÉJOUÉS -->
+<div class="modal-backdrop" id="auditModal" role="dialog" aria-modal="true" aria-labelledby="auditModalTitle">
+  <div class="modal-box">
+    <div class="panel-header">
+      <h2 class="panel-title" id="auditModalTitle">🕵️‍♂️ Rapport d'analyse : Les 5 pièges de <code>dl.ouaisfi.eu/usba/</code> déjoués</h2>
+      <button type="button" class="action-btn" id="closeAuditBtn">✕ Fermer</button>
+    </div>
+    <div class="audit-list">
+      <div class="audit-item">
+        <strong>1. Le Piège du DOM caché (19 modules du Niveau 1 écrasés par 15 modules du Niveau 0) :</strong><br>
+        Le code HTML servi par le serveur contient 19 modules en dur (<code>scratchy-index.html</code>, <code>etagere.html</code>, <code>operation-milou.html</code>, <code>learn.html</code>…), mais le script JS les efface immédiatement au chargement (<code>modulesContainer.innerHTML = ""</code>) pour afficher 15 autres modules ! <em>Solution : Les 34 modules (Niveau 0 + Niveau 1) ont été réconciliés et sont tous accessibles.</em>
+      </div>
+      <div class="audit-item">
+        <strong>2. Le Piège du filtre « Tests » cassé (<code>meta</code> vs <code>ib</code>) :</strong><br>
+        Le menu déroulant cherche <code>category === "meta"</code>, mais <code>test-1.html</code> (<em>À réussir d'urgence</em>) avait <code>category: "ib"</code> dans le JS, rendant le filtre « Tests » totalement vide (0 résultat). <em>Solution : Catégorie normalisée + fusion avec les Méta-guides du Niveau 1.</em>
+      </div>
+      <div class="audit-item">
+        <strong>3. Le Piège de la migration vers <code>ouaisfieu.github.io/gemini-pro/dashboard/</code> :</strong><br>
+        Tous les fichiers étant en chemins relatifs (<code>404.html</code>, <code>pdfs/manuel-plaidoyer-jp.pdf</code>), héberger le dashboard sur GitHub Pages cassait tous les liens. <em>Solution : Résolveur dynamique d'URL pointant vers <code>https://dl.ouaisfi.eu/usba/</code> (Niveau 0) et <code>https://dl.ouaisfi.eu/usba/1/</code> (Niveau 1).</em>
+      </div>
+      <div class="audit-item">
+        <strong>4. Les Pièges des boutons d'annexes (<code>capture.jpg</code>, Rickroll &amp; Tux) :</strong><br>
+        Le bouton <code>▶️ Intro (brol)</code> (<code>data-embed="youtubeu"</code>) prétend être un embed YouTube mais charge en réalité <code>capture.jpg</code>. Le bouton <code>YouTube (exemple)</code> est un Rickroll (<code>dQw4w9WgXcQ</code>). Et le bouton <code>Pingouin</code> pointait vers la page Wikipédia complète au lieu du SVG direct. <em>Solution : Détection et signalement explicite + aperçu adapté.</em>
+      </div>
+      <div class="audit-item">
+        <strong>5. Purge du script et du composant <code>&lt;pal-qyzvodoehdnk&gt;</code> injectés :</strong><br>
+        La sauvegarde HTML contenait un script tiers en en-tête et un Shadow DOM pointant vers <code>rg-ashy.vercel.app</code>. <em>Solution : Code 100 % nettoyé, sémantique et optimisé SEO.</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <strong>BROL 3.0 – Centraal Dashboord</strong> • Déployé sur <a href="https://ouaisfieu.github.io/gemini-pro/dashboard/" rel="noopener">ouaisfieu.github.io/gemini-pro/dashboard/</a>
+  </div>
+  <div>
+    Sources :
+    <a href="https://dl.ouaisfi.eu/usba/" target="_blank" rel="noopener">Niveau 0 (/usba/)</a> •
+    <a href="https://dl.ouaisfi.eu/usba/1/index.html" target="_blank" rel="noopener">Niveau 1 (/usba/1/)</a>
+  </div>
+</footer>
+
+<script>
+  // --- CONFIGURATION DES URLS DE BASE ---
+  const REMOTE_BASE_LVL0 = "https://dl.ouaisfi.eu/usba/";
+  const REMOTE_BASE_LVL1 = "https://dl.ouaisfi.eu/usba/1/";
+  let useRemoteBase = true;
+
+  // --- BASE DE DONNÉES UNIFIÉE : NIVEAU 0 (15 modules JS) + NIVEAU 1 (19 modules DOM statique) ---
+  const modules = [
+    // ================= NIVEAU 0 (JS dynamique de /usba/) =================
+    {
+      id: "lvl0-site-ultime",
+      level: 0,
+      title: "LE SITE ULTIME (index N0)",
+      file: "index.html",
+      category: "base",
+      kind: "niveaux -1 → 3",
+      description: "Le fichier qui permet de partir de zéro et monter progressivement.",
+      trap: "Attention : sur /usba/, index.html recharge le dashboard dans lui-même (mise en abyme)."
+    },
+    {
+      id: "lvl0-scratchy-404",
+      level: 0,
+      title: "Support technique",
+      file: "404.html",
+      category: "base",
+      kind: "au cas où",
+      description: "Il faut éteindre et rallumer. (ID interne hérité : 'scratchy')."
+    },
+    {
+      id: "lvl0-cookies",
+      level: 0,
+      title: "Politique des Cookies",
+      file: "browniz-politik.html",
+      category: "base",
+      kind: "débutant+",
+      description: "Si tu passes pas ce test, t'as raté ta vie. (ID interne : 'branques2')."
+    },
+    {
+      id: "lvl0-valeurs",
+      level: 0,
+      title: "Boussole de valeurs",
+      file: "valeurs.html",
+      category: "base",
+      kind: "boussole",
+      description: "Pour faire le point de temps en temps. (ID interne : 'pas-a-pas')."
+    },
+    {
+      id: "lvl0-portail",
+      level: 0,
+      title: "Hub illustré (Portail)",
+      file: "portail.html",
+      category: "brol",
+      kind: "codigic",
+      description: "Pour faire tout à fait autre chose."
+    },
+    {
+      id: "lvl0-rolex",
+      level: 0,
+      title: "Lien suspect (777)",
+      file: "777.html",
+      category: "brol",
+      kind: "#piraté",
+      description: "Pour faire encore autre chose.",
+      trap: "Module du BAC À SPAM tagué #piraté (id: 'rolex')."
+    },
+    {
+      id: "lvl0-amazing",
+      level: 0,
+      title: "Lien HYPER suspect",
+      file: "amazing.html",
+      category: "brol",
+      kind: "#vendu",
+      description: "Pour faire encore TOUT autre chose.",
+      trap: "Module du BAC À SPAM tagué #vendu."
+    },
+    {
+      id: "lvl0-stic-anarchie",
+      level: 0,
+      title: "STIC de l’anarchie – licornes & bisounours",
+      file: "stic-anarchie.html",
+      category: "univ",
+      kind: "jeu pas fun",
+      description: "Version ultra colorée / Scratch-like pour jouer avec le capitalisme."
+    },
+    {
+      id: "lvl0-mon-projet",
+      level: 0,
+      title: "Mon projet secret",
+      file: "veille-1160.html",
+      category: "univ",
+      kind: "univers perso",
+      description: "Description courte de ce que contient cette page (veille 1160)."
+    },
+    {
+      id: "lvl0-detective",
+      level: 0,
+      title: "Agence détective publique (Veilleuxses)",
+      file: "veilleuxses.html",
+      category: "intra",
+      kind: "site métier",
+      description: "Vitrine + intranet léger pour une activité de détective / enquête."
+    },
+    {
+      id: "lvl0-extranet",
+      level: 0,
+      title: "Extronet organisation lambda",
+      file: "xyno.html",
+      category: "intra",
+      kind: "extronet",
+      description: "Modèle extranet (xyno.html)."
+    },
+    {
+      id: "lvl0-kalifox",
+      level: 0,
+      title: "Extronet organisation bêta (Kalifox)",
+      file: "kalifox.html",
+      category: "intra",
+      kind: "outil",
+      description: "Parce que bon parfois."
+    },
+    {
+      id: "lvl0-gork-minitel",
+      level: 0,
+      title: "GORK / Pauvre Gork (Minitel)",
+      file: "minitel.html",
+      category: "ia",
+      kind: "graph",
+      description: "Il voudrait être débranché."
+    },
+    {
+      id: "lvl0-gorki-terminal",
+      level: 0,
+      title: "GORKI / Pauvre GorkI (Terminal)",
+      file: "terminal-ia.html",
+      category: "ia",
+      kind: "grave",
+      description: "Il voudrait AUSSI être débranché."
+    },
+    {
+      id: "lvl0-test-1",
+      level: 0,
+      title: "À réussir d'urgence",
+      file: "test-1.html",
+      category: "meta",
+      kind: "bisous / test",
+      description: "C'est ça ou rien.",
+      trap: "Piège déjoué : avait category: 'ib' au lieu de 'meta' dans le script original, rendant le filtre 'Tests' vide !"
+    },
+
+    // ================= NIVEAU 1 (19 modules cachés dans le HTML statique & /usba/1/) =================
+    {
+      id: "lvl1-site-ultime",
+      level: 1,
+      title: "LE SITE ULTIME (index N1)",
+      file: "index.html",
+      category: "base",
+      kind: "niveaux -1 → 3",
+      description: "Point d'entrée du Niveau 1 (/usba/1/index.html)."
+    },
+    {
+      id: "lvl1-scratchy",
+      level: 1,
+      title: "Scratchy – premier site branque-friendly",
+      file: "scratchy-index.html",
+      category: "base",
+      kind: "débutant",
+      description: "La version ultra simple, pensée pour partir de rien (extraite du DOM caché)."
+    },
+    {
+      id: "lvl1-branques-2",
+      level: 1,
+      title: "Branques – niveau 2 (mini site à 3 pages)",
+      file: "branques-niveau-2.html",
+      category: "base",
+      kind: "débutant+",
+      description: "Transforme ton fichier scratchy en petit site complet (accueil, notes, étagère)."
+    },
+    {
+      id: "lvl1-pas-a-pas",
+      level: 1,
+      title: "Pas-à-pas – boussole de navigation",
+      file: "pas-a-pas.html",
+      category: "base",
+      kind: "boussole",
+      description: "Tu choisis ton niveau + ton besoin, et il te dit quoi ouvrir ensuite."
+    },
+    {
+      id: "lvl1-etagere-simple",
+      level: 1,
+      title: "Étagère simple (version débutant)",
+      file: "etagere-simple.html",
+      category: "brol",
+      kind: "liste fichiers",
+      description: "Version basique d’étagère qui liste quelques fichiers à la main."
+    },
+    {
+      id: "lvl1-etagere",
+      level: 1,
+      title: "Étagère ultime (full options)",
+      file: "etagere.html",
+      category: "brol",
+      kind: "scanner local",
+      description: "Version avancée qui scanne un dossier local, filtre, trie, prévisualise."
+    },
+    {
+      id: "lvl1-hub",
+      level: 1,
+      title: "Mini hub (texte)",
+      file: "hub.html",
+      category: "brol",
+      kind: "carte simple",
+      description: "Hub textuel qui relie accueil, étagère, journal, univers…"
+    },
+    {
+      id: "lvl1-hub-illustre",
+      level: 1,
+      title: "Hub illustré (carte cartoon)",
+      file: "hub-illustre.html",
+      category: "brol",
+      kind: "carte cartoon",
+      description: "Une carte illustrée de ton écosystème, avec modales intégrées."
+    },
+    {
+      id: "lvl1-gork",
+      level: 1,
+      title: "GORK – Thésaurus / graph view",
+      file: "gork.html",
+      category: "ia",
+      kind: "graph",
+      description: "Vue façon Obsidian / graph de concepts, créé par GORK."
+    },
+    {
+      id: "lvl1-gork-core",
+      level: 1,
+      title: "GORK-CORE – Console & hub",
+      file: "GORK-core.html",
+      category: "ia",
+      kind: "console",
+      description: "Console centrale façon IA, pour accéder à gork.html, GORK-V0o.html, etc."
+    },
+    {
+      id: "lvl1-gork-v0o",
+      level: 1,
+      title: "GORK V0o – variante expérimentale",
+      file: "GORK-V0o.html",
+      category: "ia",
+      kind: "prototype",
+      description: "Version alternative / brouillon de GORK pour tests."
+    },
+    {
+      id: "lvl1-detective",
+      level: 1,
+      title: "Agence détective publique (Index Détective)",
+      file: "index-detective.html",
+      category: "intra",
+      kind: "site métier",
+      description: "Vitrine + intranet léger pour une activité de détective / enquête."
+    },
+    {
+      id: "lvl1-intranet",
+      level: 1,
+      title: "Intranet organisation lambda",
+      file: "intranet.html",
+      category: "intra",
+      kind: "intranet",
+      description: "Modèle d’intranet (tableau de bord, docs, annonces internes…)."
+    },
+    {
+      id: "lvl1-learn",
+      level: 1,
+      title: "LEARN – mettre en pratique",
+      file: "learn.html",
+      category: "meta",
+      kind: "tutoriel",
+      description: "Tuto pratique qui montre comment utiliser les briques pour un vrai projet."
+    },
+    {
+      id: "lvl1-relearn",
+      level: 1,
+      title: "RELEARN – cohérence globale",
+      file: "relearn.html",
+      category: "meta",
+      kind: "cohérence",
+      description: "Guide pour remettre de l’ordre quand tout devient un brol."
+    },
+    {
+      id: "lvl1-relearn-public",
+      level: 1,
+      title: "RELEARN (grand public)",
+      file: "relearn-public.html",
+      category: "meta",
+      kind: "explication simple",
+      description: "Version vulgarisée pour les gens pas à l’aise avec l’informatique."
+    },
+    {
+      id: "lvl1-univers",
+      level: 1,
+      title: "Univers Tintin × Dardenne × LOTR × Matrix",
+      file: "univers.html",
+      category: "univ",
+      kind: "monde narratif",
+      description: "La Vallée pixelisée / univers d’enquête sociale épique matrixée."
+    },
+    {
+      id: "lvl1-operation-milou",
+      level: 1,
+      title: "OPÉRATION MILOU – start-up samouraï",
+      file: "operation-milou.html",
+      category: "univ",
+      kind: "jeu / thèse",
+      description: "Projet militant/gamifié pour tester l’anarchie au secours du capitalisme."
+    },
+    {
+      id: "lvl1-stic-anarchie",
+      level: 1,
+      title: "STIC de l’anarchie (Version N1)",
+      file: "stic-anarchie.html",
+      category: "univ",
+      kind: "jeu cartoon",
+      description: "Version ultra colorée / Scratch-like pour jouer avec la thèse et le capitalisme."
+    }
+  ];
+
+  // --- EMBEDS & ANNEXES ---
+  const embeds = {
+    penguin: {
+      icon: "🐧",
+      label: "Tarot",
+      title: "Tarot pas illustré (Appsmith)",
+      url: "https://ouaisfieu.appsmith.com/app/tarotboulotproto-v3-1/tarotsimpletirage-68555a12a22d7c48aa0d27ad",
+      description: "Tarot de Boulot et de Marseille sans illustration."
+    },
+    youtube: {
+      icon: "▶️",
+      label: "YouTube (exemple)",
+      title: "YouTube – Exemple (Rickroll détecté !)",
+      url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      description: "Exemple d’embed YouTube (Rick Astley – Never Gonna Give You Up).",
+      trap: "Piège classique : cet embed est un Rickroll (dQw4w9WgXcQ) !"
+    },
+    youtubeu: {
+      icon: "🖼️",
+      label: "Intro (brol)",
+      title: "Intro (brol) – Fausse vidéo (capture.jpg)",
+      url: "capture.jpg",
+      isRelativeLvl0: true,
+      description: "Décrit comme 'Exemple d’embed YouTube' dans le code, mais pointe vers capture.jpg !",
+      trap: "Piège déjoué : le bouton 'youtubeu' affichait une icône vidéo ▶️ mais pointe vers une image fixe (capture.jpg)."
+    },
+    intranet: {
+      icon: "🐀",
+      label: "Intranet (Boot-a-rat)",
+      title: "Intranet – Boot-a-rat",
+      url: "https://boot-a-rat.vercel.app/",
+      description: "C'est par là que ça se passe."
+    },
+    spotify: {
+      icon: "🎵",
+      label: "Spotify",
+      title: "Spotify – Playlist",
+      url: "https://open.spotify.com/embed/playlist/7eTeIkIqbfmyXnC6Ilo4d2?si=QRW5lAbiRwerORLkra3Raw",
+      description: "Playlist Spotify intégrée."
+    },
+    "pdf-plaidoyer-2": {
+      icon: "📄",
+      label: "PDF Plaidoyer ULB",
+      title: "Manuel Plaidoyer ULB (PDF externe)",
+      url: "https://www.ulb-cooperation.org/wp-content/uploads/2020/08/manuel-plaidoyer-2.pdf",
+      description: "PDF externe ULB-Coopération."
+    },
+    "pdf-plaidoyer-1": {
+      icon: "📄",
+      label: "PDF Plaidoyer JP",
+      title: "Manuel Plaidoyer JP (PDF local)",
+      url: "pdfs/manuel-plaidoyer-jp.pdf",
+      isRelativeLvl0: true,
+      description: "PDF hébergé dans /usba/pdfs/manuel-plaidoyer-jp.pdf."
+    },
+    "pdf-veille-1": {
+      icon: "📄",
+      label: "PDF Veille (1)",
+      title: "Veille citoyenne – Enjeux (PDF)",
+      url: "pdfs/veille-citoyenne-enjeux.pdf",
+      isRelativeLvl0: true,
+      description: "PDF hébergé dans /usba/pdfs/veille-citoyenne-enjeux.pdf."
+    },
+    "pdf-veille-2": {
+      icon: "📄",
+      label: "PDF Veille (2)",
+      title: "Guide Réseau Veille (PDF)",
+      url: "pdfs/guide-reseau-veille.pdf",
+      isRelativeLvl0: true,
+      description: "PDF hébergé dans /usba/pdfs/guide-reseau-veille.pdf."
+    },
+    speaker: {
+      icon: "📢",
+      label: "Speaker",
+      title: "Chargé de com' (Vitrine)",
+      url: "https://ouaisfieu.github.io/vitrine/",
+      description: "Chargé de communication en boucle sur la communication."
+    },
+    king: {
+      icon: "🐧",
+      label: "Pingouin (Tux)",
+      title: "Tux – Mascotte Linux",
+      url: "https://upload.wikimedia.org/wikipedia/commons/a/af/Tux.svg",
+      description: "SVG officiel de Tux (corrigé pour s'afficher directement dans le viewer).",
+      trap: "Corrigé : l'URL originale chargeait toute la page HTML Wikipédia (#/media/Fichier:Tux.svg)."
+    },
+    dices: {
+      icon: "🎲",
+      label: "Tirage Dés",
+      title: "Application de Tirage de dés",
+      url: "https://tirage-one.vercel.app/",
+      description: "Application interactive de tirage de dés."
+    }
+  };
+
+  // --- ÉTAT DE L'APPLICATION ---
+  let currentLevelFilter = "all";
+  let currentViewMode = "iframe";
+  let onlyFavorites = false;
+  let favorites = new Set(JSON.parse(localStorage.getItem("brol3_favs") || "[]"));
+  let activeModuleId = null;
+  let filteredModules = [];
+
+  // --- ÉLÉMENTS DOM ---
+  const moduleSearch = document.getElementById("moduleSearch");
+  const moduleCategory = document.getElementById("moduleCategory");
+  const modulesContainer = document.getElementById("modulesContainer");
+  const modulesCount = document.getElementById("modulesCount");
+  const activeLevelHint = document.getElementById("activeLevelHint");
+  const favFilterBtn = document.getElementById("favFilterBtn");
+
+  const viewerTitle = document.getElementById("viewerTitle");
+  const viewerSubtitle = document.getElementById("viewerSubtitle");
+  const viewerTrapBadge = document.getElementById("viewerTrapBadge");
+  const viewerLevelBadge = document.getElementById("viewerLevelBadge");
+  const viewerCategoryBadge = document.getElementById("viewerCategoryBadge");
+  const viewerKindBadge = document.getElementById("viewerKindBadge");
+  const viewerFile = document.getElementById("viewerFile");
+  const viewerFrame = document.getElementById("viewerFrame");
+  const viewerOpenNew = document.getElementById("viewerOpenNew");
+  const trapInspectorText = document.getElementById("trapInspectorText");
+
+  const iframeContainer = document.getElementById("iframeContainer");
+  const graphContainer = document.getElementById("graphContainer");
+  const gridContainer = document.getElementById("gridContainer");
+
+  // --- UTILITAIRES ---
+  function resolveModuleUrl(m) {
+    if (/^https?:\/\//i.test(m.file)) return m.file;
+    if (!useRemoteBase) {
+      return m.level === 1 ? "1/" + m.file : m.file;
+    }
+    return (m.level === 1 ? REMOTE_BASE_LVL1 : REMOTE_BASE_LVL0) + m.file;
+  }
+
+  function resolveEmbedUrl(e) {
+    if (!e.isRelativeLvl0) return e.url;
+    return (useRemoteBase ? REMOTE_BASE_LVL0 : "") + e.url;
+  }
+
+  function categoryLabel(cat) {
+    switch (cat) {
+      case "base": return "La Base";
+      case "brol": return "BROL & Spam";
+      case "univ": return "Univers & Jeu";
+      case "intra": return "Intranet & Métier";
+      case "ia": return "IA fictive";
+      case "meta": return "Tests & Méta-guides";
+      default: return "Autre";
+    }
+  }
+
+  function kindClass(cat) {
+    return "kind-" + (["base", "brol", "univ", "intra", "ia", "meta"].includes(cat) ? cat : "meta");
+  }
+
+  function toggleFavorite(id, event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (favorites.has(id)) {
+      favorites.delete(id);
+    } else {
+      favorites.add(id);
+    }
+    localStorage.setItem("brol3_favs", JSON.stringify([...favorites]));
+    applyModuleFilter();
+  }
+
+  // --- FILTRAGE & RENDU DE LA LISTE (AVEC BALISES SÉMANTIQUES & LIENS SEO) ---
+  function applyModuleFilter() {
+    const q = moduleSearch.value.trim().toLowerCase();
+    const cat = moduleCategory.value;
+
+    filteredModules = modules.filter(m => {
+      if (currentLevelFilter !== "all" && String(m.level) !== String(currentLevelFilter)) return false;
+      if (onlyFavorites && !favorites.has(m.id)) return false;
+      if (cat !== "all" && m.category !== cat) return false;
+      if (!q) return true;
+      const haystack = `${m.title} ${m.file} ${m.description} ${m.kind} niveau ${m.level}`.toLowerCase();
+      return haystack.includes(q);
+    });
+
+    renderModulesList();
+    if (currentViewMode === "grid") renderGridView();
+    if (currentViewMode === "graph") drawGraph();
+  }
+
+  function renderModulesList() {
+    modulesContainer.innerHTML = "";
+    modulesCount.textContent = `${filteredModules.length} module${filteredModules.length > 1 ? "s" : ""}`;
+
+    if (!filteredModules.length) {
+      modulesContainer.innerHTML = `<div style="padding:12px;color:var(--muted);font-size:0.8rem;">Aucun module ne correspond à ces critères.</div>`;
+      return;
+    }
+
+    const groups = {};
+    const order = ["base", "brol", "ia", "meta", "intra", "univ"];
+    filteredModules.forEach(m => {
+      if (!groups[m.category]) groups[m.category] = [];
+      groups[m.category].push(m);
+    });
+
+    order.filter(c => groups[c]).forEach(cat => {
+      const groupEl = document.createElement("div");
+      const titleEl = document.createElement("div");
+      titleEl.className = "group-title";
+      titleEl.innerHTML = `<span>${categoryLabel(cat)}</span><span>${groups[cat].length}</span>`;
+      groupEl.appendChild(titleEl);
+
+      groups[cat].forEach(m => {
+        const item = document.createElement("article");
+        item.className = "module-item" + (m.id === activeModuleId ? " active" : "");
+        const isFav = favorites.has(m.id);
+        const fullUrl = resolveModuleUrl(m);
+
+        item.innerHTML = `
+          <div class="module-main">
+            <div class="module-title-row">
+              <button type="button" class="fav-star ${isFav ? "is-fav" : ""}" aria-label="Épingler en favori" title="Épingler en favori">★</button>
+              <a href="${fullUrl}" class="module-title" title="${m.title}">${m.title}</a>
+            </div>
+            <p class="module-sub">${m.description}</p>
+          </div>
+          <div class="module-meta">
+            <div class="badges-inline">
+              <span class="level-tag ${m.level === 1 ? "lvl-1" : ""}">N${m.level}</span>
+              <span class="module-kind ${kindClass(m.category)}">${m.kind}</span>
+            </div>
+            <div class="module-file" title="${m.file}">${m.file}</div>
+          </div>
+        `;
+
+        item.querySelector(".fav-star").addEventListener("click", (e) => toggleFavorite(m.id, e));
+        item.addEventListener("click", (e) => {
+          // Permet le Ctrl+Clic / Clic molette natif tout en chargeant dans l'iframe au clic simple
+          if (e.ctrlKey || e.metaKey || e.button === 1) return;
+          e.preventDefault();
+          selectModule(m.id);
+        });
+        groupEl.appendChild(item);
+      });
+
+      modulesContainer.appendChild(groupEl);
+    });
+  }
+
+  // --- SÉLECTION D'UN MODULE ---
+  function selectModule(id) {
+    const m = modules.find(x => x.id === id);
+    if (!m) return;
+    activeModuleId = id;
+
+    document.querySelectorAll(".embed-btn").forEach(b => b.classList.remove("active"));
+    renderModulesList();
+
+    const fullUrl = resolveModuleUrl(m);
+    viewerTitle.textContent = m.title;
+    viewerSubtitle.textContent = m.description;
+    viewerLevelBadge.textContent = `Niveau ${m.level}`;
+    viewerLevelBadge.className = `level-tag ${m.level === 1 ? "lvl-1" : ""}`;
+    viewerCategoryBadge.textContent = categoryLabel(m.category);
+    viewerCategoryBadge.className = `module-kind ${kindClass(m.category)}`;
+    viewerKindBadge.textContent = m.kind;
+
+    if (m.trap) {
+      viewerTrapBadge.style.display = "inline-block";
+      viewerTrapBadge.textContent = "⚠️ Piège détecté";
+      trapInspectorText.textContent = m.trap;
+    } else {
+      viewerTrapBadge.style.display = "none";
+      trapInspectorText.textContent = `Module vérifié : ${m.title} (Niveau ${m.level} • ${fullUrl}).`;
+    }
+
+    viewerFile.textContent = fullUrl;
+    viewerFile.title = fullUrl;
+    viewerOpenNew.href = fullUrl;
+    viewerFrame.src = fullUrl;
+  }
+
+  // --- RENDU DES EMBEDS ---
+  function renderEmbeds() {
+    const container = document.getElementById("embedsContainer");
+    container.innerHTML = "";
+    Object.entries(embeds).forEach(([key, e]) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "embed-btn";
+      btn.innerHTML = `<span aria-hidden="true">${e.icon}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.label}</span>`;
+      btn.addEventListener("click", () => {
+        activeModuleId = null;
+        renderModulesList();
+        document.querySelectorAll(".embed-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const fullUrl = resolveEmbedUrl(e);
+        viewerTitle.textContent = e.title;
+        viewerSubtitle.textContent = e.description;
+        viewerLevelBadge.textContent = "Annexe";
+        viewerCategoryBadge.textContent = "Embed externe";
+        viewerCategoryBadge.className = "module-kind kind-brol";
+        viewerKindBadge.textContent = key;
+
+        if (e.trap) {
+          viewerTrapBadge.style.display = "inline-block";
+          viewerTrapBadge.textContent = "🕵️ Piège / Easter Egg";
+          trapInspectorText.textContent = e.trap;
+        } else {
+          viewerTrapBadge.style.display = "none";
+          trapInspectorText.textContent = `Annexe active : ${e.title}`;
+        }
+
+        viewerFile.textContent = fullUrl;
+        viewerOpenNew.href = fullUrl;
+        viewerFrame.src = fullUrl;
+
+        if (currentViewMode !== "iframe") setViewMode("iframe");
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  // --- VUE GRILLE ---
+  function renderGridView() {
+    gridContainer.innerHTML = "";
+    filteredModules.forEach(m => {
+      const card = document.createElement("article");
+      card.className = "grid-card";
+      card.innerHTML = `
+        <div>
+          <div style="display:flex;justify-content:space-between;gap:6px;margin-bottom:6px;">
+            <span class="level-tag ${m.level === 1 ? "lvl-1" : ""}">Niveau ${m.level}</span>
+            <span class="module-kind ${kindClass(m.category)}">${m.kind}</span>
+          </div>
+          <h3 style="font-weight:700;font-size:0.86rem;margin-bottom:4px;">${m.title}</h3>
+          <p style="font-size:0.74rem;color:var(--muted);">${m.description}</p>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:6px;font-family:var(--font-mono);font-size:0.7rem;color:#bae6fd;">
+          <span>${m.file}</span>
+          <span>Ouvrir →</span>
+        </div>
+      `;
+      card.addEventListener("click", () => {
+        selectModule(m.id);
+        setViewMode("iframe");
+      });
+      gridContainer.appendChild(card);
+    });
+  }
+
+  // --- VUE GRAPHE INTERACTIF (FAÇON GORK / OBSIDIAN) ---
+  let graphNodes = [];
+  function drawGraph() {
+    const canvas = document.getElementById("graphCanvas");
+    if (!canvas) return;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width || 600;
+    canvas.height = rect.height || 450;
+    const ctx = canvas.getContext("2d");
+
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const radius = Math.min(cx, cy) * 0.76;
+
+    graphNodes = filteredModules.map((m, i) => {
+      const angle = (i / Math.max(1, filteredModules.length)) * Math.PI * 2;
+      const r = m.level === 0 ? radius * 0.58 : radius * 0.9;
+      return {
+        x: cx + Math.cos(angle) * r,
+        y: cy + Math.sin(angle) * r,
+        module: m
+      };
+    });
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < graphNodes.length; i++) {
+      for (let j = i + 1; j < graphNodes.length; j++) {
+        if (graphNodes[i].module.category === graphNodes[j].module.category) {
+          ctx.beginPath();
+          ctx.moveTo(graphNodes[i].x, graphNodes[i].y);
+          ctx.lineTo(graphNodes[j].x, graphNodes[j].y);
+          ctx.strokeStyle = "rgba(56, 189, 248, 0.14)";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+
+    graphNodes.forEach(n => {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.module.id === activeModuleId ? 9 : 6, 0, Math.PI * 2);
+      ctx.fillStyle = n.module.level === 0 ? "#22c55e" : "#a855f7";
+      ctx.fill();
+      ctx.strokeStyle = "#020617";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = "11px sans-serif";
+      ctx.fillText(n.module.title.slice(0, 22), n.x + 10, n.y + 4);
+    });
+  }
+
+  document.getElementById("graphCanvas").addEventListener("click", (e) => {
+    const rect = e.target.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const hit = graphNodes.find(n => Math.hypot(n.x - mx, n.y - my) < 14);
+    if (hit) {
+      selectModule(hit.module.id);
+      setViewMode("iframe");
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (currentViewMode === "graph") drawGraph();
+  });
+
+  // --- GESTION DES MODES D'AFFICHAGE ---
+  function setViewMode(mode) {
+    currentViewMode = mode;
+    document.querySelectorAll(".view-switcher .pill-btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.view === mode);
+    });
+    iframeContainer.style.display = mode === "iframe" ? "flex" : "none";
+    graphContainer.style.display = mode === "graph" ? "block" : "none";
+    gridContainer.style.display = mode === "grid" ? "grid" : "none";
+
+    if (mode === "graph") drawGraph();
+    if (mode === "grid") renderGridView();
+  }
+
+  // --- ÉVÉNEMENTS INTERFACE ---
+  moduleSearch.addEventListener("input", applyModuleFilter);
+  moduleCategory.addEventListener("change", applyModuleFilter);
+
+  document.querySelectorAll(".level-switcher .pill-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentLevelFilter = btn.dataset.level;
+      document.querySelectorAll(".level-switcher .pill-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeLevelHint.textContent = currentLevelFilter === "all"
+        ? "Niveaux 0 & 1 actifs"
+        : `Niveau ${currentLevelFilter} uniquement`;
+      applyModuleFilter();
+    });
+  });
+
+  document.querySelectorAll(".view-switcher .pill-btn").forEach(btn => {
+    btn.addEventListener("click", () => setViewMode(btn.dataset.view));
+  });
+
+  favFilterBtn.addEventListener("click", () => {
+    onlyFavorites = !onlyFavorites;
+    favFilterBtn.style.borderColor = onlyFavorites ? "#facc15" : "";
+    applyModuleFilter();
+  });
+
+  document.getElementById("toggleBaseBtn").addEventListener("click", () => {
+    useRemoteBase = !useRemoteBase;
+    document.getElementById("baseModeLabel").textContent = useRemoteBase ? "dl.ouaisfi.eu" : "Relatif local";
+    if (activeModuleId) selectModule(activeModuleId);
+  });
+
+  document.querySelectorAll(".viewport-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      viewerFrame.className = "";
+      if (btn.dataset.size === "tablet") viewerFrame.classList.add("viewport-tablet");
+      if (btn.dataset.size === "mobile") viewerFrame.classList.add("viewport-mobile");
+    });
+  });
+
+  document.getElementById("reloadFrameBtn").addEventListener("click", () => {
+    const currentSrc = viewerFrame.src;
+    viewerFrame.src = currentSrc;
+  });
+
+  document.getElementById("copyUrlBtn").addEventListener("click", () => {
+    navigator.clipboard.writeText(viewerOpenNew.href);
+    const btn = document.getElementById("copyUrlBtn");
+    btn.textContent = "✅ Copié !";
+    setTimeout(() => { btn.textContent = "📋 Copier"; }, 1400);
+  });
+
+  // Modale d'audit
+  const auditModal = document.getElementById("auditModal");
+  document.getElementById("openAuditBtn").addEventListener("click", () => auditModal.classList.add("open"));
+  document.getElementById("closeAuditBtn").addEventListener("click", () => auditModal.classList.remove("open"));
+  auditModal.addEventListener("click", (e) => { if (e.target === auditModal) auditModal.classList.remove("open"); });
+
+  // Raccourci clavier Ctrl+K / Cmd+K
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      moduleSearch.focus();
+      moduleSearch.select();
+    }
+  });
+
+  // --- INITIALISATION ---
+  document.addEventListener("DOMContentLoaded", () => {
+    renderEmbeds();
+    applyModuleFilter();
+    selectModule("lvl0-cookies");
+  });
+</script>
+</body>
+</html>
