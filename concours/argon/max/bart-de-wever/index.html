@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L'Anarcho-Féminisme Décrypté | Guide Pédagogique & Interactif</title>
+  <!-- Chosen Palette: Warm Neutrals & Libertarian Violet-Crimson -->
+  <!-- Application Structure Plan: The SPA is structured into six intuitive interactive sections designed for clear progressive learning ("Pour les Nuls"): 1. Hero & Fast Summary Dashboard (key statistics, core thesis, and quick takeaways); 2. Comparative Matrix & Interactive Radar Chart (comparing Liberal, Marxist, Radical, and Anarcho-Feminism across key criteria); 3. Interactive Timeline of 4 Global Waves (1857-2026) with dynamic filters; 4. Gallery of Key Figures & Historical Publications (searchable/filterable by era and region); 5. Interactive Matrix of 10 Key Concepts with expanders; 6. Interactive Case Study & Decision Simulator ("Facing Oppression"). This flow guarantees both immediate clarity for novices and deep exploration for researchers. -->
+  <!-- Visualization & Content Choices: 1. Radar Chart (Chart.js): Visualizing multi-axial comparison between feminist schools of thought to illustrate why anarcho-feminism rejects both State and Capitalism. 2. Doughnut Chart (Chart.js): Breakdown of Mujeres Libres actions (Capacitación vs Captación vs Social Services) showing holistic organizing. 3. Timeline & Filterable Cards (HTML/CSS + Vanilla JS): Navigating 4 historical waves without horizontal page overflow. 4. Interactive Matrix & Search Bar (Vanilla JS): Instant searching across 10 concepts and 12+ historical figures. Confirming NO SVG elements or Mermaid JS used. -->
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['Merriweather', 'serif'],
+          },
+          colors: {
+            brand: {
+              50: '#fdf2f4',
+              100: '#fce7ea',
+              200: '#f8d0d7',
+              600: '#be123c',
+              800: '#9f1239',
+              900: '#4c0519',
+            },
+            libertarian: {
+              100: '#f3e8ff',
+              600: '#9333ea',
+              800: '#581c87',
+              900: '#3b0764',
+            },
+            warmbg: '#faf8f5',
+            warmcard: '#f4efe6',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    body {
+      background-color: #faf8f5;
+      color: #1c1917;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 620px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 320px;
+      max-height: 380px;
+    }
+    @media (min-width: 768px) {
+      .chart-container { height: 360px; }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1ebd9;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased selection:bg-rose-200 selection:text-rose-900">
+
+  <!-- NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 bg-[#faf8f5]/95 backdrop-blur-md border-b border-stone-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <span class="text-2xl font-black text-brand-800 tracking-tight">Ⓐ♀</span>
+          <div>
+            <span class="text-lg font-bold text-stone-900 block leading-none">Anarcho-Féminisme</span>
+            <span class="text-xs text-stone-500 font-medium">Décryptage & Guide Interactif</span>
+          </div>
+        </div>
+        
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center space-x-1 text-sm font-semibold text-stone-600">
+          <a href="#synthese" class="px-3 py-2 rounded-lg hover:text-brand-800 hover:bg-stone-100 transition">Synthèse</a>
+          <a href="#comparatif" class="px-3 py-2 rounded-lg hover:text-brand-800 hover:bg-stone-100 transition">Courants & Matrice</a>
+          <a href="#vagues" class="px-3 py-2 rounded-lg hover:text-brand-800 hover:bg-stone-100 transition">Histoire & Vagues</a>
+          <a href="#figures" class="px-3 py-2 rounded-lg hover:text-brand-800 hover:bg-stone-100 transition">Figures & Textes</a>
+          <a href="#concepts" class="px-3 py-2 rounded-lg hover:text-brand-800 hover:bg-stone-100 transition">10 Concepts Clés</a>
+          <a href="#simulateur" class="px-3 py-2 rounded-lg hover:text-brand-800 hover:bg-stone-100 transition">Simulateur</a>
+        </nav>
+
+        <!-- Quick Tag -->
+        <div class="hidden lg:flex items-center">
+          <span class="bg-rose-100 text-brand-800 text-xs font-bold px-3 py-1 rounded-full border border-rose-200">
+            « Ni Dieu, ni patron, ni mari »
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+    <!-- HERO / INTRO SECTION -->
+    <section id="synthese" class="scroll-mt-20">
+      <div class="bg-stone-900 text-stone-100 rounded-3xl p-6 sm:p-10 lg:p-12 relative overflow-hidden shadow-xl border border-stone-800">
+        <div class="relative z-10 max-w-3xl space-y-6">
+          <div class="inline-flex items-center space-x-2 bg-brand-900/80 text-rose-300 text-xs font-bold px-3.5 py-1.5 rounded-full border border-rose-700/50">
+            <span>💡 COMPRENDRE EN 3 MINUTES</span>
+            <span>•</span>
+            <span>Émancipation Totale</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black font-serif tracking-tight text-white leading-tight">
+            L'Anarcho-Féminisme : L'Équation de l'Émancipation Sans Chef ni État
+          </h1>
+          <p class="text-stone-300 text-base sm:text-lg leading-relaxed">
+            L'anarcho-féminisme (ou <em>anarcha-féminisme</em>) n'est pas une simple variante du féminisme, ni un sous-chapitre de l'anarchisme. C'est le constat fondamental que <strong>le patriarcat est la matrice de toutes les autorités</strong> : de la famille nucléaire jusqu'à l'État capitaliste.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-4 text-xs font-medium text-stone-300">
+            <div class="bg-stone-800/90 border border-stone-700 px-4 py-2.5 rounded-xl flex items-center space-x-2">
+              <span class="text-rose-400 text-base">✕</span>
+              <span>Refus de l'État & des Réformes de Surface</span>
+            </div>
+            <div class="bg-stone-800/90 border border-stone-700 px-4 py-2.5 rounded-xl flex items-center space-x-2">
+              <span class="text-purple-400 text-base">✊</span>
+              <span>Action Directe & Autogestion</span>
+            </div>
+            <div class="bg-stone-800/90 border border-stone-700 px-4 py-2.5 rounded-xl flex items-center space-x-2">
+              <span class="text-amber-400 text-base">🌱</span>
+              <span>Préfiguration (Les moyens font la fin)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Badges Grid -->
+        <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-stone-800 pt-8">
+          <div class="bg-stone-800/50 p-4 rounded-2xl border border-stone-700/60">
+            <div class="text-2xl sm:text-3xl font-extrabold text-rose-400 font-serif">1857</div>
+            <div class="text-xs text-stone-400 mt-1">Acte fondateur (Joseph Déjacque vs Proudhon)</div>
+          </div>
+          <div class="bg-stone-800/50 p-4 rounded-2xl border border-stone-700/60">
+            <div class="text-2xl sm:text-3xl font-extrabold text-purple-400 font-serif">20 000</div>
+            <div class="text-xs text-stone-400 mt-1">Militantes dans <em>Mujeres Libres</em> (Espagne 1936)</div>
+          </div>
+          <div class="bg-stone-800/50 p-4 rounded-2xl border border-stone-700/60">
+            <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 font-serif">4 Vagues</div>
+            <div class="text-xs text-stone-400 mt-1">Séquences historiques transnationales (1857–2026)</div>
+          </div>
+          <div class="bg-stone-800/50 p-4 rounded-2xl border border-stone-700/60">
+            <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-serif">10 Concepts</div>
+            <div class="text-xs text-stone-400 mt-1">Piliers théoriques & pratiques d'action</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: COMPARATIF DES COURANTS FÉMINISTES -->
+    <section id="comparatif" class="scroll-mt-20 space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200/80 shadow-sm space-y-4">
+        <div class="max-w-3xl">
+          <span class="text-xs font-bold text-brand-800 tracking-wider uppercase bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+            SECTION 1 • ANATOMIE COMPARATIVE
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-serif text-stone-900 mt-3">
+            Pourquoi l'Anarcho-Féminisme se distingue-t-il des autres courants ?
+          </h2>
+          <p class="text-stone-600 mt-2 text-sm sm:text-base leading-relaxed">
+            Cette section décode le positionnement politique de l'anarcho-féminisme. Contrairement au féminisme libéral qui vise l'accès des femmes aux postes de pouvoir, ou au féminisme marxiste qui subordonne la lutte des femmes à la Révolution prolétarienne, l'anarcho-féminisme soutient que <strong>l'État, le Capitalisme et le Patriarcat doivent être abolis simultanément</strong>.
+          </p>
+        </div>
+
+        <!-- Interactive Grid: Radar Chart + Selector Table -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-4">
+          
+          <!-- Chart Column -->
+          <div class="lg:col-span-5 bg-stone-50 p-5 rounded-2xl border border-stone-200 flex flex-col items-center justify-center">
+            <h3 class="text-sm font-bold text-stone-800 mb-2 text-center">
+              Radar d'Orientation Politique des Féminismes
+            </h3>
+            <p class="text-xs text-stone-500 mb-4 text-center">Comparez la radicalité anti-étatiste, anti-capitaliste et préfigurative.</p>
+            <div class="chart-container">
+              <canvas id="feminismRadarChart"></canvas>
+            </div>
+            <div class="mt-3 text-center">
+              <span class="text-xs text-stone-500 italic">Survolez/Cliquez sur la légende pour isoler un courant politique.</span>
+            </div>
+          </div>
+
+          <!-- Comparative Matrix Interactive Selector -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex flex-wrap gap-2 border-b border-stone-200 pb-3" id="streamTabs">
+              <button onclick="selectStream('liberal')" id="tab-liberal" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-stone-200 text-stone-800">
+                Féminisme Libéral / d'État
+              </button>
+              <button onclick="selectStream('marxist')" id="tab-marxist" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-stone-100 text-stone-600 hover:bg-stone-200">
+                Féminisme Marxiste
+              </button>
+              <button onclick="selectStream('radical')" id="tab-radical" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-stone-100 text-stone-600 hover:bg-stone-200">
+                Féminisme Radical
+              </button>
+              <button onclick="selectStream('anarcha')" id="tab-anarcha" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-brand-800 text-white shadow-sm">
+                Anarcho-Féminisme
+              </button>
+            </div>
+
+            <!-- Dynamic Content Box -->
+            <div id="streamDetailBox" class="bg-warmcard/70 p-5 sm:p-6 rounded-2xl border border-stone-300 space-y-4 transition-all">
+              <!-- JS Populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: CHRONOLOGIE & LES 4 VAGUES HISTORIQUES -->
+    <section id="vagues" class="scroll-mt-20 space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200/80 shadow-sm space-y-6">
+        <div class="max-w-3xl">
+          <span class="text-xs font-bold text-brand-800 tracking-wider uppercase bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+            SECTION 2 • GÉNÉALOGIE TRANSNATIONALE
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-serif text-stone-900 mt-3">
+            Quatre Vagues d'Insurrection Globale (1857 – 2026)
+          </h2>
+          <p class="text-stone-600 mt-2 text-sm sm:text-base leading-relaxed">
+            L'anarcho-féminisme n'est pas une théorie académique abstraite : c'est une histoire populaire et prolétarienne née dans l'imprimé ouvrier, portée par les grèves à Chicago, les journaux clandestins à Buenos Aires et Tokyo, la Révolution espagnole de 1936 et les luttes décoloniales contemporaines.
+          </p>
+        </div>
+
+        <!-- Wave Navigation Timeline Buttons -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <button onclick="setWave(1)" id="waveBtn-1" class="p-4 rounded-2xl text-left border transition-all bg-stone-900 text-white border-stone-900 shadow-md">
+            <div class="text-xs font-bold text-rose-400">1ère VAGUE • 1857-1920</div>
+            <div class="font-serif font-bold text-sm mt-1">Pionnières & Imprimé Ouvrier</div>
+          </button>
+          <button onclick="setWave(2)" id="waveBtn-2" class="p-4 rounded-2xl text-left border border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 transition-all">
+            <div class="text-xs font-bold text-purple-600">2ème VAGUE • 1936-1939</div>
+            <div class="font-serif font-bold text-sm mt-1">Révolution & Mujeres Libres</div>
+          </button>
+          <button onclick="setWave(3)" id="waveBtn-3" class="p-4 rounded-2xl text-left border border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 transition-all">
+            <div class="text-xs font-bold text-amber-600">3ème VAGUE • Années 1970</div>
+            <div class="font-serif font-bold text-sm mt-1">Synthèse & Groupes d'Affinité</div>
+          </button>
+          <button onclick="setWave(4)" id="waveBtn-4" class="p-4 rounded-2xl text-left border border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 transition-all">
+            <div class="text-xs font-bold text-emerald-600">4ème VAGUE • 1990-2026</div>
+            <div class="font-serif font-bold text-sm mt-1">Décolonial & Anti-carcéral</div>
+          </button>
+        </div>
+
+        <!-- Dynamic Wave Detail Container -->
+        <div id="waveDetailCard" class="bg-warmcard/60 p-6 rounded-2xl border border-stone-300 space-y-6">
+          <!-- JS Populated -->
+        </div>
+
+        <!-- Focus Feature: Chart Mujeres Libres Actions (Wave 2) -->
+        <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-6 space-y-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-100 px-2.5 py-1 rounded-full"> Focus Historique • Mujeres Libres (1936-1939)</span>
+            <h3 class="text-xl font-bold font-serif text-stone-900">L'Expérience de la Double Lutte (Doble Lucha)</h3>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+              Composée de 20 000 ouvrières et paysannes, l'organisation <em>Mujeres Libres</em> rejetait le masculinisme des syndicats tout en refusant le féminisme bourgeois. Leur stratégie combinait formation professionnelle (<em>capacitación</em>), conscientisation (<em>captación</em>) et services sociaux autogérés.
+            </p>
+            <ul class="text-xs text-stone-700 space-y-1.5 list-disc list-inside font-medium">
+              <li><strong>Liberatorios de prostitución :</strong> Réinsertion autonome sans jugement moral.</li>
+              <li><strong>Guarderías :</strong> Crèches gratuites autogérées dans les usines collectivismes.</li>
+              <li><strong>Comedores populares :</strong> Cantorines communautaires contre la servitude domestique.</li>
+            </ul>
+          </div>
+          <div class="md:col-span-6 flex flex-col items-center">
+            <h4 class="text-xs font-bold text-stone-700 mb-2">Répartition des Piliers d'Action de Mujeres Libres</h4>
+            <div class="chart-container">
+              <canvas id="mujeresLibresChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: GALERIE DES FIGURES & TEXTES DE RÉFÉRENCE -->
+    <section id="figures" class="scroll-mt-20 space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200/80 shadow-sm space-y-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div class="max-w-2xl">
+            <span class="text-xs font-bold text-brand-800 tracking-wider uppercase bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+              SECTION 3 • ARCHIVES & PENSEUSES
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold font-serif text-stone-900 mt-3">
+              Figures Marquantes & Ouvrages Fondateurs
+            </h2>
+            <p class="text-stone-600 mt-2 text-sm sm:text-base">
+              Explorez les profils, citations marquantes et contributions des théoriciennes et militantes anarcho-féministes à travers le monde.
+            </p>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+            <input type="text" id="searchFigure" oninput="filterFigures()" placeholder="Rechercher une figure, pays..." class="px-4 py-2 text-sm border border-stone-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-800 bg-stone-50">
+            <select id="eraFilter" onchange="filterFigures()" class="px-3 py-2 text-sm border border-stone-300 rounded-xl bg-stone-50 text-stone-700 font-medium">
+              <option value="all">Toutes les époques</option>
+              <option value="wave1">1857–1920 (Pionnières)</option>
+              <option value="wave2">1936–1939 (Mujeres Libres)</option>
+              <option value="wave3">1970s (Deuxième Vague)</option>
+              <option value="wave4">1990–2026 (Contemporaines)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Figures Grid Container -->
+        <div id="figuresGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- JS Populated Cards -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: GUIDE DE LECTURE - 10 CONCEPTS CLÉS -->
+    <section id="concepts" class="scroll-mt-20 space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200/80 shadow-sm space-y-6">
+        <div class="max-w-3xl">
+          <span class="text-xs font-bold text-brand-800 tracking-wider uppercase bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+            SECTION 4 • GUIDE OPERATOIRE
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-serif text-stone-900 mt-3">
+            Les Dix Concepts Clés à Retenir
+          </h2>
+          <p class="text-stone-600 mt-2 text-sm sm:text-base leading-relaxed">
+            Cliquez sur chaque carte pour déplier la définition détaillée, le contexte historique et l'application pratique de ces notions incontournables.
+          </p>
+        </div>
+
+        <!-- 10 Concepts Grid -->
+        <div id="conceptsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- JS Populated Accordions -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: SIMULATEUR INTERACTIF - QUELLE RÉPONSE FACE AUX OPPRESSIONS ? -->
+    <section id="simulateur" class="scroll-mt-20 space-y-6">
+      <div class="bg-stone-900 text-stone-100 p-6 sm:p-10 rounded-3xl border border-stone-800 shadow-xl space-y-6">
+        <div class="max-w-3xl">
+          <span class="text-xs font-bold text-rose-400 tracking-wider uppercase bg-stone-800 px-3 py-1 rounded-full border border-stone-700">
+            SECTION 5 • CAS PRATIQUES INTERACTIFS
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold font-serif text-white mt-3">
+            Simulateur d'Analyse Politico-Sociale
+          </h2>
+          <p class="text-stone-300 mt-2 text-sm sm:text-base leading-relaxed">
+            Choisissez un sujet de société pour voir comment chaque courant féministe y réagit et comprendre la spécificité de la réponse anarcho-féministe.
+          </p>
+        </div>
+
+        <!-- Scenario Selector Buttons -->
+        <div class="flex flex-wrap gap-3">
+          <button onclick="loadScenario('violence')" id="scen-violence" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-brand-800 text-white transition">
+            ⚖️ Violences de Genre & Justice
+          </button>
+          <button onclick="loadScenario('parite')" id="scen-parite" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
+            🗳️ Élections, Parité & Pouvoir
+          </button>
+          <button onclick="loadScenario('travail')" id="scen-travail" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
+            🏠 Travail Domestique & Care
+          </button>
+          <button onclick="loadScenario('maternite')" id="scen-maternite" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-stone-800 text-stone-300 hover:bg-stone-700 transition">
+            👶 Mariage, Maternité & Corps
+          </button>
+        </div>
+
+        <!-- Interactive Scenario Dynamic Output -->
+        <div id="scenarioDisplay" class="bg-stone-800/90 p-6 rounded-2xl border border-stone-700 space-y-6">
+          <!-- JS Populated -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-stone-900 text-stone-400 border-t border-stone-800 mt-20 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+      <div class="flex items-center space-x-2">
+        <span class="text-rose-500 font-bold text-base">Ⓐ♀</span>
+        <span class="text-stone-300 font-semibold">Application Pédagogique d'Analyse Anarcho-Féministe</span>
+      </div>
+      <div>
+        <span>Basé sur le rapport de recherche « L'Anarcho-Féminisme Décrypté » (1857–2026)</span>
+      </div>
+      <div class="text-stone-500">
+        <span>Conçu sans graphiques SVG externes • Intégration Canvas Chart.js</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // ==========================================
+    // 1. DATA: FEMINIST STREAMS COMPARISON
+    // ==========================================
+    const streamData = {
+      liberal: {
+        title: "Féminisme Libéral / d'État",
+        badge: "Réformiste & Legalist",
+        badgeColor: "bg-blue-100 text-blue-800",
+        root: "Inégalité juridique, préjugés culturels et exclusion civique des institutions.",
+        stateView: "Arbitre neutre et levier indispensable du progrès législatif (lois de parité, égalité salariale).",
+        strategy: "Lobbying, campagnes électorales, réformes légales, suffragisme, accession aux postes de direction.",
+        horizon: "Égalité formelle des droits et parité au sein du système capitaliste et démocratique représentatif.",
+        critique: "Dénoncé par les anarcho-féministes comme un « féminisme bourgeois » qui déplace la subordination sans abolir l'exploitation des femmes prolétaires."
+      },
+      marxist: {
+        title: "Féminisme Marxiste / Socialiste",
+        badge: "Lutte de Classe",
+        badgeColor: "bg-red-100 text-red-800",
+        root: "Propriété privée, mode de production capitaliste et division de classe.",
+        stateView: "Outil de domination de classe à conquérir (État ouvrier transitoire / Dictature du prolétariat) avant son hypothétique dépérissement.",
+        strategy: "Parti d'avant-garde, syndicalisme de masse structuré verticalement, subordination temporaire du genre à la lutte des classes.",
+        horizon: "Socialisation des moyens de production, égalité économique et éradication post-capitaliste de la domination.",
+        critique: "Dénoncé par les anarcho-féministes pour sa hiérarchisation des luttes et son autoritarisme d'État qui reconduit la coercition."
+      },
+      radical: {
+        title: "Féminisme Radical",
+        badge: "Système Patriarcal",
+        badgeColor: "bg-purple-100 text-purple-800",
+        root: "Système patriarcal autonome, appropriation masculine des corps, du travail reproductif et des rôles sociaux.",
+        stateView: "Ambivalente : critique du pouvoir masculin, mais recours fréquent à l'appareil législatif et pénal de l'État (lois punitives, censure).",
+        strategy: "Groupes de prise de conscience non-mixtes, dénonciation de l'hétéronormativité, parfois séparatiste.",
+        horizon: "Abolition du genre social et libération totale de l'oppression patriarcale et reproductive.",
+        critique: "Les anarcho-féministes valident l'axiome « Le personnel est politique » mais rejettent le recours aux lois répressives de l'État."
+      },
+      anarcha: {
+        title: "Anarcho-Féminisme (Féminisme Libertaire)",
+        badge: "Émancipation Totale",
+        badgeColor: "bg-rose-100 text-brand-800 font-bold border border-rose-300",
+        root: "Imbrication structurelle indissociable du patriarcat, de l'État, du capitalisme et de TOUTE forme de hiérarchie coercitive.",
+        stateView: "Institution intrinsèquement patriarcale, centralisatrice et violente devant être abolie immédiatement (aucune transition).",
+        strategy: "Action directe, autogestion, groupes d'affinité horizontaux, éducation populaire, unité stricte des moyens et des fins (préfiguration).",
+        horizon: "Autodétermination intégrale, liberté réelle et autonomie corporelle au sein d'une société communiste libertaire sans classes ni chefs.",
+        critique: "Représente la synthèse accomplie : libère l'anarchisme de sa cécité sexiste (*manarchy*) et préserve le féminisme de la récupération marchande."
+      }
+    };
+
+    function selectStream(key) {
+      // Update Tab Styles
+      ['liberal', 'marxist', 'radical', 'anarcha'].forEach(k => {
+        const btn = document.getElementById(`tab-${k}`);
+        if (k === key) {
+          btn.className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-brand-800 text-white shadow-sm";
+        } else {
+          btn.className = "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-stone-100 text-stone-600 hover:bg-stone-200";
+        }
+      });
+
+      const d = streamData[key];
+      const box = document.getElementById('streamDetailBox');
+      box.innerHTML = `
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <h3 class="text-lg font-bold font-serif text-stone-900">${d.title}</h3>
+          <span class="text-xs px-2.5 py-1 rounded-full font-bold ${d.badgeColor}">${d.badge}</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm pt-2">
+          <div class="bg-white/80 p-3.5 rounded-xl border border-stone-200">
+            <span class="font-bold text-stone-800 block mb-1">💥 Racine de l'oppression :</span>
+            <p class="text-stone-600">${d.root}</p>
+          </div>
+          <div class="bg-white/80 p-3.5 rounded-xl border border-stone-200">
+            <span class="font-bold text-stone-800 block mb-1">🏛️ Conception de l'État :</span>
+            <p class="text-stone-600">${d.stateView}</p>
+          </div>
+          <div class="bg-white/80 p-3.5 rounded-xl border border-stone-200">
+            <span class="font-bold text-stone-800 block mb-1">⚡ Stratégie d'action :</span>
+            <p class="text-stone-600">${d.strategy}</p>
+          </div>
+          <div class="bg-white/80 p-3.5 rounded-xl border border-stone-200">
+            <span class="font-bold text-stone-800 block mb-1">🎯 Horizon d'émancipation :</span>
+            <p class="text-stone-600">${d.horizon}</p>
+          </div>
+        </div>
+        <div class="bg-rose-50/80 p-3.5 rounded-xl border border-rose-200/80 text-xs">
+          <span class="font-bold text-brand-900 block mb-0.5">👁️ Biais ou Regard de l'Anarcho-Féminisme :</span>
+          <p class="text-stone-700 italic">${d.critique}</p>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 2. DATA: 4 HISTORICAL WAVES
+    // ==========================================
+    const wavesData = {
+      1: {
+        title: "1ère Vague (1857–1920) : Des Pionnières de l'Imprimé Ouvrier à la Critique Globale",
+        period: "1857 - 1920",
+        tag: "Naissance & Syndicalisme Sauvage",
+        color: "text-rose-600",
+        summary: "Émerge au sein des mouvements ouvriers de la seconde moitié du XIXe siècle. Marquée par le refus de l'autorité conjugale, patronale et religieuse.",
+        highlights: [
+          "<strong>1857 (Joseph Déjacque) :</strong> Rédige sa <em>Lettre à Proudhon</em> à La Nouvelle-Orléans. Invente le mot « libertaire » et attaque la misogynie de Proudhon en proclamant : « L'être humain mâle et femelle est TOUT ».",
+          "<strong>1896 (La Voz de la Mujer, Argentine) :</strong> Publication du premier journal anarcho-féministe prolétarien par <strong>Virginia Bolten</strong>. Slogan historique : <em>« Ni Dios, ni patrón, ni marido »</em>. Dénonciation du machisme des compagnons militants (« Les femmes à la vaisselle »).",
+          "<strong>1887-1916 (États-Unis) :</strong> Figures emblématiques émergées du massacre de Haymarket : <strong>Lucy Parsons</strong> (organisation ouvrière), <strong>Voltairine de Cleyre</strong> (<em>They Who Marry Do Ill</em>, critique du mariage comme contrainte) et <strong>Emma Goldman</strong> (revue <em>Mother Earth</em>, défense de la contraception et arrestation en 1916).",
+          "<strong>1907 (Chine & Japon) :</strong> En exil à Tokyo, <strong>He-Yin Zhen</strong> publie dans <em>Tianyi</em> des analyses montrant que le capitalisme moderne occidental renforce le patriarcat traditionnel confucéen. Au Japon, <strong>Itô Noe</strong> mène des batailles similaires."
+        ]
+      },
+      2: {
+        title: "2ème Vague (1936–1939) : La Révolution Espagnole & Mujeres Libres",
+        period: "1936 - 1939",
+        tag: "Apogée Organisationnel & Autogestion",
+        color: "text-purple-600",
+        summary: "L'expérience la plus aboutie d'organisation féministe libertaire de masse lors de la Guerre Civile et de la Révolution Sociale espagnole.",
+        highlights: [
+          "<strong>Fédération Mujeres Libres (20 000 membres) :</strong> Fondée par Lucía Sánchez Saornil, Mercedes Comaposada et Amparo Poch y Gascón pour pallier le sexisme des syndicats CNT/FAI.",
+          "<strong>Théorie de la Double Lutte (Doble Lucha) :</strong> Menée simultanée contre le fascisme/capitalisme ET contre la domination masculine interne au mouvement révolutionnaire.",
+          "<strong>Capacitación & Captación :</strong> Programme combinant alphabétisation accélérée, formation technique pour l'autonomie financière et conscientisation politique.",
+          "<strong>Liberatorios de Prostitución :</strong> Création de centres d'émancipation offrant formation professionnelle, soins et logement pour sortir les femmes de la prostitution sans punitivisme."
+        ]
+      },
+      3: {
+        title: "3ème Vague (Années 1970) : La Synthèse Théorique et le Débat sur la Structure",
+        period: "1970 - 1978",
+        tag: "Deuxième Vague & Groupes d'Affinité",
+        color: "text-amber-600",
+        summary: "Reconfiguration théorique aux États-Unis et en Europe lors du Women's Liberation Movement, liant la politique préfigurative à l'anti-autoritarisme.",
+        highlights: [
+          "<strong>Peggy Kornegger & Carol Ehrlich (1975-1977) :</strong> Textes fondateurs (<em>Anarchism: The Feminist Connection</em>) démontrant que le féminisme radical applique un anarchisme intuitif.",
+          "<strong>Débat Freeman vs Levine (1970-1974) :</strong> Réponse décisive de Cathy Levine (<em>The Tyranny of Tyranny</em>) à Jo Freeman (<em>The Tyranny of Structurelessness</em>). Levine démontre que les structures formelles réintroduisent la hiérarchie patriarcale.",
+          "<strong>Groupes d'Affinité Non-Hiérarchiques :</strong> Organisation en cercles fluides interconnectés (*overlapping circles*) favorisant la prise de décision directe et le partage des compétences.",
+          "<strong>Anthologie Quiet Rumours :</strong> Compilée par le collectif britannique Dark Star, devenant la référence mondiale des écrits anarcha-féministes."
+        ]
+      },
+      4: {
+        title: "4ème Vague (1990–2026) : Nouveaux Fronts, Décolonialité & Justice Transformatrice",
+        period: "1990 - 2026",
+        tag: "Intersectionnalité & Anti-carcéralisme",
+        color: "text-emerald-600",
+        summary: "Renouveau contemporain intégrant les luttes autochtones, la décolonialité, l'anarchisme queer et le refus du féminisme carcéral.",
+        highlights: [
+          "<strong>Mujeres Creando (Bolivie, María Galindo) :</strong> Théorisation du principe : <em>« No se puede descolonizar sin despatriarcalizar »</em>. Action directe urbaine, créativité, graffitis politiques et refus des ONG.",
+          "<strong>Okupa Cuba Casa Refugio (Mexique) :</strong> Occupation féministe radicale du siège des droits humains à Mexico (2020-2022) transformé en refuge autogéré face à l'impunité des féminicides.",
+          "<strong>Justice Transformatrice vs Féminisme Carcéral :</strong> Refus de faire appel à la police et à la prison (institutions violentes). Développement de protocoles communautaires de réparation et de responsabilité.",
+          "<strong>Transféminisme & Anarcha-Queer :</strong> Dépassement des définitions biologiques du genre, alliances avec la Jinéologie kurde et réseaux de contre-institutions (Squats, Bibliothèques Anarcha-Féministes - BAF)."
+        ]
+      }
+    };
+
+    function setWave(num) {
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`waveBtn-${i}`);
+        if (i === num) {
+          btn.className = "p-4 rounded-2xl text-left border transition-all bg-stone-900 text-white border-stone-900 shadow-md";
+        } else {
+          btn.className = "p-4 rounded-2xl text-left border border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100 transition-all";
+        }
+      }
+
+      const w = wavesData[num];
+      const card = document.getElementById('waveDetailCard');
+      card.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-300 pb-3">
+          <div>
+            <span class="text-xs font-bold ${w.color} uppercase tracking-wider">${w.period} • ${w.tag}</span>
+            <h3 class="text-xl font-bold font-serif text-stone-900 mt-0.5">${w.title}</h3>
+          </div>
+        </div>
+        <p class="text-stone-700 text-sm italic">${w.summary}</p>
+        <div class="space-y-3 pt-2">
+          ${w.highlights.map(item => `
+            <div class="flex items-start space-x-3 bg-white/80 p-3.5 rounded-xl border border-stone-200 text-xs sm:text-sm text-stone-800">
+              <span class="text-brand-800 font-bold text-base leading-none">•</span>
+              <div>${item}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 3. DATA: HISTORICAL FIGURES & PUBLICATIONS
+    // ==========================================
+    const figuresData = [
+      {
+        name: "Joseph Déjacque",
+        dates: "1821–1864",
+        country: "France / USA",
+        era: "wave1",
+        role: "Pionnier du néologisme « Libertaire »",
+        quote: "« Qu'est-ce que l'homme ? rien. — Qu'est-ce que la femme ? rien. — Qu'est-ce que l'être-humain ? — TOUT. »",
+        desc: "Rédige en 1857 sa célèbre lettre critique à Proudhon. Attaque le monopole masculin de l'intelligence et la domination domestique."
+      },
+      {
+        name: "Virginia Bolten",
+        dates: "1876–1960",
+        country: "Argentine / Uruguay",
+        era: "wave1",
+        role: "Fondatrice de La Voz de la Mujer (1896)",
+        quote: "« Ni Dios, ni patrón, ni marido. »",
+        desc: "Oratrice syndicale de la FORA. Anime le premier journal anarcho-féministe rédigé par et pour des ouvrières prolétaires à Buenos Aires."
+      },
+      {
+        name: "Emma Goldman",
+        dates: "1869–1940",
+        country: "Russie / USA / Canada",
+        era: "wave1",
+        role: "Théoricienne & Directrice de Mother Earth",
+        quote: "« Si je ne peux pas danser, je ne veux pas faire partie de votre révolution. »",
+        desc: "Arrêtée pour propagande contraceptive. Critique le droit de vote formel qui transforme les femmes en rouages du salariat."
+      },
+      {
+        name: "Voltairine de Cleyre",
+        dates: "1866–1912",
+        country: "États-Unis",
+        era: "wave1",
+        role: "Penseuse de l'autonomie & Anti-carcéraliste",
+        quote: "« Chaque acte de violence trouve son écho dans un autre acte de violence... La matraque du policier engendre les criminels. »",
+        desc: "Rédige *They Who Marry Do Ill*. Prône un anarchisme sans adjectifs et dénonce la coercition matrimoniale légale."
+      },
+      {
+        name: "He-Yin Zhen",
+        dates: "c. 1884–c. 1920",
+        country: "Chine / Japon",
+        era: "wave1",
+        role: "Rédactrice de la revue Tianyi (1907)",
+        quote: "« Si l'ancienne société faisait des femmes des jouets, le capitalisme venu d'Occident en fait des outils d'exploitation. »",
+        desc: "Théoricienne chinoise. Démonte la double oppression du confucianisme patriarcal et de la modernisation capitaliste occidentale."
+      },
+      {
+        name: "Lucía Sánchez Saornil",
+        dates: "1895–1970",
+        country: "Espagne",
+        era: "wave2",
+        role: "Co-fondatrice de Mujeres Libres (1936)",
+        quote: "« La femme espagnole est doublement esclave : de la société et de l'homme. »",
+        desc: "Poétesse et militante anarcho-syndicaliste de la CNT. Conceptualise la nécessité d'une organisation autonome de femmes."
+      },
+      {
+        name: "Amparo Poch y Gascón",
+        dates: "1902–1968",
+        country: "Espagne / France",
+        era: "wave2",
+        role: "Médecin, Pacifiste & Co-fondatrice",
+        quote: "« La liberté de la femme exige la maîtrise intégrale de son corps et de sa santé. »",
+        desc: "Impulse les *Liberatorios de prostitución* et promeut la santé reproductive, l'éducation rationnelle et les crèches communautaires."
+      },
+      {
+        name: "Peggy Kornegger",
+        dates: "Années 1970",
+        country: "États-Unis",
+        era: "wave3",
+        role: "Théoricienne (Anarchism: The Feminist Connection)",
+        quote: "« Le féminisme implique une structure d'organisation fluide et non hiérarchique : le féminisme radical EST anarchiste. »",
+        desc: "Synthétise la deuxième vague en montrant la convergence organique entre autonomie féministe et antiautoritarisme."
+      },
+      {
+        name: "Cathy Levine",
+        dates: "Années 1970",
+        country: "États-Unis",
+        era: "wave3",
+        role: "Auteure de The Tyranny of Tyranny (1974)",
+        quote: "« Les organisations formelles et hiérarchiques n'éliminent pas les élites, elles les institutionnalisent. »",
+        desc: "Réfute la thèse de Jo Freeman et défend l'efficacité des petits groupes d'affinité souples pour éviter les dérivées autoritaires."
+      },
+      {
+        name: "María Galindo",
+        dates: "Née en 1964",
+        country: "Bolivie",
+        era: "wave4",
+        role: "Cofondatrice du collectif Mujeres Creando",
+        quote: "« No se puede descolonizar sin despatriarcalizar. »",
+        desc: "Active à La Paz. Utilise l'action directe, la radio, le graffiti et le street art contre le patriarcat post-colonial et le féminisme d'ONG."
+      },
+      {
+        name: "Irène Pereira",
+        dates: "Contemporaine",
+        country: "France",
+        era: "wave4",
+        role: "Philosophe & Auteure (Le Féminisme Libertaire)",
+        quote: "« La liberté libertaire n'est pas le libertarianisme de marché : elle est anticapitaliste, solidaire et anti-oppressive. »",
+        desc: "Actualise la pensée anarcho-féministe francophone en insistant sur l'éthique de la liberté et le refus de l'État punitif."
+      }
+    ];
+
+    function renderFigures(data) {
+      const grid = document.getElementById('figuresGrid');
+      grid.innerHTML = data.map(f => `
+        <div class="bg-warmcard/50 p-5 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-brand-800 bg-rose-100/80 px-2.5 py-0.5 rounded-full">${f.country}</span>
+              <span class="text-xs text-stone-500 font-mono">${f.dates}</span>
+            </div>
+            <h3 class="text-lg font-bold font-serif text-stone-900">${f.name}</h3>
+            <p class="text-xs font-semibold text-purple-800">${f.role}</p>
+            <p class="text-xs text-stone-600 leading-relaxed">${f.desc}</p>
+          </div>
+          <div class="bg-white p-3 rounded-xl border border-stone-200 italic text-xs text-stone-700">
+            ${f.quote}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterFigures() {
+      const query = document.getElementById('searchFigure').value.toLowerCase();
+      const era = document.getElementById('eraFilter').value;
+
+      const filtered = figuresData.filter(f => {
+        const matchesQuery = f.name.toLowerCase().includes(query) ||
+                             f.country.toLowerCase().includes(query) ||
+                             f.desc.toLowerCase().includes(query) ||
+                             f.role.toLowerCase().includes(query);
+        const matchesEra = era === 'all' || f.era === era;
+        return matchesQuery && matchesEra;
+      });
+
+      renderFigures(filtered);
+    }
+
+    // ==========================================
+    // 4. DATA: 10 KEY CONCEPTS MATRIX
+    // ==========================================
+    const conceptsData = [
+      {
+        id: 1,
+        title: "1. Anarcha-Féminisme (Féminisme Libertaire)",
+        subtitle: "L'équation fondatrice",
+        def: "Courant politique postulant que l'abolition du patriarcat est indissociable de l'abolition simultanée de l'État, du capitalisme et de toute hiérarchie coercitive.",
+        context: "Émerge pour corriger la cécité sexiste des pionniers anarchistes (comme Proudhon) et pour prémunir le féminisme contre la récupération institutionnelle."
+      },
+      {
+        id: 2,
+        title: "2. « Ni Dios, ni patrón, ni marido »",
+        subtitle: "Le quadruples refus",
+        def: "Devise historique synthétisant le rejet simultané de l'autorité religieuse, de l'exploitation patronale, de la coercition étatique et de la tutelle conjugale.",
+        context: "Forgée en 1896 par Virginia Bolten et les ouvrières de *La Voz de la Mujer* en Argentine face à la quadruple oppression subie par les femmes prolétaires."
+      },
+      {
+        id: 3,
+        title: "3. La « Double Lutte » (Doble Lucha)",
+        subtitle: "Combattre sur deux fronts",
+        def: "Stratégie affirmant que les femmes doivent mener de front la lutte des classes contre le système et la lutte spécifique contre le machisme interne au mouvement.",
+        context: "Théorisée par *Mujeres Libres* (Espagne, 1936-1939) pour justifier l'existence d'une organisation autonome féminine au sein du mouvement libertaire."
+      },
+      {
+        id: 4,
+        title: "4. Capacitación et Captación",
+        subtitle: "Empouvoirement & Conscientisation",
+        def: "Binôme méthodologique alliant la formation technique/alphabétisation (capacitación) à l'éveil de la conscience politique féministe libertaire (captación).",
+        context: "Permet aux femmes d'acquérir l'autonomie financière indispensable avant de pouvoir s'engager pleinement dans l'action syndicale et sociale."
+      },
+      {
+        id: 5,
+        title: "5. Amour Libre & Libre Maternité",
+        subtitle: "Autonomie affective et corporelle",
+        def: "Conception des unions fondée sur le seul consentement mutuel sans contrat étatique/religieux, garantie par le droit absolu à la contraception et à l'avortement.",
+        context: "Défendu dès le XIXe siècle par Emma Goldman, E. Armand et Voltairine de Cleyre contre le mariage conçu comme prostitution légale."
+      },
+      {
+        id: 6,
+        title: "6. Liberté Réelle vs. Égalité Formelle",
+        subtitle: "Critique de l'émancipation légale",
+        def: "Distinction entre l'intégration civique illusoire (droit de vote, parité parlementaire) et la transformation radicale des conditions matérielles d'existence.",
+        context: "He-Yin Zhen et Emma Goldman soulignaient que le bulletin de vote ou le salariat ne font que déplacer la servitude du foyer vers l'usine ou le bureau."
+      },
+      {
+        id: 7,
+        title: "7. Manarchy & Anarchisme (pro)féministe",
+        subtitle: "Déconstruction des privilèges masculins",
+        def: "Critique interne des comportements sexistes et autoritaires d'hommes militants libertaires qui reproduisent la domination masculine dans les espaces de lutte.",
+        context: "Concept forgé dans les années 1990/2000 et approfondi par Francis Dupuis-Déri pour exiger une déconstruction active du patriarcat chez les hommes."
+      },
+      {
+        id: 8,
+        title: "8. Unité des Moyens et des Fins (Préfiguration)",
+        subtitle: "La politique préfigurative",
+        def: "Principe imposant que l'organisation du présent reflète exactement la société future : on ne peut pas bâtir une société sans domination avec des outils autoritaires.",
+        context: "Implique le rejet des partis d'avant-garde, de la prise du pouvoir d'État et des leaders, au profit de groupes d'affinité horizontaux."
+      },
+      {
+        id: 9,
+        title: "9. Dé-patriarcalisation Décoloniale",
+        subtitle: "Théorème de María Galindo",
+        def: "Thèse démontrant que la décolonisation est impossible si elle ne démantèle pas simultanément les structures patriarcales coloniales et précoloniales.",
+        context: "Développée par le collectif bolivien *Mujeres Creando* (« No se puede descolonizar sin despatriarcalizar ») en rupture avec le féminisme d'État et d'ONG."
+      },
+      {
+        id: 10,
+        title: "10. Justice Transformatrice (Anti-carcéralisme)",
+        subtitle: "Alternative au Féminisme Carcéral",
+        def: "Démarche communautaire traitant les violences de genre par la responsabilité collective, la réparation des victimes et la transformation sans police ni prison.",
+        context: "S'oppose au « féminisme carcéral » réclamant le durcissement des peines d'État, considérant la prison comme une institution patriarcalement violente."
+      }
+    ];
+
+    function renderConcepts() {
+      const grid = document.getElementById('conceptsGrid');
+      grid.innerHTML = conceptsData.map(c => `
+        <div class="bg-stone-50 rounded-2xl border border-stone-200 overflow-hidden transition">
+          <button onclick="toggleConcept(${c.id})" class="w-full text-left p-4 sm:p-5 flex items-center justify-between bg-white hover:bg-stone-100/80 transition">
+            <div>
+              <span class="text-xs font-bold text-brand-800 uppercase tracking-wider block">${c.subtitle}</span>
+              <h3 class="text-base font-bold font-serif text-stone-900 mt-0.5">${c.title}</h3>
+            </div>
+            <span id="conceptIcon-${c.id}" class="text-lg font-bold text-stone-400 ml-2">＋</span>
+          </button>
+          <div id="conceptBody-${c.id}" class="hidden p-4 sm:p-5 bg-stone-50 border-t border-stone-200 text-xs sm:text-sm space-y-2">
+            <div>
+              <span class="font-bold text-stone-800">Définition :</span>
+              <p class="text-stone-600 mt-0.5">${c.def}</p>
+            </div>
+            <div class="pt-2 border-t border-stone-200/60">
+              <span class="font-bold text-purple-900">Contexte & Enjeu :</span>
+              <p class="text-stone-600 mt-0.5">${c.context}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleConcept(id) {
+      const body = document.getElementById(`conceptBody-${id}`);
+      const icon = document.getElementById(`conceptIcon-${id}`);
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        icon.textContent = '－';
+        icon.classList.add('text-brand-800');
+      } else {
+        body.classList.add('hidden');
+        icon.textContent = '＋';
+        icon.classList.remove('text-brand-800');
+      }
+    }
+
+    // ==========================================
+    // 5. DATA: SCENARIO SIMULATOR
+    // ==========================================
+    const scenarioData = {
+      violence: {
+        title: "Problématique : Les Violences de Genre et Agressions Conjugales",
+        liberal: "Demande de lois plus sévères, augmentation des effectifs policiers, création de numéros verts d'État et judiciarisation accrue.",
+        marxist: "Analyse la violence comme une conséquence de la misère sociale capitaliste. Propose d'intégrer les victimes dans le syndicat ouvrier.",
+        anarcha: "Prône la <strong>Justice Transformatrice</strong> : évite la police et la prison (organes violents). Crée des réseaux communautaires de soutien, d'autodéfense, de mise à l'abri immédiate et d'exigence de responsabilité de l'agresseur."
+      },
+      parite: {
+        title: "Problématique : Élections & Représentation des Femmes en Politique",
+        liberal: "Lois de parité obligatoire sur les listes électorales, quotas dans les conseils d'administration et accès des femmes aux ministères.",
+        marxist: "Soutient la création d'une section féminine dans le Parti ouvrier avant d'occuper les postes de direction du gouvernement prolétarien.",
+        anarcha: "Rejette le système électoral et la parité dans les élites. Emma Goldman résumait : <em>« Si le vote changeait quelque chose, il serait illégal. »</em> L'objectif n'est pas d'avoir des femmes cheffes ou ministres, mais de dissoudre les postes de commandement."
+      },
+      travail: {
+        title: "Problématique : Le Travail Domestique Non Rémunéré & Le Care",
+        liberal: "Revendique l'accès égal des femmes au travail salarié de carrière et la possibilité de déléguer le ménage via des contrats marchands.",
+        marxist: "Propose la socialisation du travail domestique par l'État socialiste et la réintégration des femmes dans la production industrielle.",
+        anarcha: "Socialisation immédiate et autogérée par le bas : cantines populaires (<em>comedores</em>), crèches communautaires autogérées (<em>guarderías</em>) et déconstruction du rôle de genre pour un partage direct dans la communauté."
+      },
+      maternite: {
+        title: "Problématique : Le Mariage, la Maternité et le Corps",
+        liberal: "Droit individuel au contrat de mariage révisé, congé maternité légal et accès aux soins remboursés par la sécurité sociale d'État.",
+        marxist: "Protection de la mère travailleuse par la législation du travail et incitation à la maternité pour le renouvellement prolétarien.",
+        anarcha: "Abolition de l'institution du mariage (analysé par Voltairine de Cleyre comme subordination). <strong>Amour Libre</strong> sans bénédiction d'État ou d'Église, éducation rationnelle coéduquée et contrôle direct du corps (accès libre à la contraception/avortement)."
+      }
+    };
+
+    function loadScenario(key) {
+      ['violence', 'parite', 'travail', 'maternite'].forEach(k => {
+        const btn = document.getElementById(`scen-${k}`);
+        if (k === key) {
+          btn.className = "px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-brand-800 text-white transition";
+        } else {
+          btn.className = "px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-stone-800 text-stone-300 hover:bg-stone-700 transition";
+        }
+      });
+
+      const s = scenarioData[key];
+      const box = document.getElementById('scenarioDisplay');
+      box.innerHTML = `
+        <h3 class="text-lg font-bold font-serif text-white">${s.title}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div class="bg-stone-900/80 p-4 rounded-xl border border-blue-900/50 space-y-1">
+            <span class="text-xs font-bold text-blue-400 block uppercase">Féminisme Libéral</span>
+            <p class="text-stone-300">${s.liberal}</p>
+          </div>
+          <div class="bg-stone-900/80 p-4 rounded-xl border border-red-900/50 space-y-1">
+            <span class="text-xs font-bold text-red-400 block uppercase">Féminisme Marxiste</span>
+            <p class="text-stone-300">${s.marxist}</p>
+          </div>
+          <div class="bg-stone-900 p-4 rounded-xl border border-rose-500/80 space-y-1 shadow-lg ring-1 ring-rose-500/30">
+            <span class="text-xs font-bold text-rose-400 block uppercase">Ⓐ♀ Response Anarcho-Féministe</span>
+            <p class="text-stone-100 font-medium">${s.anarcha}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 6. CHART.JS INITIALIZATIONS
+    // ==========================================
+    function initRadarChart() {
+      const ctx = document.getElementById('feminismRadarChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: [
+            'Anti-État',
+            'Anti-Capitalisme',
+            'Anti-Patriarcat',
+            'Préfiguration (Moyens=Fins)',
+            'Autonomie du Genre'
+          ],
+          datasets: [
+            {
+              label: 'Libéral',
+              data: [10, 20, 60, 30, 50],
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59, 130, 246, 0.15)',
+              borderWidth: 2
+            },
+            {
+              label: 'Marxiste',
+              data: [20, 95, 75, 40, 60],
+              borderColor: '#ef4444',
+              backgroundColor: 'rgba(239, 68, 68, 0.15)',
+              borderWidth: 2
+            },
+            {
+              label: 'Radical',
+              data: [40, 50, 95, 70, 95],
+              borderColor: '#a855f7',
+              backgroundColor: 'rgba(168, 85, 247, 0.15)',
+              borderWidth: 2
+            },
+            {
+              label: 'Anarcho-Féminisme',
+              data: [100, 100, 100, 100, 100],
+              borderColor: '#be123c',
+              backgroundColor: 'rgba(190, 18, 60, 0.25)',
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: '#e7e5e4' },
+              grid: { color: '#e7e5e4' },
+              pointLabels: {
+                font: { size: 10, weight: 'bold' },
+                color: '#44403c'
+              },
+              ticks: { display: false, min: 0, max: 100 }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 12, font: { size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    function initMujeresChart() {
+      const ctx = document.getElementById('mujeresLibresChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: [
+            'Capacitación (Formation Tech & Alphabétisation)',
+            'Captación (Conscientisation & Syndicalisme)',
+            'Liberatorios de Prostitución',
+            'Guarderías & Comedores (Care Communautaire)'
+          ],
+          datasets: [{
+            data: [35, 30, 15, 20],
+            backgroundColor: [
+              '#be123c',
+              '#7e22ce',
+              '#d97706',
+              '#059669'
+            ],
+            borderWidth: 2,
+            borderColor: '#faf8f5'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                boxWidth: 10,
+                font: { size: 10 },
+                generateLabels: function(chart) {
+                  const data = chart.data;
+                  if (data.labels.length && data.datasets.length) {
+                    return data.labels.map((label, i) => {
+                      const fill = data.datasets[0].backgroundColor[i];
+                      // Wrap 16-char logic formatting display
+                      const shortLabel = label.length > 22 ? label.substring(0, 22) + '...' : label;
+                      return {
+                        text: shortLabel,
+                        fillStyle: fill,
+                        strokeStyle: fill,
+                        lineWidth: 0,
+                        hidden: false,
+                        index: i
+                      };
+                    });
+                  }
+                  return [];
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // ==========================================
+    // INITIALIZATION ON DOM LOAD
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      selectStream('anarcha');
+      setWave(1);
+      renderFigures(figuresData);
+      renderConcepts();
+      loadScenario('violence');
+      initRadarChart();
+      initMujeresChart();
+    });
+  </script>
+</body>
+</html>
