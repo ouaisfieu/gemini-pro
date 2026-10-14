@@ -1,13 +1,76 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr-BE" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyse Critique : Couverture Médiatique du Conclave Arizona</title>
+    <title>Analyse Critique : Couverture Médiatique du Conclave Arizona | Bart De Wever vs Georges-Louis Bouchez</title>
+    
+    <!-- Meta SEO Essentielles -->
+    <meta name="description" content="Décryptage critique et audit comparatif de la couverture médiatique du conclave budgétaire fédéral belge (Coalition Arizona). Confrontation des annonces de Bart De Wever et Georges-Louis Bouchez aux rapports de la Cour des comptes, de la BNB et du Bureau du Plan.">
+    <meta name="keywords" content="Conclave budgétaire 2026, Coalition Arizona, Bart De Wever, Georges-Louis Bouchez, N-VA, MR, Cour des comptes, Banque Nationale de Belgique, Bureau du Plan, analyse médias, budget fédéral belge, fiscalité, austérité">
+    <meta name="author" content="Observatoire Critique de la Presse & de la Gouvernance Budgétaire">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://ouaisfieu.github.io/gemini-pro/concours/argon/max/bart-de-wever/georges-louis-bouchez/">
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="fr_BE">
+    <meta property="og:site_name" content="Observatoire Médias & Conclave Arizona">
+    <meta property="og:title" content="Analyse Critique : Couverture Médiatique du Conclave Arizona | BDW vs GLB">
+    <meta property="og:description" content="Audit contradictoire du conclave budgétaire fédéral belge : 7.2 Mrd € affichés vs 3.9 Mrd € audités. Décryptage des cadrages médiatiques FR/NL et des angles morts macroéconomiques.">
+    <meta property="og:url" content="https://ouaisfieu.github.io/gemini-pro/concours/argon/max/bart-de-wever/georges-louis-bouchez/">
+    <meta property="article:published_time" content="2026-10-14T10:00:00+02:00">
+    <meta property="article:modified_time" content="2026-10-14T11:45:00+02:00">
+    <meta property="article:section" content="Analyse Politique & Média">
+    <meta property="article:tag" content="Bart De Wever">
+    <meta property="article:tag" content="Georges-Louis Bouchez">
+    <meta property="article:tag" content="Coalition Arizona">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Analyse Critique du Conclave Arizona : BDW vs GLB">
+    <meta name="twitter:description" content="Audit d'impact et déconstruction du récit médiatique autour du conclave budgétaire fédéral belge.">
+
+    <!-- Structured Data (Schema.org JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Report",
+      "@id": "https://ouaisfieu.github.io/gemini-pro/concours/argon/max/bart-de-wever/georges-louis-bouchez/#report",
+      "mainEntityOfPage": "https://ouaisfieu.github.io/gemini-pro/concours/argon/max/bart-de-wever/georges-louis-bouchez/",
+      "headline": "Analyse critique de la couverture médiatique du conclave budgétaire fédéral de la coalition Arizona",
+      "description": "Étude approfondie de la fabrique du consentement, du biais de cadrage linguistique (presse FR vs NL) et du décalage comptable entre les annonces du Kern et les audits de la Cour des comptes.",
+      "datePublished": "2026-10-14",
+      "dateModified": "2026-10-14",
+      "inLanguage": "fr-BE",
+      "author": {
+        "@type": "Organization",
+        "name": "Observatoire Critique de la Presse & de la Gouvernance Budgétaire"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Observatoire Médias Belgique"
+      },
+      "about": [
+        { "@type": "Thing", "name": "Coalition Arizona" },
+        { "@type": "Person", "name": "Bart De Wever" },
+        { "@type": "Person", "name": "Georges-Louis Bouchez" },
+        { "@type": "Thing", "name": "Politique budgétaire belge" },
+        { "@type": "Thing", "name": "Analyse du discours médiatique" }
+      ],
+      "mentions": [
+        { "@type": "Organization", "name": "Cour des comptes de Belgique" },
+        { "@type": "Organization", "name": "Banque nationale de Belgique" },
+        { "@type": "Organization", "name": "Bureau fédéral du Plan" }
+      ]
+    }
+    </script>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <script>
         tailwind.config = {
             theme: {
@@ -45,7 +108,7 @@
                 height: 360px;
             }
         }
-        .tab-btn.active {
+        .tab-btn[aria-selected="true"] {
             border-bottom-color: #8b1e3f;
             color: #8b1e3f;
             font-weight: 700;
@@ -72,13 +135,13 @@
     <!-- Chosen Palette: Warm Neutral Harmonious (Stone background, Slate text, Crimson/Wine primary accent #8b1e3f, Amber & Navy visual highlights) -->
 
     <!-- Application Structure Plan:
-        1. Header & Navigation Sticky Bar: Summary metrics (23 Mrd € effort initial, 10 Mrd € impasse, 3.9 Mrd € audité vs 7.2 Mrd € affiché) and thematic tabs.
-        2. Section 1 - Macro-politique & Audit de Sincérité: Explains the macroeconomic deadlock and contrasts Kern official figures with independent audits (Cour des comptes, BNB, Bureau du Plan) using Chart.js.
-        3. Section 2 - Analyse Comparative des 6 Leviers Budgétaires: Interactive data grid & comparison cards with filters for risk levels and policy type.
-        4. Section 3 - La Fabrique du Consentement & Angles Morts: Interactive presentation of TINA framing, domestic metaphors, and hidden structural costs (tax shifts, extralegal perks, military exception).
-        5. Section 4 - Dramaturgie Politicienne & Biais Presse (FR vs NL): Comparative matrix of media narratives, leak strategies ("horror catalogue"), and crisis scenario probability doughnut chart.
+        1. Header & Navigation Sticky Bar: Semantic <header> and <nav> with explicit ARIA roles (tablist, tab, tabpanel).
+        2. Section 1 - Macro-politique & Audit de Sincérité: Explains the macroeconomic deadlock and contrasts Kern official figures (BDW vs GLB consensus) with independent audits.
+        3. Section 2 - Analyse Comparative des 6 Leviers Budgétaires: Interactive data grid & comparison cards with filters for risk levels.
+        4. Section 3 - La Fabrique du Consentement & Angles Morts: Interactive presentation of TINA framing, domestic metaphors, and hidden structural costs.
+        5. Section 4 - Dramaturgie Politicienne & Biais Presse (FR vs NL): Comparative matrix focusing on Bart De Wever vs Georges-Louis Bouchez framing and leak strategies.
         6. Section 5 - Attaque des Contre-Pouvoirs & Précarité Journalistique: Deep-dive into syndical delegitimation, mutualities targeting, and structural media precarity.
-        7. Footer & Methodology Notes.
+        7. Footer & Methodology Notes: Semantic <footer> with Schema metadata links.
     -->
 
     <!-- Visualization & Content Choices:
@@ -91,123 +154,126 @@
 
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
-    <!-- TOP HEADER -->
+    <!-- EN-TÊTE ET NAVIGATION SÉMANTIQUE -->
     <header class="bg-stone-900 text-stone-100 border-b border-stone-800 sticky top-0 z-50 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between py-3 gap-4">
                 <div class="flex items-center space-x-3">
-                    <span class="inline-block w-3 h-3 rounded-full bg-brand-500 animate-pulse"></span>
-                    <h1 class="text-lg md:text-xl font-bold tracking-tight text-white">
+                    <span class="inline-block w-3 h-3 rounded-full bg-brand-500 animate-pulse" aria-hidden="true"></span>
+                    <a href="https://ouaisfieu.github.io/gemini-pro/concours/argon/max/bart-de-wever/georges-louis-bouchez/" class="text-lg md:text-xl font-bold tracking-tight text-white hover:text-brand-200 transition-colors">
                         Observatoire Médias & Conclave Arizona 2026
-                    </h1>
+                    </a>
                 </div>
-                <nav class="flex flex-wrap justify-center gap-1 sm:gap-2 text-xs md:text-sm font-medium">
-                    <button onclick="switchTab('macro')" id="tab-macro" class="tab-btn active px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">1. Impasse & Audit</button>
-                    <button onclick="switchTab('leviers')" id="tab-leviers" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">2. 6 Leviers Budgétaires</button>
-                    <button onclick="switchTab('framing')" id="tab-framing" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">3. Fabrique du Consentement</button>
-                    <button onclick="switchTab('dramaturgie')" id="tab-dramaturgie" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">4. Pressea FR vs NL</button>
-                    <button onclick="switchTab('contrepouvoirs')" id="tab-contrepouvoirs" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">5. Contre-Pouvoirs & Médias</button>
+                <nav aria-label="Navigation principale" class="flex flex-wrap justify-center gap-1 sm:gap-2 text-xs md:text-sm font-medium">
+                    <div role="tablist" class="flex flex-wrap justify-center gap-1 sm:gap-2">
+                        <button onclick="switchTab('macro')" id="tab-macro" role="tab" aria-selected="true" aria-controls="section-macro" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">1. Impasse & Audit</button>
+                        <button onclick="switchTab('leviers')" id="tab-leviers" role="tab" aria-selected="false" aria-controls="section-leviers" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">2. 6 Leviers Budgétaires</button>
+                        <button onclick="switchTab('framing')" id="tab-framing" role="tab" aria-selected="false" aria-controls="section-framing" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">3. Fabrique du Consentement</button>
+                        <button onclick="switchTab('dramaturgie')" id="tab-dramaturgie" role="tab" aria-selected="false" aria-controls="section-dramaturgie" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">4. BDW vs GLB (FR/NL)</button>
+                        <button onclick="switchTab('contrepouvoirs')" id="tab-contrepouvoirs" role="tab" aria-selected="false" aria-controls="section-contrepouvoirs" class="tab-btn px-3 py-2 border-b-2 border-transparent hover:text-brand-500 transition-colors">5. Contre-Pouvoirs & Médias</button>
+                    </div>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTAINER -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <!-- CONTENU PRINCIPAL DE LA PAGE -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8" id="main-content">
 
-        <!-- INTRO & KPI STATS BAR -->
-        <section class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
-            <div class="max-w-4xl">
-                <span class="text-xs font-bold tracking-wider uppercase text-brand-500 bg-brand-50 px-2.5 py-1 rounded-md border border-brand-200">
-                    Rapport de synthèse & Décryptage d'Audit
-                </span>
-                <h2 class="text-2xl md:text-3xl font-extrabold text-stone-900 mt-3 tracking-tight">
-                    Analyse critique de la couverture médiatique du conclave budgétaire fédéral
-                </h2>
-                <p class="mt-3 text-stone-600 text-sm md:text-base leading-relaxed">
-                    Cette application interactive déconstruit le cadrage journalistique du conclave d'automne 2026 de la coalition Arizona (N-VA, MR, Les Engagés, Vooruit, CD&V). Elle confronte la narration politique du gouvernement — largement relayée par les grands médias — à la matérialité des audits de la Cour des comptes, de la Banque nationale de Belgique (BNB) et du Bureau fédéral du Plan.
+        <!-- ARTICLE D'INTRODUCTION ET TABLEAU DE BORD KPI -->
+        <article class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
+            <header class="max-w-4xl space-y-3">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold tracking-wider uppercase text-brand-500 bg-brand-50 px-2.5 py-1 rounded-md border border-brand-200">
+                        Rapport de Synthèse & Décryptage d'Audit
+                    </span>
+                    <time datetime="2026-10-14" class="text-xs text-stone-500 font-medium">Mis à jour le 14 Octobre 2026</time>
+                </div>
+                <h1 class="text-2xl md:text-4xl font-extrabold text-stone-900 tracking-tight leading-tight">
+                    Analyse critique de la couverture médiatique du conclave budgétaire fédéral : La confrontation Arizona
+                </h1>
+                <p class="text-stone-600 text-sm md:text-base leading-relaxed">
+                    Cette application interactive et documentaire déconstruit le cadrage journalistique du conclave d'automne 2026 de la coalition Arizona (N-VA, MR, Les Engagés, Vooruit, CD&V). Centrée sur l'opposition politico-médiatique entre <strong>Bart De Wever</strong> (N-VA) et <strong>Georges-Louis Bouchez</strong> (MR), cette étude confronte la narration officielle aux données chiffrées des audits de la <strong>Cour des comptes</strong>, de la <strong>Banque nationale de Belgique (BNB)</strong> et du <strong>Bureau fédéral du Plan</strong>.
                 </p>
-            </div>
+            </header>
 
-            <!-- KEY METRICS GRID -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-stone-100">
+            <!-- GRILLE SEMANTIQUE DES INDICATEURS CLEFS (KPI) -->
+            <section aria-label="Indicateurs clés du conclave" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-stone-100">
                 <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
-                    <p class="text-xs text-stone-500 uppercase font-semibold">Effit Budgétaire Initial</p>
+                    <h2 class="text-xs text-stone-500 uppercase font-semibold">Effort Budgétaire Initial</h2>
                     <p class="text-2xl md:text-3xl font-bold text-stone-900 mt-1">23,0 <span class="text-sm font-medium text-stone-600">Mrd €</span></p>
                     <p class="text-xs text-stone-500 mt-1">Objectif 2025-2030 (Accord initial)</p>
                 </div>
                 <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
-                    <p class="text-xs text-stone-500 uppercase font-semibold">Impasse Automne 2026</p>
+                    <h2 class="text-xs text-stone-500 uppercase font-semibold">Impasse Automne 2026</h2>
                     <p class="text-2xl md:text-3xl font-bold text-brand-500 mt-1">10,0 <span class="text-sm font-medium text-brand-500">Mrd €</span></p>
                     <p class="text-xs text-stone-500 mt-1">Effort réévalué par le SPF BOSA</p>
                 </div>
                 <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
-                    <p class="text-xs text-stone-500 uppercase font-semibold">Affiché Kern vs Réel</p>
+                    <h2 class="text-xs text-stone-500 uppercase font-semibold">Affiché Kern vs Réel</h2>
                     <p class="text-2xl md:text-3xl font-bold text-amber-600 mt-1">3,90 <span class="text-sm font-medium text-stone-600">Mrd €</span></p>
                     <p class="text-xs text-stone-500 mt-1">Rendement réel (sur 7,20 Mrd € affichés)</p>
                 </div>
                 <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
-                    <p class="text-xs text-stone-500 uppercase font-semibold">Coussin Parlementaire</p>
+                    <h2 class="text-xs text-stone-500 uppercase font-semibold">Coussin Parlementaire</h2>
                     <p class="text-2xl md:text-3xl font-bold text-stone-900 mt-1">80 <span class="text-sm font-medium text-stone-600">/ 150</span></p>
                     <p class="text-xs text-stone-500 mt-1">Sièges (Majorité à +4 voix)</p>
                 </div>
-            </div>
-        </section>
+            </section>
+        </article>
 
         <!-- SECTION 1: MACRO-POLITIQUE & AUDIT DE SINCÉRITÉ -->
-        <section id="section-macro" class="tab-content block space-y-6">
+        <section id="section-macro" role="tabpanel" aria-labelledby="tab-macro" class="tab-content block space-y-6">
             <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-stone-900">1. Cadre macro-politique et anatomie du mur budgétaire d'octobre 2026</h3>
+                <header class="mb-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-stone-900">1. Cadre macro-politique et anatomie du mur budgétaire d'octobre 2026</h2>
                     <p class="text-sm text-stone-600 mt-2 leading-relaxed">
-                        Cette section présente les origines de la crise budgétaire de l'automne 2026 et met en évidence le fossé dramatique entre la communication du gouvernement fédéral (le Kern) et les audits techniques indépendants. Alors que la presse focalise le débat sur un chiffre nominal de 7,20 milliards d'euros de mesures trouvées, l'analyse comptable révèle plus de 3,30 milliards d'euros d'hypothèses fictives ou juridiquement irréalisables.
+                        Cette section présente les origines de la crise budgétaire et met en évidence le fossé dramatique entre la communication du gouvernement fédéral (le Kern sous la houlette de Bart De Wever) et les audits techniques indépendants. Alors que la presse focalise le débat sur un chiffre nominal de 7,20 milliards d'euros de mesures trouvées, l'analyse comptable révèle plus de 3,30 milliards d'euros d'hypothèses fictives ou juridiquement irréalisables.
                     </p>
-                </div>
+                </header>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <!-- Text / Explanations -->
                     <div class="space-y-4">
-                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-md">
-                            <h4 class="font-semibold text-amber-900 text-sm">Avertissement de la BNB & de l'Agence de la Dette (7 oct. 2026)</h4>
+                        <aside class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-md" role="note">
+                            <h3 class="font-semibold text-amber-900 text-sm">Avertissement de la BNB & de l'Agence de la Dette (7 oct. 2026)</h3>
                             <p class="text-xs text-amber-800 mt-1 leading-relaxed">
                                 L'effet « boule de neige » sur la dette publique ($r_t > g_t$) menace de s'enclencher dès 2028-2029 au lieu de 2031, portant le taux d'endettement à <strong>122,6 % du PIB</strong> d'ici 2031. La charge d'intérêts annuelle est projetée à <strong>50 milliards d'euros en 2035</strong> (contre 16,7 Mrd € en 2026).
                             </p>
-                        </div>
+                        </aside>
 
                         <div class="space-y-3 text-sm text-stone-700 leading-relaxed">
-                            <p>
-                                <strong>Les 3 erreurs de paramétrage de l'accord initial :</strong>
-                            </p>
+                            <h3 class="font-bold text-stone-900">Les 3 erreurs de paramétrage de l'accord initial :</h3>
                             <ul class="list-disc pl-5 space-y-1.5 text-xs md:text-sm text-stone-600">
-                                <li><strong>Surestimation des effets retour :</strong> Prévision de 7,9 Mrd € basés sur un retour de 50 % de l'emploi, alors que la KU Leuven/ULB prouvent un retour réel plafonné entre 4 % et 15 %.</li>
-                                <li><strong>Mésaventure des réalignements TVA de 2025 :</strong> Effets de substitution massifs des consommateurs vers les produits non taxés ou transfrontaliers.</li>
-                                <li><strong>Absorptions incompressibles :</strong> Le coût du vieillissement démographique (+2,1 % du PIB), l'indexation automatique et les engagements envers l'OTAN (2 % du PIB).</li>
+                                <li><strong>Surestimation des effets retour :</strong> Prévision de 7,9 Mrd € basés sur un retour de 50 % de l'emploi, alors que la KU Leuven et l'ULB prouvent un retour réel plafonné entre 4 % et 15 %.</li>
+                                <li><strong>Mésaventure des réalignements TVA de 2025 :</strong> Effets de substitution massifs des consommateurs vers les produits non taxés ou les achats transfrontaliers.</li>
+                                <li><strong>Absorptions incompressibles :</strong> Le coût du vieillissement démographique (+2,1 % du PIB), l'indexation automatique des prestations et les engagements envers l'OTAN (2 % du PIB).</li>
                             </ul>
                         </div>
                     </div>
 
                     <!-- Chart 1 Container -->
-                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 flex flex-col justify-between">
-                        <h4 class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-2 text-center">
+                    <figure class="bg-stone-50 p-4 rounded-xl border border-stone-200 flex flex-col justify-between">
+                        <figcaption class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-2 text-center">
                             Confrontation : Affiché par le Kern vs Réalité Auditée (Automne 2026)
-                        </h4>
+                        </figcaption>
                         <div class="chart-container">
-                            <canvas id="chartSincerite"></canvas>
+                            <canvas id="chartSincerite" aria-label="Graphique comparatif des chiffres du gouvernement contre la réalité auditée"></canvas>
                         </div>
                         <p class="text-[11px] text-stone-500 text-center mt-2 italic">
                             Sources : Cour des comptes, Banque nationale de Belgique, Bureau fédéral du Plan (octobre 2026).
                         </p>
-                    </div>
+                    </figure>
                 </div>
             </div>
         </section>
 
         <!-- SECTION 2: AUDIT DES 6 LEVIERS BUDGÉTAIRES -->
-        <section id="section-leviers" class="tab-content hidden space-y-6">
+        <section id="section-leviers" role="tabpanel" aria-labelledby="tab-leviers" class="tab-content hidden space-y-6">
             <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                     <div>
-                        <h3 class="text-xl font-bold text-stone-900">2. Audit détaillé des 6 principaux leviers budgétaires</h3>
+                        <h2 class="text-xl md:text-2xl font-bold text-stone-900">2. Audit détaillé des 6 principaux leviers budgétaires</h2>
                         <p class="text-sm text-stone-600 mt-1">
                             Explorez chaque mesure clé du conclave. Utilisez le filtre pour comparer l'affichage médiatique aux risques comptables documentés.
                         </p>
@@ -221,175 +287,172 @@
                             <option value="moderate">Risque comptable Modéré</option>
                         </select>
                     </div>
-                </div>
+                </header>
 
                 <!-- Horizontal Stacked Chart for visual quick-view -->
-                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 mb-8">
-                    <h4 class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-3">
+                <figure class="bg-stone-50 p-4 rounded-xl border border-stone-200 mb-8">
+                    <figcaption class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-3">
                         Rendement affiché vs Rendement audité par mesure (en Milliards d'Euros)
-                    </h4>
+                    </figcaption>
                     <div class="chart-container" style="height:260px;">
-                        <canvas id="chartLeviers"></canvas>
+                        <canvas id="chartLeviers" aria-label="Graphique des leviers budgétaires avec écarts de rendement"></canvas>
                     </div>
-                </div>
+                </figure>
 
                 <!-- Interactive Data Cards / Table -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="leverage-cards-container">
-                    <!-- Dynamically populated by JS -->
+                    <!-- Populated dynamically by JavaScript -->
                 </div>
             </div>
         </section>
 
         <!-- SECTION 3: FABRIQUE DU CONSENTEMENT & ANGLES MORTS -->
-        <section id="section-framing" class="tab-content hidden space-y-6">
+        <section id="section-framing" role="tabpanel" aria-labelledby="tab-framing" class="tab-content hidden space-y-6">
             <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-stone-900">3. La fabrique du consentement et le déplacement de la fenêtre d'Overton</h3>
+                <header class="mb-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-stone-900">3. La fabrique du consentement et le déplacement de la fenêtre d'Overton</h2>
                     <p class="text-sm text-stone-600 mt-2 leading-relaxed">
                         Cette section décrypte comment l'appareil médiatique belge (Rossel, IPM, Mediahuis, DPG Media, Roularta) a dépolitisé l'austérité budgétaire en imposant le dogme TINA (<em>There Is No Alternative</em>) et la métaphore du « bon père de famille », tout en occultant les dépenses fiscales et régaliennes majeures.
                     </p>
-                </div>
+                </header>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <!-- Card TINA -->
-                    <div class="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-2">
-                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-xs">01</div>
-                        <h4 class="font-bold text-stone-900 text-sm">Hégémonie du Dogme TINA</h4>
+                    <article class="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-2">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-xs" aria-hidden="true">01</div>
+                        <h3 class="font-bold text-stone-900 text-sm">Hégémonie du Dogme TINA</h3>
                         <p class="text-xs text-stone-600 leading-relaxed">
                             L'assainissement est cadré non comme un choix politique, mais comme une « loi de la nature » imposée par la Commission européenne et les dégradations des agences de notation (Fitch AA- → A+, Moody's Aa3 → A1, S&P threat).
                         </p>
-                    </div>
+                    </article>
 
-                    <!-- Card Métaphore Ménage -->
-                    <div class="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-2">
-                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-xs">02</div>
-                        <h4 class="font-bold text-stone-900 text-sm">Métaphores Domestiques</h4>
+                    <article class="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-2">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-xs" aria-hidden="true">02</div>
+                        <h3 class="font-bold text-stone-900 text-sm">Métaphores Domestiques</h3>
                         <p class="text-xs text-stone-600 leading-relaxed">
-                            Assimilation permanente du budget de l'État à celui d'un ménage (*« potje breken, potje betalen »*). Ce langage moralisateur réduit la macroéconomie à une simple vertu de sobriété individuelle.
+                            Assimilation permanente du budget de l'État à celui d'un ménage (<em>« potje breken, potje betalen »</em>). Ce langage moralisateur réduit la macroéconomie à une simple vertu de sobriété individuelle.
                         </p>
-                    </div>
+                    </article>
 
-                    <!-- Card Arbitrage Binaire -->
-                    <div class="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-2">
-                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-xs">03</div>
-                        <h4 class="font-bold text-stone-900 text-sm">Fenêtre d'Overton Rétrécie</h4>
+                    <article class="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-2">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-xs" aria-hidden="true">03</div>
+                        <h3 class="font-bold text-stone-900 text-sm">Fenêtre d'Overton Rétrécie</h3>
                         <p class="text-xs text-stone-600 leading-relaxed">
                             Le débat public légitime est confiné à un arbitrage restreint entre hausse de la TVA et coupes dans la santé et le chômage, excluant toute réévaluation structurelle des recettes.
                         </p>
-                    </div>
+                    </article>
                 </div>
 
                 <!-- Comparison Blindspots Section -->
                 <div class="bg-stone-900 text-stone-100 p-6 rounded-xl border border-stone-800">
-                    <h4 class="text-base font-bold text-white mb-2">
-                        Les Angles Morts Macroéconomiques du Récit Médiatique
-                    </h4>
-                    <p class="text-xs text-stone-400 mb-6 leading-relaxed">
-                        Pendant que les JT et la presse quotidienne qualifient d'irréaliste le slogan <em>« Tax the rich »</em>, d'immenses niches fiscales et hausses de dépenses régaliennes sont traitées comme des variables exogènes intouchables.
-                    </p>
+                    <header class="mb-4">
+                        <h3 class="text-lg font-bold text-white">Les Angles Morts Macroéconomiques du Récit Médiatique</h3>
+                        <p class="text-xs text-stone-400 mt-1 leading-relaxed">
+                            Pendant que les JT et la presse quotidienne qualifient d'irréaliste le slogan <em>« Tax the rich »</em>, d'immenses niches fiscales et hausses de dépenses régaliennes sont traitées comme des variables exogènes intouchables.
+                        </p>
+                    </header>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                         <div class="space-y-4 text-xs md:text-sm">
                             <div class="border-l-2 border-brand-500 pl-3 space-y-1">
-                                <p class="font-bold text-white">Subventions aux entreprises & Cotisations : 16 Mrd € / an</p>
+                                <h4 class="font-bold text-white">Subventions aux entreprises & Cotisations : 16 Mrd € / an</h4>
                                 <p class="text-stone-400 text-xs">Passées de 1,6 Mrd à 16 Mrd € en 20 ans, dont 10 Mrd € de réductions patronales issues du tax shift Michel.</p>
                             </div>
 
                             <div class="border-l-2 border-brand-500 pl-3 space-y-1">
-                                <p class="font-bold text-white">Avantages extralégaux : 14,5 Mrd € / an</p>
+                                <h4 class="font-bold text-white">Avantages extralégaux : 14,5 Mrd € / an</h4>
                                 <p class="text-stone-400 text-xs">Voitures de société, options d'actions, chèques-repas (+2€/jour) échappant au financement de la Sécurité sociale.</p>
                             </div>
 
                             <div class="border-l-2 border-brand-500 pl-3 space-y-1">
-                                <p class="font-bold text-white">Exception militaire : +11,57 Mrd € (2 % du PIB)</p>
+                                <h4 class="font-bold text-white">Exception militaire : +11,57 Mrd € (2 % du PIB)</h4>
                                 <p class="text-stone-400 text-xs">Achat de 11 F-35 supplémentaires (1,5 Mrd €) et création d'un Fonds Défense exempté des règles de déficit UE.</p>
                             </div>
 
                             <div class="border-l-2 border-brand-500 pl-3 space-y-1">
-                                <p class="font-bold text-white">Taxe Plus-Values Financières : ~0,50 Mrd € maximum</p>
+                                <h4 class="font-bold text-white">Taxe Plus-Values Financières : ~0,50 Mrd € maximum</h4>
                                 <p class="text-stone-400 text-xs">Ne représente que 2 % de l'effort global, avec de multiples exceptions (holdings > 4M€, exonération sous 1M€).</p>
                             </div>
                         </div>
 
                         <!-- Chart 4 Container -->
-                        <div class="bg-stone-850 p-4 rounded-xl border border-stone-700">
-                            <h5 class="text-xs font-bold text-stone-300 uppercase tracking-wider mb-2 text-center">
+                        <figure class="bg-stone-850 p-4 rounded-xl border border-stone-700">
+                            <figcaption class="text-xs font-bold text-stone-300 uppercase tracking-wider mb-2 text-center">
                                 Asymétrie : Niches & Défense vs Contribuables & Justice Fiscale
-                            </h5>
+                            </figcaption>
                             <div class="chart-container" style="height: 260px;">
-                                <canvas id="chartBlindspots"></canvas>
+                                <canvas id="chartBlindspots" aria-label="Graphique montrant l'asymétrie entre dépenses occultées et taxe plus-values"></canvas>
                             </div>
-                        </div>
+                        </figure>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 4: DRAMATURGIE POLITICIENNE & BIAIS PRESSE (FR vs NL) -->
-        <section id="section-dramaturgie" class="tab-content hidden space-y-6">
+        <!-- SECTION 4: DRAMATURGIE POLITICIENNE & BIAIS PRESSE (FR vs NL / BDW vs GLB) -->
+        <section id="section-dramaturgie" role="tabpanel" aria-labelledby="tab-dramaturgie" class="tab-content hidden space-y-6">
             <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-stone-900">4. Dramaturgie négociatoire, "Horse-Race Politics" et fuites orchestrées</h3>
+                <header class="mb-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-stone-900">4. Dramaturgie négociatoire : Bart De Wever vs Georges-Louis Bouchez</h2>
                     <p class="text-sm text-stone-600 mt-2 leading-relaxed">
                         Le journalisme politique belge a privilégié la chronique des duels de personnalités (Bart De Wever vs Georges-Louis Bouchez) et le relais du « catalogue des horreurs » au détriment de l'analyse d'impact. Observez l'asymétrie spectaculaire du traitement médiatique entre le Nord et le Sud du pays.
                     </p>
-                </div>
+                </header>
 
                 <!-- Comparative Matrix FR vs NL -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <!-- Presse Francophone -->
-                    <div class="bg-blue-50/50 p-5 rounded-xl border border-blue-200 space-y-3">
+                    <article class="bg-blue-50/50 p-5 rounded-xl border border-blue-200 space-y-3">
                         <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-blue-950 text-base">Presse Francophone (Le Soir, La Libre, RTBF, RTL)</h4>
+                            <h3 class="font-bold text-blue-950 text-base">Presse Francophone (Le Soir, La Libre, RTBF, RTL)</h3>
                             <span class="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded">Sud du pays</span>
                         </div>
                         <ul class="space-y-2 text-xs md:text-sm text-blue-900 leading-relaxed">
                             <li class="flex items-start gap-2">
-                                <span class="text-blue-600 font-bold">•</span>
+                                <span class="text-blue-600 font-bold" aria-hidden="true">•</span>
                                 <span><strong>Réhabilitation de Bart De Wever :</strong> Campé en « homme d'État responsable », arbitre pragmatique cherchant un compromis rationnel face aux excès partisans.</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <span class="text-blue-600 font-bold">•</span>
-                                <span><strong>Lecture de la posture du MR :</strong> Georges-Louis Bouchez analysé en « seul contre quatre » comme le défenseur calculateur mais cohérent de la classe moyenne.</span>
+                                <span class="text-blue-600 font-bold" aria-hidden="true">•</span>
+                                <span><strong>Posture de Georges-Louis Bouchez :</strong> Analyse de GLB en « seul contre quatre », présenté comme le défenseur calculateur mais cohérent de la classe moyenne.</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <span class="text-blue-600 font-bold">•</span>
-                                <span><strong>Focalisation TVA :</strong> Accent mis sur l'érosion immédiate du pouvoir d'achat et le risque de fuite des achats vers la France.</span>
+                                <span class="text-blue-600 font-bold" aria-hidden="true">•</span>
+                                <span><strong>Focalisation TVA :</strong> Accent mis sur l'érosion immédiate du pouvoir d'achat et le risque de fuite des consommateurs vers la France.</span>
                             </li>
                         </ul>
-                    </div>
+                    </article>
 
                     <!-- Presse Néerlandophone -->
-                    <div class="bg-amber-50/50 p-5 rounded-xl border border-amber-200 space-y-3">
+                    <article class="bg-amber-50/50 p-5 rounded-xl border border-amber-200 space-y-3">
                         <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-amber-950 text-base">Presse Néerlandophone (De Standaard, De Tijd, HLN, Knack)</h4>
+                            <h3 class="font-bold text-amber-950 text-base">Presse Néerlandophone (De Standaard, De Tijd, HLN, Knack)</h3>
                             <span class="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded">Nord du pays</span>
                         </div>
                         <ul class="space-y-2 text-xs md:text-sm text-amber-900 leading-relaxed">
                             <li class="flex items-start gap-2">
-                                <span class="text-amber-600 font-bold">•</span>
-                                <span><strong>Cristallisation du blâme sur GLB :</strong> Titres chocs (*« Het probleem heet GLB »* - Maxime Prévot dans *De Tijd*). Bouchez accusé d'obstructionnisme pur.</span>
+                                <span class="text-amber-600 font-bold" aria-hidden="true">•</span>
+                                <span><strong>Cristallisation du blâme sur GLB :</strong> Titres chocs (<em>« Het probleem heet GLB »</em> - Maxime Prévot dans <em>De Tijd</em>). Bouchez accusé d'obstructionnisme pur.</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <span class="text-amber-600 font-bold">•</span>
+                                <span class="text-amber-600 font-bold" aria-hidden="true">•</span>
                                 <span><strong>Cadrage communautaire sous-jacent :</strong> L'absence d'accord perçue comme un refus francophone d'assumer l'assainissement, perpétuant les transferts Nord-Sud.</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <span class="text-amber-600 font-bold">•</span>
-                                <span><strong>Analyse du *Horrorcatalogus* :</strong> Décryptage tactique de la diffusion des super-notes comme outil pour « masser les esprits » (*geesten masseren*).</span>
+                                <span class="text-amber-600 font-bold" aria-hidden="true">•</span>
+                                <span><strong>Analyse du <em>Horrorcatalogus</em> :</strong> Décryptage tactique de la diffusion des super-notes comme outil pour « masser les esprits » (<em>geesten masseren</em>).</span>
                             </li>
                         </ul>
-                    </div>
+                    </article>
                 </div>
 
                 <!-- Scenario Probability Chart & Inter-federal Mechanics -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-stone-50 p-6 rounded-xl border border-stone-200">
                     <div>
-                        <h4 class="font-bold text-stone-900 text-sm uppercase tracking-wider mb-2">
+                        <h3 class="font-bold text-stone-900 text-sm uppercase tracking-wider mb-2">
                             Effets de Ciseaux Inter-fédéraux & Arithmétique Sourdine
-                        </h4>
+                        </h3>
                         <p class="text-xs text-stone-600 leading-relaxed mb-3">
-                            Le blocage sur la TVA et le chômage ne relève pas seulement d'un conflit d'ego, mais d'impératifs électoraux croisés avec les entités fédérées :
+                            Le blocage entre Bart De Wever et Georges-Louis Bouchez sur la TVA et le chômage ne relève pas seulement d'un conflit d'ego, mais d'impératifs électoraux croisés avec les entités fédérées :
                         </p>
                         <ul class="space-y-2 text-xs text-stone-700">
                             <li class="bg-white p-2.5 rounded border border-stone-200">
@@ -405,34 +468,34 @@
                     </div>
 
                     <!-- Chart 3 Container -->
-                    <div class="bg-white p-4 rounded-xl border border-stone-200">
-                        <h4 class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-2 text-center">
+                    <figure class="bg-white p-4 rounded-xl border border-stone-200">
+                        <figcaption class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-2 text-center">
                             Projections de Sortie de Crise Politico-Budgétaire
-                        </h4>
+                        </figcaption>
                         <div class="chart-container" style="height: 250px;">
-                            <canvas id="chartScenarios"></canvas>
+                            <canvas id="chartScenarios" aria-label="Graphique circulaire montrant les probabilités de sortie de crise"></canvas>
                         </div>
-                    </div>
+                    </figure>
                 </div>
             </div>
         </section>
 
         <!-- SECTION 5: DISQUALIFICATION DES CONTRE-POUVOIRS & ÉCOSYSTÈME MÉDIATIQUE -->
-        <section id="section-contrepouvoirs" class="tab-content hidden space-y-6">
+        <section id="section-contrepouvoirs" role="tabpanel" aria-labelledby="tab-contrepouvoirs" class="tab-content hidden space-y-6">
             <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-stone-900">5. Neutralisation des contre-pouvoirs et précarisation de la presse</h3>
+                <header class="mb-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-stone-900">5. Neutralisation des contre-pouvoirs et précarisation de la presse</h2>
                     <p class="text-sm text-stone-600 mt-2 leading-relaxed">
                         Cette section analyse comment les mobilisations syndicales et les mutualités ont été ciblées par une communication hostile, pendant que les journalistes eux-mêmes subissaient un durcissement fiscal et des pressions politiques directes.
                     </p>
-                </div>
+                </header>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Column 1: Unions -->
-                    <div class="border border-stone-200 rounded-xl p-5 bg-stone-50 space-y-3">
+                    <article class="border border-stone-200 rounded-xl p-5 bg-stone-50 space-y-3">
                         <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span>
-                            <h4 class="font-bold text-stone-900 text-sm">Stigmatisation Syndicale</h4>
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-600" aria-hidden="true"></span>
+                            <h3 class="font-bold text-stone-900 text-sm">Stigmatisation Syndicale</h3>
                         </div>
                         <p class="text-xs text-stone-600 leading-relaxed">
                             Lors des grèves de 2026 (manifestation de 100 000 personnes le 12 mars, grèves d'octobre), le récit télévisuel s'est focalisé à 80 % sur les <em>« galères dans les transports »</em> et les <em>« nuisances pour les usagers »</em>.
@@ -440,13 +503,13 @@
                         <p class="text-xs text-stone-500 italic">
                             Effacement des motifs réels : fin des statuts SNCB, baisse estimée d'un quart de pension, service communautaire à 4,5 €/h.
                         </p>
-                    </div>
+                    </article>
 
                     <!-- Column 2: Mutualities -->
-                    <div class="border border-stone-200 rounded-xl p-5 bg-stone-50 space-y-3">
+                    <article class="border border-stone-200 rounded-xl p-5 bg-stone-50 space-y-3">
                         <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
-                            <h4 class="font-bold text-stone-900 text-sm">Offensive contre les Mutualités</h4>
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-600" aria-hidden="true"></span>
+                            <h3 class="font-bold text-stone-900 text-sm">Offensive contre les Mutualités</h3>
                         </div>
                         <p class="text-xs text-stone-600 leading-relaxed">
                             Offensive conjointe (MR, N-VA, Ministre de la Santé) dénonçant des « abus colossaux » et le statut d'organisme payeur des mutuelles.
@@ -454,50 +517,52 @@
                         <p class="text-xs text-stone-500 italic">
                             Démantèlement progressif de la gestion paritaire de la Sécurité sociale ouvrant la voie au marché privé de l'assurance maladie.
                         </p>
-                    </div>
+                    </article>
 
                     <!-- Column 3: Media Precarity -->
-                    <div class="border border-stone-200 rounded-xl p-5 bg-stone-50 space-y-3">
+                    <article class="border border-stone-200 rounded-xl p-5 bg-stone-50 space-y-3">
                         <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
-                            <h4 class="font-bold text-stone-900 text-sm">Précarisation des Rédactions</h4>
+                            <span class="w-2.5 h-2.5 rounded-full bg-brand-500" aria-hidden="true"></span>
+                            <h3 class="font-bold text-stone-900 text-sm">Précarisation des Rédactions</h3>
                         </div>
                         <p class="text-xs text-stone-600 leading-relaxed">
                             Suppression du forfait fiscal des droits d'auteur (taxation à 15 %) dans la Loi-Programme de juin 2026, frappant directement les journalistes indépendants.
                         </p>
                         <p class="text-xs text-stone-500 italic">
-                            Pressions politiques directes (menaces de boycott de la RTBF par le MR lors de l'affaire PMR) et application de peines accrues sur le secret professionnel.
+                            Pressions politiques directes (menaces de boycott de la RTBF par le MR) et application de peines accrues sur le secret professionnel.
                         </p>
-                    </div>
+                    </article>
                 </div>
 
                 <!-- Interactive Summary Box -->
-                <div class="mt-8 bg-brand-50 border border-brand-200 p-5 rounded-xl text-brand-900 text-xs md:text-sm leading-relaxed">
-                    <p class="font-bold text-brand-800 text-base mb-1">Conclusion de l'Analyse Critique</p>
+                <aside class="mt-8 bg-brand-50 border border-brand-200 p-5 rounded-xl text-brand-900 text-xs md:text-sm leading-relaxed" role="note">
+                    <h3 class="font-bold text-brand-800 text-base mb-1">Conclusion de l'Analyse Critique</h3>
                     <p>
                         Tant que le journalisme politique belge privilégiera la chronique des coulisses du 16 rue de la Loi et la reproduction servile des ballons d'essai sur l'audit contradictoire des données publiques, la mise en scène du « mur budgétaire » continuera de fonctionner comme le plus puissant vecteur de légitimation des reculs sociaux.
                     </p>
-                </div>
+                </aside>
             </div>
         </section>
 
     </main>
 
-    <!-- FOOTER -->
+    <!-- PIED DE PAGE SÉMANTIQUE (FOOTER) -->
     <footer class="bg-stone-900 text-stone-400 py-8 border-t border-stone-800 mt-12 text-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
                 <p class="font-semibold text-stone-200">Observatoire Critique de la Presse & de la Gouvernance Budgétaire</p>
-                <p class="mt-1 text-stone-500">Basé sur le rapport d'analyse critique du Conclave Fédéral de la Coalition Arizona (2025-2026).</p>
+                <p class="mt-1 text-stone-500">
+                    Dossier d'analyse : <a href="https://ouaisfieu.github.io/gemini-pro/concours/argon/max/bart-de-wever/georges-louis-bouchez/" class="underline hover:text-stone-300">Conclave Fédéral Arizona (BDW vs GLB)</a>
+                </p>
             </div>
             <div class="text-right text-stone-500">
                 <p>Sources : Cour des comptes, BNB, Bureau fédéral du Plan, BOSA, AJP, CRISP.</p>
-                <p class="mt-0.5">Application SPA autonome — 0% SVG / 100% Canvas & Dynamic Data</p>
+                <p class="mt-0.5">Application SPA autonome — 0% SVG / 100% Canvas & Accessibility Optimized</p>
             </div>
         </div>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC & CHARTS CODE -->
+    <!-- LOGIQUE JAVASCRIPT ET GRAPHIQUES CHART.JS -->
     <script>
         // Data Store for 6 Budgetary Levers
         const leverageData = [
@@ -581,7 +646,7 @@
         let chartScenariosInstance = null;
         let chartBlindspotsInstance = null;
 
-        // TAB SWITCHING LOGIC
+        // ACCESSIBLE TAB SWITCHING LOGIC
         function switchTab(tabId) {
             // Hide all tab content
             document.querySelectorAll('.tab-content').forEach(el => {
@@ -589,9 +654,9 @@
                 el.classList.remove('block');
             });
             
-            // Remove active class from buttons
+            // Reset ARIA selected states on tab buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
             });
 
             // Show selected tab content
@@ -601,20 +666,20 @@
                 target.classList.add('block');
             }
 
-            // Set active button
+            // Set active button ARIA state
             const activeBtn = document.getElementById(`tab-${tabId}`);
             if(activeBtn) {
-                activeBtn.classList.add('active');
+                activeBtn.setAttribute('aria-selected', 'true');
             }
         }
 
-        // POPULATE LEVERAGE CARDS
+        // RENDER LEVERAGE CARDS
         function renderLeverageCards(items) {
             const container = document.getElementById('leverage-cards-container');
             if(!container) return;
 
             container.innerHTML = items.map(item => `
-                <div class="bg-stone-50 border border-stone-200 rounded-xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <article class="bg-stone-50 border border-stone-200 rounded-xl p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
                     <div>
                         <div class="flex items-center justify-between gap-2 mb-2">
                             <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${item.riskLevel === 'high' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'}">
@@ -624,7 +689,7 @@
                                 Écart: -${item.gap.toFixed(2)} Mrd €
                             </span>
                         </div>
-                        <h4 class="font-bold text-stone-900 text-sm leading-snug">${item.title}</h4>
+                        <h3 class="font-bold text-stone-900 text-sm leading-snug">${item.title}</h3>
                         
                         <div class="grid grid-cols-2 gap-2 my-3 py-2 border-y border-stone-200 text-center">
                             <div>
@@ -646,7 +711,7 @@
                     <div class="mt-4 pt-2 border-t border-stone-200 text-[11px] text-stone-500">
                         <strong class="text-stone-700">Impact de Risque :</strong> ${item.riskImpact}
                     </div>
-                </div>
+                </article>
             `).join('');
         }
 
