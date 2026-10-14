@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AETHER // Moteur Procédural & Audio-Réactif</title>
+  <style>
+    :root {
+      --bg: #05060a;
+      --panel: rgba(12, 16, 28, 0.72);
+      --border: rgba(0, 240, 255, 0.25);
+      --accent: #00f0ff;
+      --accent-2: #ff007a;
+      --accent-3: #7000ff;
+      --text: #e6f1ff;
+      --muted: #8a99ad;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+
+    /* HUD Overlay */
+    .hud {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+      z-index: 10;
+      background: radial-gradient(circle at center, transparent 60%, rgba(2, 3, 6, 0.65) 100%);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      padding: 16px 22px;
+      border-radius: 12px;
+      pointer-events: auto;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    .brand h1 {
+      font-size: 1.25rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, var(--accent), #fff, var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .brand p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .telemetry {
+      display: flex;
+      gap: 14px;
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      pointer-events: auto;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .stat span.label {
+      color: var(--muted);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+    }
+
+    .stat span.val {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    /* Controls Panel */
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .controls {
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 22px;
+      pointer-events: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-group label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 130px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .modes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text);
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    button.active {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(112, 0, 255, 0.35));
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.4);
+    }
+
+    button.audio-btn.on {
+      border-color: var(--accent-2);
+      background: rgba(255, 0, 122, 0.2);
+      box-shadow: 0 0 18px rgba(255, 0, 122, 0.45);
+    }
+
+    .instructions {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.5;
+      pointer-events: auto;
+    }
+
+    .instructions strong {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="stage"></canvas>
+
+  <div class="hud">
+    <div class="top-bar">
+      <div class="brand">
+        <h1>AETHER // ENGINE v4.2</h1>
+        <p>Simulation Physique 3D, Nébuleuse Quantique & Synthèse WebAudio</p>
+      </div>
+
+      <div class="telemetry">
+        <div class="stat">
+          <span class="label">FPS</span>
+          <span class="val" id="fps">60</span>
+        </div>
+        <div class="stat">
+          <span class="label">Entités</span>
+          <span class="val" id="entity-count">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Énergie</span>
+          <span class="val" id="energy-val">0.00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="controls">
+        <div class="modes">
+          <button class="mode-btn active" data-mode="vortex">Vortex 3D</button>
+          <button class="mode-btn" data-mode="lattice">Réseau Neuronal</button>
+          <button class="mode-btn" data-mode="hypercube">Tesseract 4D</button>
+          <button id="pulse-btn">Onde de Choc [Espace]</button>
+          <button id="audio-btn" class="audio-btn">Audio Synth : OFF</button>
+        </div>
+
+        <div class="control-group">
+          <label>Densité <span id="lbl-count">450</span></label>
+          <input type="range" id="ctrl-count" min="150" max="900" value="450" />
+        </div>
+
+        <div class="control-group">
+          <label>Gravité <span id="lbl-grav">1.0</span></label>
+          <input type="range" id="ctrl-grav" min="0.1" max="3.0" step="0.1" value="1.0" />
+        </div>
+
+        <div class="control-group">
+          <label>Vitesse Temporelle <span id="lbl-speed">1.0</span></label>
+          <input type="range" id="ctrl-speed" min="0.1" max="2.5" step="0.1" value="1.0" />
+        </div>
+      </div>
+
+      <div class="instructions">
+        <strong>Souris :</strong> Puits gravitationnel & Parallaxe 3D<br/>
+        <strong>Clic Gauche maintenu :</strong> Singularité d'attraction<br/>
+        <strong>Double-Clic / Espace :</strong> Supernova harmonique
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById('stage');
+      const ctx = canvas.getContext('2d', { alpha: false });
+
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      // --- SYNTHÉTISEUR AUDIO PROCÉDURAL (Web Audio API) ---
+      class CyberSynth {
+        constructor() {
+          this.ctx = null;
+          this.enabled = false;
+          this.scale = [130.81, 146.83, 164.81, 196.00, 220.00, 261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 659.25];
+          this.droneOsc = null;
+          this.droneGain = null;
+        }
+
+        toggle() {
+          if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            this.ctx = new AudioCtx();
+            this.setupDrone();
+          }
+          if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+          }
+          this.enabled = !this.enabled;
+          if (this.droneGain) {
+            this.droneGain.gain.setTargetAtTime(this.enabled ? 0.06 : 0, this.ctx.currentTime, 0.3);
+          }
+          return this.enabled;
+        }
+
+        setupDrone() {
+          this.droneOsc = this.ctx.createOscillator();
+          const filter = this.ctx.createBiquadFilter();
+          this.droneGain = this.ctx.createGain();
+
+          this.droneOsc.type = 'sawtooth';
+          this.droneOsc.frequency.value = 65.41; // C2
+
+          filter.type = 'lowpass';
+          filter.frequency.value = 180;
+
+          this.droneGain.gain.value = 0;
+
+          this.droneOsc.connect(filter);
+          filter.connect(this.droneGain);
+          this.droneGain.connect(this.ctx.destination);
+          this.droneOsc.start();
+          this.filter = filter;
+        }
+
+        modulate(energy, mouseRatioX) {
+          if (!this.enabled || !this.ctx) return;
+          const now = this.ctx.currentTime;
+          this.filter.frequency.setTargetAtTime(120 + Math.min(energy * 60, 1200), now, 0.1);
+          this.droneOsc.frequency.setTargetAtTime(65.41 + mouseRatioX * 32, now, 0.2);
+        }
+
+        triggerChord(intensity = 1) {
+          if (!this.enabled || !this.ctx) return;
+          const now = this.ctx.currentTime;
+          for (let i = 0; i < 3; i++) {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            const freq = this.scale[Math.floor(Math.random() * this.scale.length)] * (i === 2 ? 2 : 1);
+
+            osc.type = i % 2 === 0 ? 'sine' : 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            osc.frequency.exponentialRampToValueAtTime(freq * 1.01, now + 1.4);
+
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(0.06 * intensity, now + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 1.65);
+          }
+        }
+      }
+
+      const synth = new CyberSynth();
+
+      // --- ÉTAT GLOBAL & PARAMÈTRES ---
+      const state = {
+        mode: 'vortex',
+        particleCount: 450,
+        gravity: 1.0,
+        timeScale: 1.0,
+        mouseX: 0,
+        mouseY: 0,
+        normX: 0,
+        normY: 0,
+        mouseDown: false,
+        rotX: 0.3,
+        rotY: 0.5,
+        time: 0,
+        shockwaves: []
+      };
+
+      // --- PROJECTION 3D & GÉOMÉTRIE 4D (TESSERACT) ---
+      const tesseractVertices = [];
+      for (let i = 0; i < 16; i++) {
+        tesseractVertices.push([
+          (i & 1) ? 1 : -1,
+          (i & 2) ? 1 : -1,
+          (i & 4) ? 1 : -1,
+          (i & 8) ? 1 : -1
+        ]);
+      }
+
+      const tesseractEdges = [];
+      for (let i = 0; i < 16; i++) {
+        for (let j = i + 1; j < 16; j++) {
+          let diff = i ^ j;
+          if ((diff & (diff - 1)) === 0) {
+            tesseractEdges.push([i, j]);
+          }
+        }
+      }
+
+      function project3D(x, y, z, fov = 550) {
+        // Rotation Y
+        const cosY = Math.cos(state.rotY);
+        const sinY = Math.sin(state.rotY);
+        let x1 = x * cosY - z * sinY;
+        let z1 = z * cosY + x * sinY;
+
+        // Rotation X
+        const cosX = Math.cos(state.rotX);
+        const sinX = Math.sin(state.rotX);
+        let y2 = y * cosX - z1 * sinX;
+        let z2 = z1 * cosX + y * sinX;
+
+        const depth = fov + z2 + 450;
+        if (depth <= 10) return null;
+        const scale = fov / depth;
+        return {
+          x: width * 0.5 + x1 * scale,
+          y: height * 0.5 + y2 * scale,
+          scale,
+          depth: z2
+        };
+      }
+
+      // --- SYSTÈME DE PARTICULES ---
+      class Particle {
+        constructor(index) {
+          this.index = index;
+          this.reset();
+        }
+
+        reset() {
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          const r = 120 + Math.random() * 340;
+
+          this.x = r * Math.sin(phi) * Math.cos(theta);
+          this.y = r * Math.sin(phi) * Math.sin(theta);
+          this.z = r * Math.cos(phi);
+
+          this.vx = (Math.random() - 0.5) * 1.5;
+          this.vy = (Math.random() - 0.5) * 1.5;
+          this.vz = (Math.random() - 0.5) * 1.5;
+
+          this.hue = 180 + Math.random() * 140;
+          this.size = 1.4 + Math.random() * 2.4;
+        }
+
+        update(dt) {
+          const speed = state.timeScale * dt;
+
+          if (state.mode === 'vortex') {
+            // Force de Lorentz / Tourbillon galactique
+            const distXZ = Math.hypot(this.x, this.z) + 0.001;
+            const angle = Math.atan2(this.z, this.x);
+            const orbitalForce = (140 / (distXZ + 60)) * state.gravity;
+
+            this.vx += (-Math.sin(angle) * orbitalForce - this.x * 0.0015) * speed;
+            this.vz += (Math.cos(angle) * orbitalForce - this.z * 0.0015) * speed;
+            this.vy += (-this.y * 0.006 + Math.sin(state.time * 2 + this.index) * 0.08) * speed;
+
+          } else if (state.mode === 'lattice') {
+            // Champ harmonique ondulatoire
+            const targetY = Math.sin(this.x * 0.015 + state.time) * Math.cos(this.z * 0.015 + state.time) * 140;
+            this.vy += (targetY - this.y) * 0.02 * state.gravity * speed;
+            this.vx += Math.sin(this.z * 0.01 + state.time) * 0.12 * speed;
+            this.vz += Math.cos(this.x * 0.01 + state.time) * 0.12 * speed;
+
+          } else if (state.mode === 'hypercube') {
+            // Orbite autour des sommets du Tesseract
+            const targetIdx = this.index % 16;
+            const v = rotated4DVertices[targetIdx] || { x: 0, y: 0, z: 0 };
+            this.vx += (v.x - this.x) * 0.025 * state.gravity * speed;
+            this.vy += (v.y - this.y) * 0.025 * state.gravity * speed;
+            this.vz += (v.z - this.z) * 0.025 * state.gravity * speed;
+          }
+
+          // Singularité souris en 3D
+          const mx3D = state.normX * 380;
+          const my3D = state.normY * 280;
+          const dx = mx3D - this.x;
+          const dy = my3D - this.y;
+          const dz = -this.z;
+          const distSq = dx * dx + dy * dy + dz * dz + 400;
+
+          if (state.mouseDown) {
+            const pull = (3200 / distSq) * state.gravity * speed;
+            this.vx += dx * pull;
+            this.vy += dy * pull;
+            this.vz += dz * pull;
+          } else {
+            const gentle = (450 / distSq) * speed;
+            this.vx += dx * gentle;
+            this.vy += dy * gentle;
+          }
+
+          // Friction fluide
+          this.vx *= 0.96;
+          this.vy *= 0.96;
+          this.vz *= 0.96;
+
+          this.x += this.vx * speed;
+          this.y += this.vy * speed;
+          this.z += this.vz * speed;
+
+          const vMag = Math.hypot(this.vx, this.vy, this.vz);
+          this.hue = (185 + vMag * 18 + (this.index % 40)) % 360;
+          return vMag;
+        }
+      }
+
+      let particles = [];
+      let rotated4DVertices = [];
+
+      function syncParticles() {
+        while (particles.length < state.particleCount) {
+          particles.push(new Particle(particles.length));
+        }
+        if (particles.length > state.particleCount) {
+          particles.length = state.particleCount;
+        }
+        document.getElementById('entity-count').textContent = particles.length;
+      }
+
+      syncParticles();
+
+      function triggerShockwave(screenX, screenY) {
+        state.shockwaves.push({
+          x: screenX ?? width / 2,
+          y: screenY ?? height / 2,
+          radius: 5,
+          maxRadius: Math.max(width, height) * 0.65,
+          alpha: 1
+        });
+
+        for (const p of particles) {
+          const len = Math.hypot(p.x, p.y, p.z) || 1;
+          const boost = 14 + Math.random() * 18;
+          p.vx += (p.x / len) * boost;
+          p.vy += (p.y / len) * boost;
+          p.vz += (p.z / len) * boost;
+        }
+        synth.triggerChord(1.2);
+      }
+
+      // --- ÉVÉNEMENTS INTERACTIFS ---
+      window.addEventListener('pointermove', (e) => {
+        state.mouseX = e.clientX;
+        state.mouseY = e.clientY;
+        state.normX = (e.clientX / width) * 2 - 1;
+        state.normY = (e.clientY / height) * 2 - 1;
+      });
+
+      window.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('.hud button, .hud input')) return;
+        state.mouseDown = true;
+        synth.triggerChord(0.7);
+      });
+
+      window.addEventListener('pointerup', () => {
+        state.mouseDown = false;
+      });
+
+      window.addEventListener('dblclick', (e) => {
+        if (e.target.closest('.hud button, .hud input')) return;
+        triggerShockwave(e.clientX, e.clientY);
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          triggerShockwave(state.mouseX || width / 2, state.mouseY || height / 2);
+        }
+      });
+
+      // UI Bindings
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.mode = btn.dataset.mode;
+          synth.triggerChord(1.0);
+        });
+      });
+
+      document.getElementById('pulse-btn').addEventListener('click', () => {
+        triggerShockwave(width / 2, height / 2);
+      });
+
+      const audioBtn = document.getElementById('audio-btn');
+      audioBtn.addEventListener('click', () => {
+        const isOn = synth.toggle();
+        audioBtn.textContent = `Audio Synth : ${isOn ? 'ON' : 'OFF'}`;
+        audioBtn.classList.toggle('on', isOn);
+        if (isOn) synth.triggerChord(1.0);
+      });
+
+      const ctrlCount = document.getElementById('ctrl-count');
+      ctrlCount.addEventListener('input', (e) => {
+        state.particleCount = parseInt(e.target.value, 10);
+        document.getElementById('lbl-count').textContent = state.particleCount;
+        syncParticles();
+      });
+
+      const ctrlGrav = document.getElementById('ctrl-grav');
+      ctrlGrav.addEventListener('input', (e) => {
+        state.gravity = parseFloat(e.target.value);
+        document.getElementById('lbl-grav').textContent = state.gravity.toFixed(1);
+      });
+
+      const ctrlSpeed = document.getElementById('ctrl-speed');
+      ctrlSpeed.addEventListener('input', (e) => {
+        state.timeScale = parseFloat(e.target.value);
+        document.getElementById('lbl-speed').textContent = state.timeScale.toFixed(1);
+      });
+
+      // --- BOUCLE DE RENDU HAUTE PERFORMANCE ---
+      let lastTime = performance.now();
+      let frameCount = 0;
+      let fpsTimer = 0;
+
+      function updateTesseract(t) {
+        rotated4DVertices = tesseractVertices.map(([x, y, z, w]) => {
+          // Rotation 4D dans les plans XW et ZW
+          const cosA = Math.cos(t * 0.7);
+          const sinA = Math.sin(t * 0.7);
+          const x1 = x * cosA - w * sinA;
+          const w1 = x * sinA + w * cosA;
+
+          const cosB = Math.cos(t * 0.5);
+          const sinB = Math.sin(t * 0.5);
+          const z2 = z * cosB - w1 * sinB;
+          const w2 = z * sinB + w1 * cosB;
+
+          const distance4D = 2.6;
+          const factor = 1 / (distance4D - w2);
+          const scale3D = 220;
+
+          return {
+            x: x1 * factor * scale3D,
+            y: y * factor * scale3D,
+            z: z2 * factor * scale3D
+          };
+        });
+      }
+
+      function render(now) {
+        const rawDt = Math.min((now - lastTime) / 16.667, 3);
+        lastTime = now;
+
+        frameCount++;
+        if (now - fpsTimer > 400) {
+          const fps = Math.round((frameCount * 1000) / (now - fpsTimer));
+          document.getElementById('fps').textContent = fps;
+          frameCount = 0;
+          fpsTimer = now;
+        }
+
+        state.time += 0.016 * state.timeScale * rawDt;
+        state.rotY += (0.004 * state.timeScale + state.normX * 0.012) * rawDt;
+        state.rotX += ((state.normY * 0.65 - state.rotX) * 0.05) * rawDt;
+
+        // Motion blur par persistance lumineuse
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = 'rgba(5, 6, 10, 0.22)';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.globalCompositeOperation = 'lighter';
+
+        // Mise à jour géométrie 4D
+        updateTesseract(state.time);
+
+        if (state.mode === 'hypercube') {
+          const projectedVerts = rotated4DVertices.map(v => project3D(v.x, v.y, v.z));
+          ctx.lineWidth = 1.4;
+          for (const [i, j] of tesseractEdges) {
+            const p1 = projectedVerts[i];
+            const p2 = projectedVerts[j];
+            if (p1 && p2) {
+              ctx.strokeStyle = `rgba(0, 240, 255, 0.28)`;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Mise à jour et projection des particules
+        let totalEnergy = 0;
+        const projected = [];
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          totalEnergy += p.update(rawDt);
+          const proj = project3D(p.x, p.y, p.z);
+          if (proj) {
+            projected.push({ p, proj });
+          }
+        }
+
+        // Liens dynamiques de proximité
+        const connectDistSq = state.mode === 'lattice' ? 8500 : 4200;
+        ctx.lineWidth = 0.8;
+
+        for (let i = 0; i < projected.length; i++) {
+          const a = projected[i];
+          const r = Math.max(0.8, a.p.size * a.proj.scale);
+
+          ctx.fillStyle = `hsla(${a.p.hue}, 95%, 65%, ${Math.min(1, a.proj.scale * 0.9)})`;
+          ctx.beginPath();
+          ctx.arc(a.proj.x, a.proj.y, r, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Connexions locales optimisées
+          for (let j = i + 1; j < Math.min(i + 18, projected.length); j++) {
+            const b = projected[j];
+            const dx = a.proj.x - b.proj.x;
+            const dy = a.proj.y - b.proj.y;
+            const dSq = dx * dx + dy * dy;
+            if (dSq < connectDistSq) {
+              const alpha = (1 - dSq / connectDistSq) * 0.35;
+              ctx.strokeStyle = `hsla(${(a.p.hue + b.p.hue) * 0.5}, 90%, 60%, ${alpha})`;
+              ctx.beginPath();
+              ctx.moveTo(a.proj.x, a.proj.y);
+              ctx.lineTo(b.proj.x, b.proj.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Rendu des ondes de choc
+        for (let i = state.shockwaves.length - 1; i >= 0; i--) {
+          const sw = state.shockwaves[i];
+          sw.radius += 18 * rawDt;
+          sw.alpha = 1 - sw.radius / sw.maxRadius;
+          if (sw.alpha <= 0) {
+            state.shockwaves.splice(i, 1);
+            continue;
+          }
+          ctx.strokeStyle = `rgba(255, 0, 122, ${sw.alpha * 0.7})`;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        const avgEnergy = totalEnergy / (particles.length || 1);
+        document.getElementById('energy-val').textContent = avgEnergy.toFixed(2);
+        synth.modulate(avgEnergy, state.normX);
+
+        requestAnimationFrame(render);
+      }
+
+      requestAnimationFrame(render);
+    })();
+  </script>
+</body>
+</html>
